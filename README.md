@@ -6,6 +6,8 @@ O site não é o jogo: ele existe para **autenticação de contas** e para a **l
 tabuleiro é vendido. A experiência de Realidade Aumentada acontece no aplicativo, que usa
 a conta criada aqui.
 
+> **Produção:** [https://superpista.com](https://superpista.com)
+
 ## Escopo
 
 - **Login e contas** — cadastro, ativação por e-mail, sessões e edição de usuário.
