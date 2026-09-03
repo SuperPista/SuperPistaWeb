@@ -1,0 +1,794 @@
+/* Landing page do tabuleiro Super Pista.
+   Sistema visual: sinalização de pista: asfalto, eixo tracejado, bandeira
+   quadriculada, tinta chapada de embalagem de brinquedo. */
+
+.pagina {
+  --preto: #000000;
+  --branco: #ffffff;
+  --amarelo: #ffd100;
+  --vermelho: #e4002b;
+  --cinza: #565656;
+
+  --largura: 1160px;
+  --gutter: clamp(20px, 4vw, 40px);
+  --respiro: clamp(64px, 8vw, 116px);
+
+  background-color: var(--branco);
+  color: var(--preto);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  /* clip, e não hidden: hidden criaria contexto de rolagem e
+     quebraria o position: sticky do cabeçalho. */
+  overflow-x: clip;
+}
+
+.pagina *,
+.pagina *::before,
+.pagina *::after {
+  box-sizing: border-box;
+}
+
+.container {
+  width: min(100% - var(--gutter) * 2, var(--largura));
+  margin-inline: auto;
+}
+
+.secao {
+  padding-block: var(--respiro);
+}
+
+/* ---------- tipografia ---------- */
+
+.h1,
+.h2 {
+  margin: 0;
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.h1 {
+  font-size: clamp(1.85rem, 4.6vw, 3.4rem);
+}
+
+.h2 {
+  font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+  line-height: 1.02;
+}
+
+.h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.introducao {
+  display: grid;
+  gap: 14px;
+}
+
+.lead {
+  margin: 0;
+  max-width: 34em;
+  font-size: clamp(1.06rem, 1.7vw, 1.3rem);
+  line-height: 1.5;
+}
+
+.corpo {
+  margin: 0;
+  max-width: 58ch;
+  color: var(--cinza);
+}
+
+.dado {
+  font-stretch: 87%;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- botão de compra ---------- */
+
+.botao {
+  display: inline-block;
+  padding: 18px 34px;
+  border: 3px solid var(--preto);
+  border-radius: 999px;
+  background-color: var(--amarelo);
+  box-shadow: 7px 7px 0 var(--preto);
+  color: var(--preto);
+  font-size: 1.18rem;
+  font-weight: 900;
+  font-stretch: 112%;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.botao:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 4px 4px 0 var(--preto);
+}
+
+.botao:active {
+  transform: translate(7px, 7px);
+  box-shadow: 0 0 0 var(--preto);
+}
+
+.botaoCompacto {
+  padding: 11px 22px;
+  white-space: nowrap;
+  font-size: 0.98rem;
+  box-shadow: 4px 4px 0 var(--preto);
+}
+
+.botaoCompacto:hover {
+  box-shadow: 2px 2px 0 var(--preto);
+}
+
+.reforco {
+  margin: 0;
+  max-width: 26em;
+  color: var(--cinza);
+  font-size: 0.94rem;
+  line-height: 1.4;
+}
+
+.pagina a:focus-visible,
+.pagina button:focus-visible,
+.pagina input:focus-visible {
+  outline: 3px solid var(--vermelho);
+  outline-offset: 4px;
+}
+
+/* ---------- cabeçalho ---------- */
+
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 3px solid var(--preto);
+  background-color: var(--branco);
+}
+
+.cabecalhoLinha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 10px;
+}
+
+.marca {
+  display: block;
+  width: clamp(84px, 11vw, 116px);
+  height: auto;
+}
+
+/* ---------- faixas de separação ---------- */
+
+.faixa {
+  position: relative;
+  height: 54px;
+  border-block: 3px solid var(--preto);
+  background-color: var(--preto);
+}
+
+.faixa::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 6px;
+  translate: 0 -50%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--amarelo) 0 38px,
+    transparent 38px 72px
+  );
+}
+
+.faixaChegada {
+  height: 40px;
+  border: 0;
+  background-color: var(--branco);
+  background-image: repeating-conic-gradient(
+    var(--preto) 0% 25%,
+    var(--branco) 0% 50%
+  );
+  background-size: 40px 40px;
+}
+
+.faixaChegada::after {
+  content: none;
+}
+
+/* ---------- herói ---------- */
+
+.heroi {
+  padding-block: clamp(40px, 4vw, 60px) clamp(28px, 3vw, 36px);
+}
+
+.heroiCorpo {
+  display: grid;
+  gap: clamp(36px, 4vw, 56px);
+  align-items: center;
+  margin-top: clamp(28px, 3vw, 40px);
+}
+
+@media (min-width: 900px) {
+  .heroiCorpo {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  }
+}
+
+.heroiTexto {
+  display: grid;
+  justify-items: start;
+  gap: 28px;
+}
+
+.arteEspaco {
+  position: relative;
+}
+
+.seloArte {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  z-index: 3;
+  margin: 0;
+}
+
+.selo {
+  display: inline-block;
+  padding: 12px 20px;
+  border: 4px solid var(--preto);
+  background-color: var(--vermelho);
+  color: var(--branco);
+  font-size: 1.12rem;
+  font-weight: 800;
+  font-stretch: 87%;
+  line-height: 1.15;
+  transform: rotate(-2deg);
+}
+
+.descerLinha {
+  display: flex;
+  margin-top: clamp(36px, 5vw, 60px);
+}
+
+.descerDireita {
+  justify-content: flex-end;
+}
+
+.descer {
+  display: block;
+  color: inherit;
+  line-height: 0;
+}
+
+.descerSeta {
+  display: block;
+  width: 30px;
+  height: auto;
+}
+
+.descerPonta {
+  fill: var(--amarelo);
+}
+
+/* na dobra amarela a ponta sumiria no fundo */
+.claro .descerPonta {
+  fill: var(--branco);
+}
+
+/* só a primeira seta chama atenção; as outras são só sinalização */
+.heroi .descerSeta {
+  animation: chamar 2.4s ease-in-out infinite;
+}
+
+.descer:hover .descerSeta {
+  animation-play-state: paused;
+  translate: 0 6px;
+}
+
+@keyframes chamar {
+  0%,
+  70%,
+  100% {
+    translate: 0 0;
+  }
+  35% {
+    translate: 0 7px;
+  }
+}
+
+/* ---------- imagem do herói ---------- */
+
+.arteImagem {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .descerSeta {
+    animation: none;
+  }
+
+  .botao,
+  .marcador::after,
+  .respostaCaixa {
+    transition: none;
+  }
+}
+
+/* ---------- demonstração em vídeo ---------- */
+
+.escuro {
+  background-color: var(--preto);
+  color: var(--branco);
+}
+
+.escuro .corpo {
+  color: rgb(255 255 255 / 72%);
+}
+
+.escuro .botao {
+  box-shadow: 7px 7px 0 var(--vermelho);
+}
+
+.escuro .botao:hover {
+  box-shadow: 4px 4px 0 var(--vermelho);
+}
+
+.escuro .botao:active {
+  box-shadow: 0 0 0 var(--vermelho);
+}
+
+.demonstracao {
+  display: grid;
+  gap: clamp(32px, 4vw, 56px);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .demonstracao {
+    grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
+  }
+}
+
+.demonstracaoTexto {
+  display: grid;
+  justify-items: start;
+  gap: 24px;
+}
+
+.video {
+  border: 3px solid var(--branco);
+  background-color: #101010;
+  line-height: 0;
+}
+
+.videoMidia {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1280 / 738;
+  object-fit: cover;
+}
+
+/* ---------- etapas ---------- */
+
+.etapas {
+  display: grid;
+  gap: 4px;
+  margin: 52px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: etapa;
+}
+
+@media (min-width: 860px) {
+  .etapas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.etapa {
+  position: relative;
+  padding: 30px 26px 34px;
+  border: 3px solid var(--preto);
+  counter-increment: etapa;
+}
+
+.etapa::before {
+  content: counter(etapa);
+  display: block;
+  margin-bottom: 12px;
+  font-size: 4.6rem;
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.8;
+  color: var(--amarelo);
+  -webkit-text-stroke: 3px var(--preto);
+}
+
+.etapa .h3 {
+  margin-bottom: 12px;
+}
+
+/* ---------- o que vem na caixa ---------- */
+
+.claro {
+  background-color: var(--amarelo);
+}
+
+.caixa {
+  display: grid;
+  gap: clamp(32px, 4vw, 60px);
+}
+
+@media (min-width: 860px) {
+  .caixa {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+.caixaTexto {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: 24px;
+}
+
+.corpoEscuro {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 1.1rem;
+}
+
+.itens {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 3px solid var(--preto);
+}
+
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding-block: 16px;
+  border-bottom: 2px dashed rgb(0 0 0 / 45%);
+}
+
+.itemQtd {
+  flex: none;
+  min-width: 3.4em;
+  font-weight: 900;
+  font-stretch: 87%;
+}
+
+/* ---------- personalização ---------- */
+
+.personalize {
+  display: grid;
+  gap: clamp(36px, 4vw, 64px);
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .personalize {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+  }
+}
+
+.campo {
+  display: grid;
+  gap: 10px;
+  margin-top: 30px;
+  max-width: 420px;
+}
+
+.rotulo {
+  font-weight: 700;
+}
+
+.entrada {
+  width: 100%;
+  padding: 14px 18px;
+  border: 3px solid var(--branco);
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--branco);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.entrada::placeholder {
+  color: rgb(255 255 255 / 40%);
+  letter-spacing: 0.04em;
+}
+
+.regra {
+  margin: 0;
+  color: rgb(255 255 255 / 66%);
+  font-size: 0.9rem;
+}
+
+.medalhaoCaixa {
+  display: grid;
+  place-items: center;
+}
+
+.medalhao {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+}
+
+/* ---------- depoimentos ---------- */
+
+.depoimentos {
+  display: grid;
+  gap: 40px;
+  margin-top: 48px;
+}
+
+@media (min-width: 860px) {
+  .depoimentos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.depoimento {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+.assinaturaLinha {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.fotoPequena {
+  flex: none;
+  width: 72px;
+}
+
+.foto {
+  aspect-ratio: 4 / 5;
+  border: 3px solid var(--preto);
+  background-color: #ededed;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 11px,
+    rgb(0 0 0 / 6%) 11px 22px
+  );
+}
+
+.depoimentoTexto {
+  margin: 0;
+  font-size: 1.06rem;
+  line-height: 1.5;
+}
+
+.assinatura {
+  margin: 0;
+  color: var(--cinza);
+}
+
+/* ---------- autor ---------- */
+
+.secaoColada {
+  padding-top: 0;
+}
+
+.autorFoto {
+  max-width: 260px;
+}
+
+.autor {
+  display: grid;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+  padding: clamp(28px, 4vw, 48px);
+  border: 3px solid var(--preto);
+  box-shadow: 10px 10px 0 var(--amarelo);
+}
+
+@media (min-width: 780px) {
+  .autor {
+    grid-template-columns: minmax(0, 0.5fr) minmax(0, 1.5fr);
+  }
+}
+
+.autorTexto {
+  display: grid;
+  gap: 20px;
+}
+
+/* ---------- perguntas ---------- */
+
+.faq {
+  display: grid;
+  gap: clamp(32px, 4vw, 60px);
+}
+
+@media (min-width: 860px) {
+  .faq {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  }
+}
+
+.faqTexto {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: 26px;
+}
+
+.perguntas {
+  border-top: 3px solid var(--preto);
+}
+
+.pergunta {
+  border-bottom: 3px solid var(--preto);
+}
+
+.perguntaTitulo {
+  margin: 0;
+}
+
+.perguntaBotao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  padding: 22px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.14rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.marcador {
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+
+.marcador::before,
+.marcador::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background-color: var(--vermelho);
+}
+
+.marcador::before {
+  width: 22px;
+  height: 4px;
+}
+
+.marcador::after {
+  width: 4px;
+  height: 22px;
+  transition: transform 260ms ease;
+}
+
+.aberta .marcador::after {
+  transform: scaleY(0);
+}
+
+.respostaCaixa {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms ease;
+}
+
+.aberta .respostaCaixa {
+  grid-template-rows: 1fr;
+}
+
+.respostaInterna {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s 280ms;
+}
+
+.aberta .respostaInterna {
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+.resposta {
+  margin: 0 0 24px;
+  max-width: 62ch;
+  color: var(--cinza);
+}
+
+/* ---------- oferta ---------- */
+
+.oferta {
+  display: grid;
+  justify-items: center;
+  gap: 26px;
+  text-align: center;
+}
+
+.oferta .lead,
+.oferta .corpo {
+  max-width: 46ch;
+}
+
+.marca3d {
+  display: block;
+  width: clamp(180px, 26vw, 250px);
+  height: auto;
+}
+
+.preco {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+}
+
+.precoAntes {
+  color: rgb(255 255 255 / 60%);
+  text-decoration: line-through;
+}
+
+.precoAgora {
+  font-size: clamp(3rem, 9vw, 5rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--amarelo);
+}
+
+.parcelas {
+  color: var(--branco);
+}
+
+.garantia {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: rgb(255 255 255 / 72%);
+}
