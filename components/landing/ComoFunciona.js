@@ -1,34 +1,52 @@
+import Image from "next/image";
 import estilos from "components/landing/landing.module.css";
 import Descer from "components/landing/Descer.js";
 
+// Os fatos seguem a descrição oficial do produto.
 const ETAPAS = [
   {
-    titulo: "Tabuleiro",
+    titulo: "Encaixe as quatro peças",
     texto:
-      "Quatro peças que encaixam de um jeito só e formam a cidade inteira: ruas, praça, escola, banco e estádio. Monta no chão ou na mesa.",
+      "As quatro peças de MDF, de 38 × 38 cm cada, formam uma cidade de 76 × 76 cm que cabe no tapete da sala. Quando a brincadeira acaba, tudo volta para a sacola.",
   },
   {
-    titulo: "Aplicativo",
+    titulo: "Chame os brinquedos da casa",
     texto:
-      "Baixe o app do Super Pista no celular ou no tablet. Funciona em Android e em iPhone.",
+      "Os carrinhos ganham pista, os bonecos ganham hospital, escola e estádio. Aquele brinquedo esquecido no fundo da caixa volta a ter onde morar.",
   },
   {
-    titulo: "Cidade",
+    titulo: "Veja a cidade de pé",
     texto:
-      "Aponte a câmera para o tabuleiro montado e a cidade aparece em cima dele. Os prédios sobem, as ruas se enchem e a criança passeia por dentro do que acabou de montar.",
+      "Baixe o app Super Pista na Play Store ou na App Store e use grátis por 3 dias. Para continuar, faça login e digite o código do cartão que vem na sacola. Depois é só apontar a câmera para a imagem alvo da peça 1.",
   },
 ];
 
-// O produto explicado em três partes, na ordem em que a criança usa.
+// O produto explicado na ordem em que a criança brinca.
 function ComoFunciona() {
   return (
-    <section className={estilos.secao} id="como-funciona">
+    <section
+      className={`${estilos.secao} ${estilos.secaoColada}`}
+      id="como-funciona"
+    >
       <div className={estilos.container}>
-        <div className={estilos.introducao}>
-          <h2 className={estilos.h2}>Tabuleiro, aplicativo, cidade</h2>
-          <p className={estilos.lead}>
-            Três partes e nenhuma delas precisa de óculos, controle ou tomada.
-          </p>
+        <div className={estilos.comoIntro}>
+          <div className={estilos.introducao}>
+            <h2 className={estilos.h2}>
+              Montar é rápido. Brincar leva a tarde toda.
+            </h2>
+            <p className={estilos.lead}>
+              A cidade é feita para os brinquedos que já existem na sua casa.
+            </p>
+          </div>
+
+          <Image
+            className={estilos.arteImagem}
+            src="/landing/tabuleiro.webp"
+            alt="Tabuleiro do Super Pista montado com as quatro peças numeradas, formando uma mini cidade com pista de carrinhos, estádio, hospital, escola, praça, academia e banco, e o nome Daniel no círculo amarelo da peça 4."
+            width={1400}
+            height={992}
+            sizes="(min-width: 860px) 600px, 92vw"
+          />
         </div>
 
         <ol className={estilos.etapas}>
@@ -41,7 +59,7 @@ function ComoFunciona() {
         </ol>
       </div>
 
-      <Descer destino="#na-caixa" rotulo="o que vem na caixa" />
+      <Descer destino="#junto" rotulo="a família brincando junto" direita />
     </section>
   );
 }

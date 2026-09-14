@@ -7,21 +7,20 @@ function Oferta() {
   return (
     <section className={`${estilos.secao} ${estilos.escuro}`} id="comprar">
       <div className={`${estilos.container} ${estilos.oferta}`}>
-        <Image
-          className={estilos.marca3d}
-          src="/landing/logo-super-pista-3d.webp"
-          alt=""
-          width={900}
-          height={614}
-          sizes="260px"
-        />
+        <div className={`${estilos.caixaMidia} ${estilos.ofertaFoto}`}>
+          <Image
+            className={estilos.cobrir}
+            src="/landing/oferta-sacola.webp"
+            alt="Menino e menina deitados no chão entre carrinhos e blocos, rindo, com a sacola do Super Pista nas mãos."
+            fill
+            sizes="(min-width: 600px) 520px, 92vw"
+          />
+        </div>
 
-        <h2 className={estilos.h2}>
-          A brincadeira começa quando a caixa chega
-        </h2>
+        <h2 className={estilos.h2}>Imagine essa cara quando a sacola chegar</h2>
         <p className={estilos.lead}>
-          O tabuleiro de quatro peças e o aplicativo. Sem assinatura e sem nada
-          para comprar depois.
+          As quatro peças de MDF, a sacola reforçada, o cartão que ativa o
+          aplicativo e o nome da criança impresso na cidade, sem custo a mais.
         </p>
 
         <p className={estilos.preco}>
@@ -34,7 +33,7 @@ function Oferta() {
           </span>
         </p>
 
-        <BotaoComprar />
+        <BotaoComprar>Quero ver essa cara em casa</BotaoComprar>
 
         <ul className={`${estilos.garantia} ${estilos.dado}`}>
           <li>Frete grátis para todo o Brasil</li>

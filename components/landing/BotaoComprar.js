@@ -4,14 +4,16 @@ import estilos from "components/landing/landing.module.css";
 // Enquanto ele não existe, todos os botões levam para a oferta no fim da página.
 export const LINK_CHECKOUT = "#comprar";
 
-function BotaoComprar({ compacto = false }) {
+// Na landing cada botão fala da cena da dobra em que está, então o texto vem
+// de quem usa. Sem texto, fica o rótulo neutro da home.
+function BotaoComprar({ compacto = false, children = "Comprar agora" }) {
   const classes = compacto
     ? `${estilos.botao} ${estilos.botaoCompacto}`
     : estilos.botao;
 
   return (
     <a className={classes} href={LINK_CHECKOUT}>
-      Comprar agora
+      {children}
     </a>
   );
 }

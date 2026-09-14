@@ -1,0 +1,50 @@
+/* Campo e prévia do nome da criança, usados na landing do tabuleiro e no popup
+   da home. Os dois lugares têm fundo escuro, e as cores contam com isso. */
+
+.campo {
+  /* o mesmo branco da landing, repetido para o lint validar este arquivo */
+  --branco: #ffffff;
+
+  display: grid;
+  gap: 10px;
+  margin-top: 30px;
+  max-width: 420px;
+}
+
+.rotulo {
+  font-weight: 700;
+}
+
+.entrada {
+  width: 100%;
+  padding: 14px 18px;
+  border: 3px solid var(--branco);
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--branco);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.entrada::placeholder {
+  color: rgb(255 255 255 / 40%);
+  letter-spacing: 0.04em;
+}
+
+.regra {
+  margin: 0;
+  color: rgb(255 255 255 / 66%);
+  font-size: 0.9rem;
+}
+
+.medalhao {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+}

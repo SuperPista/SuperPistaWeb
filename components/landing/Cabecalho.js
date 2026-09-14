@@ -15,7 +15,7 @@ function Cabecalho() {
           height={414}
           priority
         />
-        <BotaoComprar compacto />
+        <BotaoComprar compacto>Quero para meu filho</BotaoComprar>
       </div>
     </header>
   );

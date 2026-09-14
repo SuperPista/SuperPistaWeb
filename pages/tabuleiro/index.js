@@ -5,11 +5,13 @@ import estilos from "components/landing/landing.module.css";
 import Cabecalho from "components/landing/Cabecalho.js";
 import Hero from "components/landing/Hero.js";
 import Faixa from "components/landing/Faixa.js";
+import Lembranca from "components/landing/Lembranca.js";
 import Demonstracao from "components/landing/Demonstracao.js";
 import ComoFunciona from "components/landing/ComoFunciona.js";
-import NaCaixa from "components/landing/NaCaixa.js";
+import BrincarJunto from "components/landing/BrincarJunto.js";
+import NaSacola from "components/landing/NaSacola.js";
 import Personalizacao from "components/landing/Personalizacao.js";
-import Depoimentos from "components/landing/Depoimentos.js";
+import Presente from "components/landing/Presente.js";
 import Autor from "components/landing/Autor.js";
 import Perguntas from "components/landing/Perguntas.js";
 import Oferta from "components/landing/Oferta.js";
@@ -24,15 +26,16 @@ const archivo = Archivo({
 });
 
 // Landing page do tabuleiro: sem menu, sem rodapé e sem link para o site.
-// Todo botão leva para o mesmo lugar.
+// A página conta uma história, da infância de quem compra até a sacola chegando
+// em casa, e todo botão leva para a oferta com o gancho da dobra em que está.
 function LandingDoTabuleiro() {
   return (
     <>
       <Head>
-        <title>Super Pista: o tabuleiro que vira cidade no celular</title>
+        <title>Super Pista: hoje a tarde é no chão da sala</title>
         <meta
           name="description"
-          content="Um tabuleiro de quatro peças que a criança encaixa e vira uma cidade em realidade aumentada na tela do celular. Sem óculos, sem controle e sem pilha."
+          content="Uma cidade com pista de carrinhos e o nome do seu filho, para os brinquedos esquecidos no quarto voltarem à brincadeira e a família sentar junto no chão da sala. Com o app, a cidade surge em 3D no celular."
         />
       </Head>
 
@@ -41,12 +44,14 @@ function LandingDoTabuleiro() {
         <main>
           <Hero />
           <Faixa />
+          <Lembranca />
           <Demonstracao />
           <ComoFunciona />
           <Faixa />
-          <NaCaixa />
+          <BrincarJunto />
+          <NaSacola />
           <Personalizacao />
-          <Depoimentos />
+          <Presente />
           <Autor />
           <Faixa />
           <Perguntas />
