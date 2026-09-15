@@ -1,9 +1,9 @@
-import { useState } from "react";
 import estilos from "components/landing/landing.module.css";
 import Descer from "components/landing/Descer.js";
 import BotaoComprar from "components/landing/BotaoComprar.js";
 import CampoDoNome from "components/nome/CampoDoNome.js";
 import Medalhao from "components/nome/Medalhao.js";
+import useNomeDaCrianca from "components/nome/useNomeDaCrianca.js";
 import VideoEmLoop from "components/midia/VideoEmLoop.js";
 
 const CRIANCAS = [
@@ -24,7 +24,7 @@ const CRIANCAS = [
 // O botão usa o nome que acabou de ser escrito: é a cidade que a pessoa está
 // imaginando. Só o visual: nada é enviado ainda.
 function Personalizacao() {
-  const [nome, setNome] = useState("");
+  const { nome, artigo, mudarNome, escolherArtigo } = useNomeDaCrianca();
   const nomeEscrito =
     nome && nome[0].toUpperCase() + nome.slice(1).toLowerCase();
 
@@ -44,7 +44,12 @@ function Personalizacao() {
             </p>
           </div>
 
-          <CampoDoNome nome={nome} aoMudar={setNome} />
+          <CampoDoNome
+            nome={nome}
+            artigo={artigo}
+            aoMudar={mudarNome}
+            aoEscolherArtigo={escolherArtigo}
+          />
 
           <div className={estilos.chamada}>
             <BotaoComprar>
@@ -56,7 +61,7 @@ function Personalizacao() {
         </div>
 
         <div className={estilos.medalhaoCaixa}>
-          <Medalhao nome={nome} />
+          <Medalhao nome={nome} artigo={artigo} />
         </div>
       </div>
 

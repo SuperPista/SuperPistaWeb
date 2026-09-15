@@ -1,4 +1,5 @@
 import estilos from "components/nome/nome.module.css";
+import { NOME_DE_EXEMPLO } from "components/nome/useNomeDaCrianca.js";
 
 // Largura de cada maiúscula da Archivo 900, em fração do tamanho da fonte.
 // Serve para o nome nunca passar da borda do círculo, com M e W ou com I e L.
@@ -40,9 +41,10 @@ function desvioDaLetra(letra, indice) {
 // O círculo amarelo de uma das peças do tabuleiro, com o nome impresso.
 // Cada letra sai colorida, com contorno preto e um contorno branco por fora,
 // que acompanha o desenho da letra em vez de ser uma caixa atrás dela. Cada
-// letra cai um pouco acima ou abaixo da linha, como no tabuleiro impresso.
-function Medalhao({ nome }) {
-  const texto = nome.trim() === "" ? "DANIEL" : nome.toUpperCase();
+// letra cai um pouco acima ou abaixo da linha, como no tabuleiro impresso. O
+// "da" ou "do" vem pronto de quem usa, junto com o nome.
+function Medalhao({ nome, artigo }) {
+  const texto = (nome.trim() === "" ? NOME_DE_EXEMPLO : nome).toUpperCase();
   const letras = [...texto];
 
   // as letras, mais o espaço entre elas e o contorno branco das pontas
@@ -118,7 +120,7 @@ function Medalhao({ nome }) {
         letterSpacing="2"
         textAnchor="middle"
       >
-        DO
+        {artigo.toUpperCase()}
       </text>
 
       <text {...medidas} stroke="#fff" strokeWidth={tamanho * 0.26}>

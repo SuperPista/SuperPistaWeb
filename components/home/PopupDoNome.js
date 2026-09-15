@@ -1,8 +1,9 @@
-import { useId, useRef, useState } from "react";
+import { useId, useRef } from "react";
 import landing from "components/landing/landing.module.css";
 import estilos from "components/home/home.module.css";
 import CampoDoNome from "components/nome/CampoDoNome.js";
 import Medalhao from "components/nome/Medalhao.js";
+import useNomeDaCrianca from "components/nome/useNomeDaCrianca.js";
 
 // A mesma prévia do nome da landing, aberta num popup sem sair da home. O
 // <dialog> nativo já prende o foco, fecha com Esc e deixa o resto da página
@@ -10,7 +11,7 @@ import Medalhao from "components/nome/Medalhao.js";
 function PopupDoNome() {
   const dialogo = useRef(null);
   const idTitulo = useId();
-  const [nome, setNome] = useState("");
+  const { nome, artigo, mudarNome, escolherArtigo } = useNomeDaCrianca();
 
   function abrir() {
     dialogo.current.showModal();
@@ -66,11 +67,16 @@ function PopupDoNome() {
               Escreva o nome ou apelido da criança para ver como ele sai no
               círculo amarelo da peça.
             </p>
-            <CampoDoNome nome={nome} aoMudar={setNome} />
+            <CampoDoNome
+              nome={nome}
+              artigo={artigo}
+              aoMudar={mudarNome}
+              aoEscolherArtigo={escolherArtigo}
+            />
           </div>
 
           <div className={estilos.popupMedalhao}>
-            <Medalhao nome={nome} />
+            <Medalhao nome={nome} artigo={artigo} />
           </div>
         </div>
       </dialog>
