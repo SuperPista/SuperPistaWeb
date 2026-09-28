@@ -23,7 +23,7 @@ describe("POST /api/v1/sessions", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "email.errado@superpista.com",
+          email: "email.errado@gmail.com",
           password: "senha-correta",
         }),
       });
@@ -42,7 +42,7 @@ describe("POST /api/v1/sessions", () => {
 
     test("With correct `email` but incorrect `password`", async () => {
       await orchestrator.createUser({
-        email: "email.correto@superpista.com",
+        email: "email.correto@gmail.com",
       });
 
       const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
@@ -51,7 +51,7 @@ describe("POST /api/v1/sessions", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "email.correto@superpista.com",
+          email: "email.correto@gmail.com",
           password: "senha-incorreta",
         }),
       });
@@ -77,7 +77,7 @@ describe("POST /api/v1/sessions", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "email.incorreto@superpista.com",
+          email: "email.incorreto@gmail.com",
           password: "senha-incorreta",
         }),
       });
@@ -94,9 +94,39 @@ describe("POST /api/v1/sessions", () => {
       });
     });
 
+    test("With correct credentials of an account not activated yet", async () => {
+      await orchestrator.createUser({
+        email: "aindanaoativou@gmail.com",
+        password: "senha-correta",
+      });
+
+      const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "aindanaoativou@gmail.com",
+          password: "senha-correta",
+        }),
+      });
+
+      expect(response.status).toBe(403);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        name: "ForbiddenError",
+        message: "Sua conta ainda não foi ativada.",
+        action:
+          "Abra o link de ativação que mandamos para o seu email. Se ele venceu, peça um novo em Esqueci minha senha.",
+        status_code: 403,
+      });
+    });
+
     test("With correct `email` and correct `password`", async () => {
       const createdUser = await orchestrator.createUser({
-        email: "tudo.correto@superpista.com",
+        email: "tudo.correto@gmail.com",
         password: "tudocorreto",
       });
 
@@ -108,7 +138,7 @@ describe("POST /api/v1/sessions", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: "tudo.correto@superpista.com",
+          email: "tudo.correto@gmail.com",
           password: "tudocorreto",
         }),
       });
@@ -131,26 +161,19 @@ describe("POST /api/v1/sessions", () => {
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
-      // `expires_at` é calculado na aplicação antes da persistência.
-      // `created_at` é calculado depois na camada do banco de dados.
-      // Por isso, o tempo real entre as duas datas pode ficar ligeiramente
-      // menor do que o tempo de expiração configurado e não bater 30 dias nos
-      // milissegundos caso seja calculado apenas `expires_at` - `created_at`.
-      // Então a ideia é garantir que no momento `expires_at` seja maior que
-      // `created_at`, e também que possa existir distância de até 5 segundo
-      // entre as duas datas para cobrir o caso do banco sofrer algum load
-      // inesperado nos testes.
-
       const expiresAt = new Date(responseBody.expires_at);
       const createdAt = new Date(responseBody.created_at);
 
-      expect(expiresAt >= createdAt).toBe(true);
+      const actualDuration = expiresAt - createdAt;
+      const expectedDuration = session.EXPIRATION_IN_MILLISECONDS;
+      const toleranceInMilliseconds = 5000;
 
-      const actualLifetimeInMilliseconds = expiresAt - createdAt;
-      const lifetimeDifferenceInMilliseconds =
-        session.EXPIRATION_IN_MILLISECONDS - actualLifetimeInMilliseconds;
-
-      expect(lifetimeDifferenceInMilliseconds).toBeLessThanOrEqual(5000);
+      expect(actualDuration).toBeGreaterThanOrEqual(
+        expectedDuration - toleranceInMilliseconds,
+      );
+      expect(actualDuration).toBeLessThanOrEqual(
+        expectedDuration + toleranceInMilliseconds,
+      );
 
       const parsedSetCookie = setCookieParser(response, {
         map: true,
