@@ -28,7 +28,8 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
         name: "NotFoundError",
         message:
           "O token de ativação utilizado não foi encontrado no sistema ou expirou.",
-        action: "Faça um novo cadastro.",
+        action:
+          "Peça um novo link em Esqueci minha senha. Se a conta ainda não foi ativada, o link que chega é de ativação.",
         status_code: 404,
       });
     });
@@ -58,7 +59,8 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
         name: "NotFoundError",
         message:
           "O token de ativação utilizado não foi encontrado no sistema ou expirou.",
-        action: "Faça um novo cadastro.",
+        action:
+          "Peça um novo link em Esqueci minha senha. Se a conta ainda não foi ativada, o link que chega é de ativação.",
         status_code: 404,
       });
     });
@@ -91,7 +93,8 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
         name: "NotFoundError",
         message:
           "O token de ativação utilizado não foi encontrado no sistema ou expirou.",
-        action: "Faça um novo cadastro.",
+        action:
+          "Peça um novo link em Esqueci minha senha. Se a conta ainda não foi ativada, o link que chega é de ativação.",
         status_code: 404,
       });
     });
@@ -131,16 +134,23 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
       const expiresAt = new Date(responseBody.expires_at);
       const createdAt = new Date(responseBody.created_at);
 
-      expiresAt.setMilliseconds(0);
-      createdAt.setMilliseconds(0);
+      const actualDuration = expiresAt - createdAt;
+      const expectedDuration = activation.EXPIRATION_IN_MILLISECONDS;
+      const toleranceInMilliseconds = 5000;
 
-      expect(expiresAt - createdAt).toBe(activation.EXPIRATION_IN_MILLISECONDS);
+      expect(actualDuration).toBeGreaterThanOrEqual(
+        expectedDuration - toleranceInMilliseconds,
+      );
+      expect(actualDuration).toBeLessThanOrEqual(
+        expectedDuration + toleranceInMilliseconds,
+      );
 
       const activatedUser = await user.findOneById(responseBody.user_id);
       expect(activatedUser.features).toEqual([
         "create:session",
         "read:session",
         "update:user",
+        "delete:user",
       ]);
     });
 

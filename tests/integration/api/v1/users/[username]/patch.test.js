@@ -142,11 +142,11 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With duplicated `email`", async () => {
       await orchestrator.createUser({
-        email: "email1@superpista.com",
+        email: "email1@gmail.com",
       });
 
       const createdUser2 = await orchestrator.createUser({
-        email: "email2@superpista.com",
+        email: "email2@gmail.com",
       });
 
       const activatedUser2 = await orchestrator.activateUser(createdUser2);
@@ -161,7 +161,7 @@ describe("PATCH /api/v1/users/[username]", () => {
             Cookie: `session_id=${sessionObject2.token}`,
           },
           body: JSON.stringify({
-            email: "email1@superpista.com",
+            email: "email1@gmail.com",
           }),
         },
       );
@@ -204,7 +204,6 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: responseBody.id,
         username: "uniqueUser2",
-        features: ["create:session", "read:session", "update:user"],
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -231,7 +230,7 @@ describe("PATCH /api/v1/users/[username]", () => {
             Cookie: `session_id=${sessionObject.token}`,
           },
           body: JSON.stringify({
-            email: "uniqueEmail2@superpista.com",
+            email: "uniqueEmail2@gmail.com",
           }),
         },
       );
@@ -243,7 +242,6 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: responseBody.id,
         username: createdUser.username,
-        features: ["create:session", "read:session", "update:user"],
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -255,11 +253,10 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody.updated_at > responseBody.created_at).toBe(true);
 
       const userInDatabase = await user.findOneByUsername(createdUser.username);
-
-      expect(userInDatabase.email).toBe("uniqueEmail2@superpista.com");
+      expect(userInDatabase.email).toBe("uniqueEmail2@gmail.com");
     });
 
-    test("With new `password`", async () => {
+    test("With `password`", async () => {
       const createdUser = await orchestrator.createUser({
         password: "newPassword1",
       });
@@ -280,37 +277,122 @@ describe("PATCH /api/v1/users/[username]", () => {
         },
       );
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(400);
 
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        id: responseBody.id,
-        username: createdUser.username,
-        features: ["create:session", "read:session", "update:user"],
-        created_at: responseBody.created_at,
-        updated_at: responseBody.updated_at,
+        name: "ValidationError",
+        message: "A senha não pode ser alterada por este endpoint.",
+        action: "Utilize o endpoint de alteração de senha.",
+        status_code: 400,
       });
 
-      expect(uuidVersion(responseBody.id)).toBe(4);
-      expect(Date.parse(responseBody.created_at)).not.toBeNaN();
-      expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+      // A senha só muda por POST /api/v1/user/password, que exige a senha
+      // atual. Aceitá-la aqui deixava uma sessão roubada trocar a senha.
+      const userInDatabase = await user.findOneByUsername(createdUser.username);
 
-      expect(responseBody.updated_at > responseBody.created_at).toBe(true);
+      expect(
+        await password.compare("newPassword1", userInDatabase.password),
+      ).toBe(true);
+      expect(
+        await password.compare("newPassword2", userInDatabase.password),
+      ).toBe(false);
+    });
+
+    // `features` nunca chegou ao SQL do UPDATE, então ninguém se promovia por
+    // aqui, mas a resposta era 200, dizendo que um pedido ignorado deu certo.
+    test("With `features`", async () => {
+      const createdUser = await orchestrator.createUser();
+      const activatedUser = await orchestrator.activateUser(createdUser);
+      const sessionObject = await orchestrator.createSession(activatedUser);
+
+      const response = await fetch(
+        `${webserver.origin}/api/v1/users/${createdUser.username}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionObject.token}`,
+          },
+          body: JSON.stringify({
+            features: ["update:user:others"],
+          }),
+        },
+      );
+
+      expect(response.status).toBe(400);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        name: "ValidationError",
+        message: "Não é possível atualizar: features.",
+        action: "Este endpoint atualiza apenas: username, email.",
+        status_code: 400,
+      });
 
       const userInDatabase = await user.findOneByUsername(createdUser.username);
-      const correctPasswordMatch = await password.compare(
-        "newPassword2",
-        userInDatabase.password,
+      expect(userInDatabase.features).not.toContain("update:user:others");
+    });
+
+    test("With fields the endpoint does not write", async () => {
+      const createdUser = await orchestrator.createUser();
+      const activatedUser = await orchestrator.activateUser(createdUser);
+      const sessionObject = await orchestrator.createSession(activatedUser);
+
+      const response = await fetch(
+        `${webserver.origin}/api/v1/users/${createdUser.username}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionObject.token}`,
+          },
+          body: JSON.stringify({
+            id: "00000000-0000-4000-8000-000000000000",
+            created_at: "2020-01-01T00:00:00.000Z",
+          }),
+        },
       );
 
-      const incorrectPasswordMatch = await password.compare(
-        "newPassword1",
-        userInDatabase.password,
+      expect(response.status).toBe(400);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        name: "ValidationError",
+        message: "Não é possível atualizar: id, created_at.",
+        action: "Este endpoint atualiza apenas: username, email.",
+        status_code: 400,
+      });
+
+      const userInDatabase = await user.findOneByUsername(createdUser.username);
+      expect(userInDatabase.id).toBe(createdUser.id);
+    });
+
+    // Sem corpo o `request.body` chega `undefined`, e o `in` do model estourava
+    // TypeError: 500 numa requisição que é só malformada. Agora termina como o
+    // corpo vazio, que sempre respondeu 200.
+    test("Without body", async () => {
+      const createdUser = await orchestrator.createUser();
+      const activatedUser = await orchestrator.activateUser(createdUser);
+      const sessionObject = await orchestrator.createSession(activatedUser);
+
+      const response = await fetch(
+        `${webserver.origin}/api/v1/users/${createdUser.username}`,
+        {
+          method: "PATCH",
+          headers: {
+            Cookie: `session_id=${sessionObject.token}`,
+          },
+        },
       );
 
-      expect(correctPasswordMatch).toBe(true);
-      expect(incorrectPasswordMatch).toBe(false);
+      expect(response.status).toBe(200);
+
+      const responseBody = await response.json();
+      expect(responseBody.username).toBe(createdUser.username);
     });
   });
 
@@ -351,7 +433,6 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: defaultUser.id,
         username: "AlteradoPorPrivilegiado",
-        features: defaultUser.features,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });

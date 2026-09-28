@@ -7,6 +7,8 @@ const availableFeatures = [
   "read:user:self",
   "update:user",
   "update:user:others",
+  "delete:user",
+  "delete:user:others",
 
   // SESSION
   "create:session",
@@ -42,6 +44,14 @@ function can(user, feature, resource) {
     }
   }
 
+  if (feature === "delete:user" && resource) {
+    authorized = false;
+
+    if (user.id === resource.id || can(user, "delete:user:others")) {
+      authorized = true;
+    }
+  }
+
   return authorized;
 }
 
@@ -51,10 +61,12 @@ function filterOutput(user, feature, resource) {
   validateResource(resource);
 
   if (feature === "read:user") {
+    // Sem `features`: esta é a visão de um usuário sobre outro, e a lista de
+    // features é o mapa de privilégios da conta. Quem precisa dela para a
+    // própria conta tem o ramo `read:user:self`.
     return {
       id: resource.id,
       username: resource.username,
-      features: resource.features,
       created_at: resource.created_at,
       updated_at: resource.updated_at,
     };

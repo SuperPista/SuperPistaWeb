@@ -1,0 +1,126 @@
+/* Campo e prévia do nome da criança, usados na landing do tabuleiro e no popup
+   da home. Os dois lugares têm fundo escuro, e as cores contam com isso. */
+
+.campo {
+  /* as mesmas cores da landing, repetidas para o lint validar este arquivo */
+  --preto: #000000;
+  --branco: #ffffff;
+  --amarelo: #ffd100;
+
+  display: grid;
+  gap: 10px;
+  margin-top: 30px;
+  max-width: 420px;
+}
+
+.somenteLeitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rotulo {
+  font-weight: 700;
+}
+
+/* o "da" ou "do" fica antes do nome, na mesma ordem em que sai no círculo */
+.linha {
+  display: flex;
+  gap: 10px;
+}
+
+.artigos {
+  display: flex;
+  flex-shrink: 0;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.artigo {
+  position: relative;
+  display: flex;
+}
+
+.artigoTexto {
+  display: grid;
+  place-items: center;
+  min-width: 3.2rem;
+  padding: 0 10px;
+  border: 3px solid var(--branco);
+  color: var(--branco);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* os dois botões dividem a borda do meio */
+.artigo + .artigo .artigoTexto {
+  border-left-width: 0;
+}
+
+.artigo input:not(:checked, :disabled) + .artigoTexto:hover {
+  background-color: rgb(255 255 255 / 14%);
+}
+
+.artigo input:checked + .artigoTexto {
+  background-color: var(--amarelo);
+  color: var(--preto);
+}
+
+.artigo input:focus-visible + .artigoTexto {
+  outline: 3px solid var(--amarelo);
+  outline-offset: 3px;
+}
+
+.artigos:disabled .artigoTexto {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.entrada {
+  width: 100%;
+  min-width: 0;
+  padding: 14px 18px;
+  border: 3px solid var(--branco);
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--branco);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.entrada::placeholder {
+  color: rgb(255 255 255 / 40%);
+  letter-spacing: 0.04em;
+}
+
+.regra {
+  margin: 0;
+  color: rgb(255 255 255 / 66%);
+  font-size: 0.9rem;
+}
+
+.medalhao {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+}

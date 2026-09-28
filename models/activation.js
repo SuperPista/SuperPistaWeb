@@ -6,6 +6,7 @@ import webserver from "infra/webserver.js";
 import { NotFoundError, ForbiddenError } from "infra/errors.js";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000; // 15 minutes
+const RESEND_INTERVAL_IN_MILLISECONDS = 60 * 5 * 1000; // 5 minutes
 
 async function findOneValidById(tokenId) {
   const activationTokenObject = await runSelectQuery(tokenId);
@@ -33,7 +34,8 @@ async function findOneValidById(tokenId) {
       throw new NotFoundError({
         message:
           "O token de ativação utilizado não foi encontrado no sistema ou expirou.",
-        action: "Faça um novo cadastro.",
+        action:
+          "Peça um novo link em Esqueci minha senha. Se a conta ainda não foi ativada, o link que chega é de ativação.",
       });
     }
 
@@ -102,8 +104,32 @@ async function activateUserByUserId(userId) {
     "create:session",
     "read:session",
     "update:user",
+    "delete:user",
   ]);
   return activatedUser;
+}
+
+// Diz se um link de ativação saiu há pouco para esta conta. Quem pede um link
+// novo (pelo cadastro repetido ou por Esqueci minha senha) digita só um email,
+// e qualquer um pode digitar o email dos outros: sem esta checagem, cada pedido
+// virava mais um email na caixa de alguém.
+async function wasSentRecentlyToUser(userId) {
+  const results = await database.query({
+    text: `
+      SELECT
+        1
+      FROM
+        user_activation_tokens
+      WHERE
+        user_id = $1
+        AND created_at > NOW() - make_interval(secs => $2)
+      LIMIT
+        1
+    ;`,
+    values: [userId, RESEND_INTERVAL_IN_MILLISECONDS / 1000],
+  });
+
+  return results.rowCount > 0;
 }
 
 async function sendEmailToUser(user, activationToken) {
@@ -125,8 +151,10 @@ const activation = {
   create,
   markTokenAsUsed,
   activateUserByUserId,
+  wasSentRecentlyToUser,
   sendEmailToUser,
   EXPIRATION_IN_MILLISECONDS,
+  RESEND_INTERVAL_IN_MILLISECONDS,
 };
 
 export default activation;
