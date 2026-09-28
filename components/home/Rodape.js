@@ -2,16 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 import landing from "components/landing/landing.module.css";
 import estilos from "components/home/home.module.css";
-import { LINK_LOGIN, LINK_CRIAR_CONTA } from "components/home/links.js";
+import {
+  LINK_LOGIN,
+  LINK_CRIAR_CONTA,
+  LINK_PRIVACIDADE,
+} from "components/conta/links.js";
 
 const COLUNAS = [
   {
     titulo: "Loja",
     links: [
-      { rotulo: "Como brinca", destino: "#como-brinca" },
-      { rotulo: "Nome da criança", destino: "#nome" },
-      { rotulo: "Dúvidas", destino: "#perguntas" },
-      { rotulo: "Comprar", destino: "#comprar" },
+      { rotulo: "Como brinca", destino: "/#como-brinca" },
+      { rotulo: "Nome da criança", destino: "/#nome" },
+      { rotulo: "Dúvidas", destino: "/#perguntas" },
+      { rotulo: "Comprar", destino: "/#comprar" },
     ],
   },
   {
@@ -19,6 +23,7 @@ const COLUNAS = [
     links: [
       { rotulo: "Login", destino: LINK_LOGIN },
       { rotulo: "Criar conta", destino: LINK_CRIAR_CONTA },
+      { rotulo: "Termos e privacidade", destino: LINK_PRIVACIDADE },
     ],
   },
   {

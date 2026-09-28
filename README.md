@@ -10,7 +10,8 @@ a conta criada aqui.
 
 ## Escopo
 
-- **Login e contas** — cadastro, ativação por e-mail, sessões e edição de usuário.
+- **Login e contas** — cadastro, ativação por e-mail, login, recuperação de senha e a
+  área Minha conta (trocar senha, baixar os dados e excluir a conta).
 - **Loja** — página de venda do tabuleiro Super Pista.
 
 Qualquer coisa fora disso (gameplay, rastreamento de marcadores, AR) fica no aplicativo.
@@ -54,7 +55,8 @@ MailCatcher, que pode ser aberto em <http://localhost:1080>.
 | `npm run services:stop`     | Para os containers                                   |
 | `npm run services:down`     | Remove os containers                                 |
 | `npm run migrations:create` | Cria uma nova migration                              |
-| `npm run migrations:up`     | Aplica as migrations pendentes                       |
+| `npm run migrations:up:dev` | Aplica as migrations pendentes no banco local        |
+| `npm run migrations:up`     | Aplica as migrations com o ambiente do deploy        |
 | `npm run lint:prettier:fix` | Formata o código                                     |
 | `npm run commit`            | Commit guiado pelo Commitizen                        |
 
@@ -84,19 +86,45 @@ Todo pull request dispara dois workflows no GitHub Actions:
 - **Linting** — `prettier --check`, `eslint --max-warnings 0` e `commitlint`
 - **Automated Tests** — a suíte completa do Jest
 
+## Páginas da conta
+
+| Página                        | O que faz                                              |
+| ----------------------------- | ------------------------------------------------------ |
+| `/login`                      | Entrar com e-mail e senha                              |
+| `/cadastro`                   | Criar conta, com aceite dos termos                     |
+| `/cadastro/ativar/[token_id]` | Link de ativação enviado por e-mail                    |
+| `/recuperar-senha`            | Pedir por e-mail o link para criar uma senha nova      |
+| `/recuperar-senha/[token]`    | Link enviado por e-mail para criar a senha nova        |
+| `/conta`                      | Minha conta: sair, trocar senha, baixar dados, excluir |
+| `/privacidade`                | Termos de Uso e Política de Privacidade                |
+
 ## API
 
-| Endpoint                               | Descrição                          |
-| -------------------------------------- | ---------------------------------- |
-| `GET /api/v1/status`                   | Status do sistema e do banco       |
-| `POST /api/v1/users`                   | Cria uma conta                     |
-| `GET /api/v1/users/[username]`         | Dados públicos de um usuário       |
-| `PATCH /api/v1/users/[username]`       | Atualiza um usuário                |
-| `GET /api/v1/user`                     | Usuário da sessão atual            |
-| `POST /api/v1/sessions`                | Login                              |
-| `DELETE /api/v1/sessions`              | Logout                             |
-| `PATCH /api/v1/activations/[token_id]` | Ativa a conta pelo token do e-mail |
-| `POST /api/v1/migrations`              | Aplica migrations                  |
+| Endpoint                                | Descrição                          |
+| --------------------------------------- | ---------------------------------- |
+| `GET /api/v1/status`                    | Status do sistema e do banco       |
+| `POST /api/v1/users`                    | Cria uma conta                     |
+| `GET /api/v1/users/[username]`          | Dados de um usuário (com sessão)   |
+| `PATCH /api/v1/users/[username]`        | Atualiza username ou e-mail        |
+| `DELETE /api/v1/users/[username]`       | Exclui a conta                     |
+| `GET /api/v1/user`                      | Usuário da sessão atual            |
+| `POST /api/v1/user/password`            | Troca a senha, pedindo a atual     |
+| `GET /api/v1/user/export`               | Baixa os dados da conta (LGPD)     |
+| `POST /api/v1/sessions`                 | Login                              |
+| `DELETE /api/v1/sessions`               | Logout                             |
+| `PATCH /api/v1/activations/[token_id]`  | Ativa a conta pelo token do e-mail |
+| `POST /api/v1/password-resets`          | Envia o link de senha nova         |
+| `PATCH /api/v1/password-resets/[token]` | Grava a senha nova pelo link       |
+| `POST /api/v1/migrations`               | Aplica migrations                  |
+
+O cadastro e o pedido de senha nova respondem igual exista a conta ou não, para não
+revelar quem é cliente. Os dois mandam no máximo um e-mail a cada 5 minutos por conta.
+
+## Deploy
+
+O build da Vercel roda `vercel-build`, que aplica as migrations antes do `next build`.
+Ele usa as variáveis `POSTGRES_*` do ambiente do deploy, inclusive nos deploys de
+preview: confira que o preview não aponta para o banco de produção.
 
 ## Licença
 

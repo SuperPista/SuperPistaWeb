@@ -3,7 +3,7 @@ import Link from "next/link";
 import landing from "components/landing/landing.module.css";
 import estilos from "components/home/home.module.css";
 import BotaoComprar from "components/landing/BotaoComprar.js";
-import { LINK_LOGIN } from "components/home/links.js";
+import { LINK_LOGIN } from "components/conta/links.js";
 
 // Fechamento da home e destino dos botões de compra dela, até existir checkout.
 function Chamada() {

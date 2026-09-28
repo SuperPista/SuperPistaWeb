@@ -2,11 +2,12 @@ import Link from "next/link";
 import landing from "components/landing/landing.module.css";
 import estilos from "components/home/home.module.css";
 import VideoEmLoop from "components/midia/VideoEmLoop.js";
-import { LINK_LOGIN, LINK_CRIAR_CONTA } from "components/home/links.js";
+import { LINK_LOGIN, LINK_CRIAR_CONTA } from "components/conta/links.js";
 
 // O caminho até a cidade aparecer na tela. É aqui que a conta do site entra:
-// o aplicativo pede login para ativar o código que vem com o tabuleiro.
-const ETAPAS = [
+// o aplicativo pede login para ativar o código que vem com o tabuleiro. As
+// telas da conta mostram o mesmo caminho, com o passo em que a pessoa está.
+export const ETAPAS = [
   "Baixe o app Super Pista na Play Store ou na App Store. Os três primeiros dias são grátis.",
   "Crie sua conta aqui no site e confirme pelo link que chega no seu e-mail.",
   "No app, faça login e digite o código do cartão que vem na sacola.",

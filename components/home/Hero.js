@@ -4,7 +4,7 @@ import landing from "components/landing/landing.module.css";
 import estilos from "components/home/home.module.css";
 import { CORES_DAS_LETRAS } from "components/nome/Medalhao.js";
 import VideoEmLoop from "components/midia/VideoEmLoop.js";
-import { LINK_LOGIN } from "components/home/links.js";
+import { LINK_LOGIN } from "components/conta/links.js";
 
 // O "É HORA" do logo escrito do jeito que o nome da criança sai impresso no
 // tabuleiro: cada letra com uma cor, na mesma ordem, e um pouco acima ou abaixo
