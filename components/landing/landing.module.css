@@ -1,0 +1,1046 @@
+/* Landing page do tabuleiro Super Pista.
+   Sistema visual: sinalização de pista: asfalto, eixo tracejado, bandeira
+   quadriculada, tinta chapada de embalagem de brinquedo. */
+
+.pagina {
+  --preto: #000000;
+  --branco: #ffffff;
+  --amarelo: #ffd100;
+  --vermelho: #e4002b;
+  --cinza: #565656;
+
+  --largura: 1160px;
+  --gutter: clamp(20px, 4vw, 40px);
+  --respiro: clamp(64px, 8vw, 116px);
+
+  background-color: var(--branco);
+  color: var(--preto);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  /* clip, e não hidden: hidden criaria contexto de rolagem e
+     quebraria o position: sticky do cabeçalho. */
+  overflow-x: clip;
+}
+
+.pagina *,
+.pagina *::before,
+.pagina *::after {
+  box-sizing: border-box;
+}
+
+.container {
+  width: min(100% - var(--gutter) * 2, var(--largura));
+  margin-inline: auto;
+}
+
+.secao {
+  padding-block: var(--respiro);
+}
+
+/* ---------- tipografia ---------- */
+
+.h1,
+.h2 {
+  margin: 0;
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.h1 {
+  font-size: clamp(1.85rem, 4.6vw, 3.4rem);
+}
+
+.h2 {
+  font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+  line-height: 1.02;
+}
+
+.h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.introducao {
+  display: grid;
+  gap: 14px;
+}
+
+.lead {
+  margin: 0;
+  max-width: 34em;
+  font-size: clamp(1.06rem, 1.7vw, 1.3rem);
+  line-height: 1.5;
+}
+
+.corpo {
+  margin: 0;
+  max-width: 58ch;
+  color: var(--cinza);
+}
+
+.dado {
+  font-stretch: 87%;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- botão de compra ---------- */
+
+.botao {
+  display: inline-block;
+  padding: 18px 34px;
+  border: 3px solid var(--preto);
+  border-radius: 999px;
+  background-color: var(--amarelo);
+  box-shadow: 7px 7px 0 var(--preto);
+  color: var(--preto);
+  font-size: 1.18rem;
+  font-weight: 900;
+  font-stretch: 112%;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-decoration: none;
+  /* fonte e entrelinha explícitas para ficar igual num <a> e num <button> */
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  line-height: inherit;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.botao:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 4px 4px 0 var(--preto);
+}
+
+.botao:active {
+  transform: translate(7px, 7px);
+  box-shadow: 0 0 0 var(--preto);
+}
+
+.botaoCompacto {
+  padding: 11px 22px;
+  white-space: nowrap;
+  font-size: 0.98rem;
+  box-shadow: 4px 4px 0 var(--preto);
+}
+
+.botaoCompacto:hover {
+  box-shadow: 2px 2px 0 var(--preto);
+}
+
+/* no celular os textos dos botões são longos: menos folga para caber numa
+   linha e, quando quebram, as duas linhas ficam centradas na pílula */
+@media (max-width: 480px) {
+  .botao:not(.botaoCompacto) {
+    padding: 16px 24px;
+    font-size: 1.06rem;
+  }
+}
+
+.reforco {
+  margin: 0;
+  max-width: 26em;
+  color: var(--cinza);
+  font-size: 0.94rem;
+  line-height: 1.4;
+}
+
+.pagina a:focus-visible,
+.pagina button:focus-visible,
+.pagina input:focus-visible {
+  outline: 3px solid var(--vermelho);
+  outline-offset: 4px;
+}
+
+/* ---------- cabeçalho ---------- */
+
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 3px solid var(--preto);
+  background-color: var(--branco);
+}
+
+.cabecalhoLinha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 10px;
+}
+
+.marca {
+  display: block;
+  width: clamp(84px, 11vw, 116px);
+  height: auto;
+}
+
+/* ---------- faixas de separação ---------- */
+
+.faixa {
+  position: relative;
+  height: 54px;
+  border-block: 3px solid var(--preto);
+  background-color: var(--preto);
+}
+
+.faixa::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 6px;
+  translate: 0 -50%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--amarelo) 0 38px,
+    transparent 38px 72px
+  );
+}
+
+.faixaChegada {
+  height: 40px;
+  border: 0;
+  background-color: var(--branco);
+  background-image: repeating-conic-gradient(
+    var(--preto) 0% 25%,
+    var(--branco) 0% 50%
+  );
+  background-size: 40px 40px;
+}
+
+.faixaChegada::after {
+  content: none;
+}
+
+/* ---------- herói ---------- */
+
+.heroi {
+  padding-block: clamp(40px, 4vw, 60px) clamp(28px, 3vw, 36px);
+}
+
+.heroiCorpo {
+  display: grid;
+  gap: clamp(36px, 4vw, 56px);
+  align-items: center;
+  margin-top: clamp(28px, 3vw, 40px);
+}
+
+@media (min-width: 900px) {
+  .heroiCorpo {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  }
+}
+
+.heroiTexto {
+  display: grid;
+  justify-items: start;
+  gap: 28px;
+}
+
+.descerLinha {
+  display: flex;
+  margin-top: clamp(36px, 5vw, 60px);
+}
+
+.descerDireita {
+  justify-content: flex-end;
+}
+
+.descer {
+  display: block;
+  color: inherit;
+  line-height: 0;
+}
+
+.descerSeta {
+  display: block;
+  width: 30px;
+  height: auto;
+}
+
+.descerPonta {
+  fill: var(--amarelo);
+}
+
+/* na dobra amarela a ponta sumiria no fundo */
+.claro .descerPonta {
+  fill: var(--branco);
+}
+
+/* só a primeira seta chama atenção; as outras são só sinalização */
+.heroi .descerSeta {
+  animation: chamar 2.4s ease-in-out infinite;
+}
+
+.descer:hover .descerSeta {
+  animation-play-state: paused;
+  translate: 0 6px;
+}
+
+@keyframes chamar {
+  0%,
+  70%,
+  100% {
+    translate: 0 0;
+  }
+  35% {
+    translate: 0 7px;
+  }
+}
+
+/* ---------- arte do tabuleiro ---------- */
+
+.arteImagem {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .descerSeta {
+    animation: none;
+  }
+
+  .botao,
+  .marcador::after,
+  .respostaCaixa {
+    transition: none;
+  }
+}
+
+/* ---------- dobras escuras e demonstração ---------- */
+
+.escuro {
+  background-color: var(--preto);
+  color: var(--branco);
+}
+
+.escuro .corpo {
+  color: rgb(255 255 255 / 72%);
+}
+
+.escuro .botao {
+  box-shadow: 7px 7px 0 var(--vermelho);
+}
+
+.escuro .botao:hover {
+  box-shadow: 4px 4px 0 var(--vermelho);
+}
+
+.escuro .botao:active {
+  box-shadow: 0 0 0 var(--vermelho);
+}
+
+.demonstracao {
+  display: grid;
+  gap: clamp(32px, 4vw, 56px);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .demonstracao {
+    grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
+  }
+}
+
+.demonstracaoTexto {
+  display: grid;
+  justify-items: start;
+  gap: 24px;
+}
+
+/* ---------- etapas ---------- */
+
+.etapas {
+  display: grid;
+  gap: 4px;
+  margin: 52px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: etapa;
+}
+
+@media (min-width: 860px) {
+  .etapas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.etapa {
+  position: relative;
+  padding: 30px 26px 34px;
+  border: 3px solid var(--preto);
+  counter-increment: etapa;
+}
+
+.etapa::before {
+  content: counter(etapa);
+  display: block;
+  margin-bottom: 12px;
+  font-size: 4.6rem;
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.8;
+  color: var(--amarelo);
+  -webkit-text-stroke: 3px var(--preto);
+}
+
+.etapa .h3 {
+  margin-bottom: 12px;
+}
+
+/* ---------- o que vem na sacola ---------- */
+
+.claro {
+  background-color: var(--amarelo);
+}
+
+.sacola {
+  display: grid;
+  gap: clamp(32px, 4vw, 60px);
+}
+
+@media (min-width: 860px) {
+  .sacola {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+.sacolaTexto {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: 24px;
+}
+
+.corpoEscuro {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 1.1rem;
+}
+
+.nota {
+  margin: 0;
+  max-width: 40ch;
+}
+
+.itens {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 3px solid var(--preto);
+}
+
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding-block: 16px;
+  border-bottom: 2px dashed rgb(0 0 0 / 45%);
+}
+
+.itemQtd {
+  flex: none;
+  min-width: 3.4em;
+  font-weight: 900;
+  font-stretch: 87%;
+}
+
+/* ---------- personalização ---------- */
+
+.personalize {
+  display: grid;
+  gap: clamp(36px, 4vw, 64px);
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .personalize {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+  }
+}
+
+.medalhaoCaixa {
+  display: grid;
+  place-items: center;
+}
+
+/* ---------- moldura de foto ---------- */
+
+.foto {
+  aspect-ratio: 4 / 5;
+  border: 3px solid var(--preto);
+  background-color: #ededed;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 11px,
+    rgb(0 0 0 / 6%) 11px 22px
+  );
+}
+
+/* ---------- autor ---------- */
+
+.secaoColada {
+  padding-top: 0;
+}
+
+.autorFoto {
+  position: relative;
+  overflow: hidden;
+  max-width: 260px;
+}
+
+.fotoImagem {
+  object-fit: cover;
+}
+
+.autor {
+  display: grid;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+  padding: clamp(28px, 4vw, 48px);
+  border: 3px solid var(--preto);
+  box-shadow: 10px 10px 0 var(--amarelo);
+}
+
+@media (min-width: 780px) {
+  .autor {
+    grid-template-columns: minmax(0, 0.5fr) minmax(0, 1.5fr);
+  }
+}
+
+.autorTexto {
+  display: grid;
+  gap: 20px;
+}
+
+/* ---------- perguntas ---------- */
+
+.faq {
+  display: grid;
+  gap: clamp(32px, 4vw, 60px);
+}
+
+@media (min-width: 860px) {
+  .faq {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  }
+}
+
+.faqLado {
+  display: grid;
+  align-content: start;
+  gap: 40px;
+}
+
+/* no celular a coluna se desfaz: a foto fica sob o título e o contato vai
+   para depois da última pergunta */
+@media (max-width: 859px) {
+  .faqLado {
+    display: contents;
+  }
+
+  .perguntas {
+    order: 1;
+  }
+
+  .faqContato {
+    order: 2;
+  }
+}
+
+/* a lista é longa: no desktop a coluna acompanha a rolagem, logo abaixo do
+   cabeçalho fixo, para não ficar vazia ao lado das perguntas */
+@media (min-width: 860px) {
+  .faqLado {
+    position: sticky;
+    top: 128px;
+    align-self: start;
+  }
+}
+
+.faqTexto {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: 26px;
+}
+
+.faqFoto {
+  width: min(100%, 420px);
+  aspect-ratio: 840 / 790;
+  box-shadow: 10px 10px 0 var(--amarelo);
+}
+
+.faqContato {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 24px 26px;
+  border: 3px solid var(--preto);
+  background-color: var(--amarelo);
+}
+
+.faqContatoTexto {
+  margin: 0;
+  max-width: 34ch;
+}
+
+.faqContatoLink {
+  color: inherit;
+  font-weight: 800;
+  font-stretch: 112%;
+  overflow-wrap: anywhere;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.faqContatoLink:hover {
+  text-decoration-color: var(--vermelho);
+}
+
+.perguntas {
+  border-top: 3px solid var(--preto);
+}
+
+.pergunta {
+  border-bottom: 3px solid var(--preto);
+}
+
+.perguntaTitulo {
+  margin: 0;
+}
+
+.perguntaBotao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  padding: 22px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.14rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.marcador {
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+
+.marcador::before,
+.marcador::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background-color: var(--vermelho);
+}
+
+.marcador::before {
+  width: 22px;
+  height: 4px;
+}
+
+.marcador::after {
+  width: 4px;
+  height: 22px;
+  transition: transform 260ms ease;
+}
+
+.aberta .marcador::after {
+  transform: scaleY(0);
+}
+
+.respostaCaixa {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms ease;
+}
+
+.aberta .respostaCaixa {
+  grid-template-rows: 1fr;
+}
+
+.respostaInterna {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s 280ms;
+}
+
+.aberta .respostaInterna {
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+.resposta {
+  margin: 0 0 24px;
+  max-width: 62ch;
+  color: var(--cinza);
+}
+
+/* ---------- mídia e chamadas ---------- */
+
+/* cada dobra termina com um botão de compra que fala da cena dela */
+.chamada {
+  margin-top: clamp(32px, 4vw, 48px);
+}
+
+/* na dobra amarela o botão amarelo sumiria no fundo */
+.claro .botao {
+  background-color: var(--branco);
+}
+
+.caixaMidia {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--preto);
+  background-color: #101010;
+  line-height: 0;
+}
+
+.preencher {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cobrir {
+  object-fit: cover;
+}
+
+.legenda {
+  margin: 16px 0 0;
+  color: var(--cinza);
+}
+
+.introLado {
+  display: grid;
+  gap: 16px 56px;
+}
+
+@media (min-width: 860px) {
+  .introLado {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+  }
+}
+
+/* ---------- herói em vídeo ---------- */
+
+.heroiMidia {
+  margin: 0;
+}
+
+.moldura {
+  aspect-ratio: 16 / 9;
+  box-shadow: 10px 10px 0 var(--amarelo);
+}
+
+/* ---------- lembrança ---------- */
+
+.antesHoje {
+  display: grid;
+  gap: 40px 28px;
+  align-items: end;
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+@media (min-width: 760px) {
+  .antesHoje {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+}
+
+.quadro {
+  margin: 0;
+}
+
+.quadroMidia {
+  aspect-ratio: 16 / 9;
+  border-color: var(--branco);
+}
+
+/* a lembrança ganha a borda larga de foto revelada e fica um pouco torta */
+.quadroAntes .quadroMidia {
+  border-width: 10px;
+  rotate: -1.5deg;
+}
+
+.quadroLegenda {
+  margin-top: 16px;
+  color: rgb(255 255 255 / 72%);
+}
+
+.virada {
+  display: grid;
+  justify-items: start;
+  gap: 24px;
+  margin-top: clamp(48px, 6vw, 72px);
+}
+
+/* ---------- a tela junto ---------- */
+
+.palcoPrincipal {
+  aspect-ratio: 16 / 9;
+  box-shadow: 10px 10px 0 var(--amarelo);
+}
+
+/* o que aparece no celular, sobreposto ao vídeo da família */
+.palcoTela {
+  position: relative;
+  width: 62%;
+  margin: -44px 0 0 auto;
+}
+
+.palcoTelaMidia {
+  aspect-ratio: 1280 / 738;
+  box-shadow: 6px 6px 0 var(--preto);
+}
+
+.palcoLegenda {
+  margin-top: 10px;
+  color: var(--cinza);
+}
+
+@media (min-width: 900px) {
+  .palco {
+    position: relative;
+    margin-bottom: 96px;
+  }
+
+  .palcoTela {
+    position: absolute;
+    bottom: -96px;
+    left: -32px;
+    width: 42%;
+    margin: 0;
+  }
+}
+
+/* ---------- como funciona ---------- */
+
+.comoIntro {
+  display: grid;
+  gap: 36px 56px;
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .comoIntro {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+}
+
+/* ---------- brincar junto ---------- */
+
+.mosaico {
+  display: grid;
+  gap: 16px;
+  margin-top: clamp(40px, 5vw, 56px);
+}
+
+@media (min-width: 760px) {
+  .mosaico {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+}
+
+.ladrilho {
+  aspect-ratio: 16 / 9;
+}
+
+@media (min-width: 760px) {
+  .ladrilhoGrande {
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+}
+
+/* ---------- sacola ---------- */
+
+.sacolaFoto {
+  width: 100%;
+  aspect-ratio: 1000 / 597;
+  margin-top: 8px;
+  box-shadow: 8px 8px 0 var(--amarelo);
+}
+
+.sacolaLista {
+  display: grid;
+  align-content: start;
+  gap: 24px;
+}
+
+/* ---------- crianças com o nome ---------- */
+
+/* no celular os vídeos viram uma fileira que desliza para o lado */
+.criancas {
+  display: grid;
+  grid-auto-columns: 62%;
+  grid-auto-flow: column;
+  gap: 16px;
+  margin: clamp(48px, 6vw, 72px) 0 0;
+  padding: 0 0 12px;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x mandatory;
+}
+
+@media (min-width: 760px) {
+  .criancas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: row;
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+.crianca {
+  aspect-ratio: 4 / 5;
+  border-color: var(--branco);
+  scroll-snap-align: start;
+}
+
+/* ---------- presente ---------- */
+
+.vermelho {
+  background-color: var(--vermelho);
+  color: var(--branco);
+}
+
+/* no vermelho o texto fica branco puro: com transparência perde contraste */
+.vermelho .corpo {
+  color: var(--branco);
+}
+
+/* o contorno de foco da página é vermelho e sumiria neste fundo */
+.pagina .vermelho a:focus-visible {
+  outline-color: var(--branco);
+}
+
+.presente {
+  display: grid;
+  gap: clamp(40px, 5vw, 64px);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .presente {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+}
+
+.presenteTexto {
+  display: grid;
+  justify-items: start;
+  gap: 20px;
+}
+
+.presenteVideos {
+  display: grid;
+  gap: 20px;
+}
+
+.presenteVideo {
+  aspect-ratio: 16 / 9;
+  box-shadow: 8px 8px 0 var(--preto);
+}
+
+/* o segundo vídeo avança sobre o primeiro, como fotos na geladeira */
+@media (min-width: 560px) {
+  .presenteVideo + .presenteVideo {
+    width: 82%;
+    margin: -56px 0 0 auto;
+  }
+}
+
+/* ---------- oferta ---------- */
+
+.ofertaFoto {
+  width: min(100%, 520px);
+  aspect-ratio: 1040 / 660;
+  border-color: var(--branco);
+  box-shadow: 10px 10px 0 var(--amarelo);
+}
+
+.oferta {
+  display: grid;
+  justify-items: center;
+  gap: 26px;
+  text-align: center;
+}
+
+.oferta .lead,
+.oferta .corpo {
+  max-width: 46ch;
+}
+
+.marca3d {
+  display: block;
+  width: clamp(180px, 26vw, 250px);
+  height: auto;
+}
+
+.preco {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+}
+
+.precoAntes {
+  color: rgb(255 255 255 / 60%);
+  text-decoration: line-through;
+}
+
+.precoAgora {
+  font-size: clamp(3rem, 9vw, 5rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--amarelo);
+}
+
+.parcelas {
+  color: var(--branco);
+}
+
+.garantia {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: rgb(255 255 255 / 72%);
+}

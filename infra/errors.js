@@ -26,6 +26,9 @@ export class ServiceError extends Error {
     this.name = "ServiceError";
     this.action = action || "Verifique se o serviço está disponível.";
     this.statusCode = 503;
+    // `context` fica só para diagnóstico no servidor. Não sai no toJSON(): no
+    // envio de email ele carrega destinatário e corpo, e o corpo pode trazer o
+    // link de ativação ou de troca de senha.
     this.context = context;
   }
 
@@ -35,7 +38,6 @@ export class ServiceError extends Error {
       message: this.message,
       action: this.action,
       status_code: this.statusCode,
-      context: this.context,
     };
   }
 }

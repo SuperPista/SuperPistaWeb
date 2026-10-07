@@ -59,6 +59,7 @@ async function createUser(userObject) {
       userObject?.username || faker.internet.username().replace(/[_.-]/g, ""),
     email: userObject?.email || faker.internet.email(),
     password: userObject?.password || "validpassword",
+    privacy_accepted: true,
   });
 }
 
@@ -70,6 +71,11 @@ async function deleteAllEmails() {
   await fetch(`${emailHttpUrl}/messages`, {
     method: "DELETE",
   });
+}
+
+async function getAllEmails() {
+  const emailListResponse = await fetch(`${emailHttpUrl}/messages`);
+  return await emailListResponse.json();
 }
 
 async function getLastEmail() {
@@ -95,6 +101,29 @@ function extractUUID(text) {
   return match ? match[0] : null;
 }
 
+function extractPasswordResetToken(text) {
+  const match = text.match(/\/recuperar-senha\/([A-Za-z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
+// Um link de ativação de antes do intervalo de reenvio, como o de quem se
+// cadastrou há uma hora e nunca abriu o email.
+async function createOldActivationToken(userObject) {
+  const results = await database.query({
+    text: `
+      INSERT INTO
+        user_activation_tokens (user_id, expires_at, created_at)
+      VALUES
+        ($1, NOW() - INTERVAL '45 minutes', NOW() - INTERVAL '1 hour')
+      RETURNING
+        *
+    ;`,
+    values: [userObject.id],
+  });
+
+  return results.rows[0];
+}
+
 async function activateUser(inactiveUser) {
   return await activation.activateUserByUserId(inactiveUser.id);
 }
@@ -111,8 +140,11 @@ const orchestrator = {
   createUser,
   createSession,
   deleteAllEmails,
+  getAllEmails,
   getLastEmail,
   extractUUID,
+  extractPasswordResetToken,
+  createOldActivationToken,
   activateUser,
   addFeaturesToUser,
 };

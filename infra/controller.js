@@ -35,7 +35,16 @@ function onErrorHandler(error, request, response) {
     cause: error,
   });
 
-  console.error(publicErrorObject);
+  // Log sem a cadeia de `cause`: um ServiceError de email carrega
+  // destinatário e corpo, e o corpo pode ter o link de ativação ou de troca de
+  // senha. O nome e a stack bastam para investigar.
+  console.error({
+    name: publicErrorObject.name,
+    message: publicErrorObject.message,
+    statusCode: publicErrorObject.statusCode,
+    underlyingErrorName: error?.name,
+    stack: error?.stack,
+  });
 
   response.status(publicErrorObject.statusCode).json(publicErrorObject);
 }
@@ -58,6 +67,7 @@ function clearSessionCookie(response) {
     maxAge: -1,
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
+    sameSite: "lax",
   });
 
   response.setHeader("Set-Cookie", setCookie);
@@ -110,6 +120,14 @@ function canRequest(feature) {
   };
 }
 
+function getClientIp(request) {
+  const forwarded = request.headers["x-forwarded-for"];
+  if (typeof forwarded === "string" && forwarded.length > 0) {
+    return forwarded.split(",")[0].trim();
+  }
+  return request.socket?.remoteAddress || "unknown";
+}
+
 const controller = {
   errorHandlers: {
     onNoMatch: onNoMatchHandler,
@@ -119,6 +137,7 @@ const controller = {
   clearSessionCookie,
   injectAnonymousOrUser,
   canRequest,
+  getClientIp,
 };
 
 export default controller;
