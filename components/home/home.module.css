@@ -30,18 +30,21 @@
 
 /* ---------- botões que só a home usa ---------- */
 
-/* dois seletores de classe, para vencer o .botao e o .escuro .botao */
-.pagina .botaoEscuro {
+/* Duas classes e o elemento, para vencer o .botao, o .escuro .botao e o
+   .claro .botao da landing, que têm duas classes. Com a mesma força ganhava a
+   regra que o navegador carregasse por último, e num quadro amarelo o botão
+   podia ficar com o fundo branco do .claro e a letra branca daqui. */
+.pagina button.botaoEscuro {
   background-color: var(--preto);
   color: var(--branco);
   box-shadow: 7px 7px 0 var(--vermelho);
 }
 
-.pagina .botaoEscuro:hover {
+.pagina button.botaoEscuro:hover {
   box-shadow: 4px 4px 0 var(--vermelho);
 }
 
-.pagina .botaoEscuro:active {
+.pagina button.botaoEscuro:active {
   box-shadow: 0 0 0 var(--vermelho);
 }
 
@@ -745,7 +748,9 @@
   max-width: 34ch;
 }
 
+/* o selo fica no meio do quadro; o texto e o botão seguem à esquerda */
 .destaqueMedalhao {
+  justify-self: center;
   width: min(100%, 176px);
 }
 
