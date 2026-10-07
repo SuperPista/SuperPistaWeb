@@ -14,28 +14,38 @@ export const ETAPAS = [
   "Aponte a câmera para a imagem alvo da peça 1 e veja a cidade surgir em 3D.",
 ];
 
-function Aplicativo() {
+// A seção aparece em /aplicativo e na página de cada tabuleiro. `legenda` é
+// para as páginas em que o vídeo não mostra a cidade daquele produto.
+function Aplicativo({ legenda }) {
   return (
     <section
       className={`${landing.secao} ${estilos.fundoVermelho}`}
       id="aplicativo"
     >
       <div className={`${landing.container} ${estilos.appGrade}`}>
-        <div className={estilos.appVideo}>
-          <VideoEmLoop
-            className={`${estilos.videoMidia} ${estilos.videoApp}`}
-            src="/home/app-semaforo.mp4"
-            poster="/home/app-semaforo-poster.webp"
-            rotulo="A cidade em 3D sobre o tabuleiro, com o semáforo passando do vermelho para o verde ao lado de um radar."
-          />
-        </div>
+        <figure className={estilos.appFigura}>
+          <div className={estilos.appVideo}>
+            <VideoEmLoop
+              className={`${estilos.videoMidia} ${estilos.videoApp}`}
+              src="/home/app-semaforo.mp4"
+              poster="/home/app-semaforo-poster.webp"
+              rotulo="A cidade em 3D sobre o tabuleiro, com o semáforo passando do vermelho para o verde ao lado de um radar."
+            />
+          </div>
+          {legenda && (
+            <figcaption className={`${estilos.appLegenda} ${landing.dado}`}>
+              {legenda}
+            </figcaption>
+          )}
+        </figure>
 
         <div className={estilos.appTexto}>
           <h2 className={landing.h2}>A cidade de pé na tela do celular</h2>
           <p className={`${landing.corpo} ${estilos.corpoClaro}`}>
-            O aplicativo usa a câmera do celular ou do tablet para levantar a
-            cidade em cima do tabuleiro. Dá até para tirar uma foto e mandar
-            para a família.
+            O aplicativo Super Pista usa Realidade Aumentada: a câmera do
+            celular ou do tablet reconhece o tabuleiro e levanta a cidade em 3D
+            em cima dele. Não precisa de óculos, e dá até para tirar uma foto e
+            mandar para a família.
           </p>
 
           <ol className={estilos.etapasApp}>

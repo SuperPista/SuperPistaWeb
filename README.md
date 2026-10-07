@@ -20,6 +20,7 @@ Qualquer coisa fora disso (gameplay, rastreamento de marcadores, AR) fica no apl
 
 - [Next.js](https://nextjs.org/) + React (páginas e API Routes)
 - PostgreSQL com migrations via [node-pg-migrate](https://github.com/salsita/node-pg-migrate)
+- [Zustand](https://zustand.docs.pmnd.rs/) para o que fica guardado no navegador (sacola e nome da criança)
 - Docker Compose para os serviços de desenvolvimento (banco e servidor de e-mail)
 - Jest para testes unitários e de integração
 
@@ -97,6 +98,28 @@ Todo pull request dispara dois workflows no GitHub Actions:
 | `/recuperar-senha/[token]`    | Link enviado por e-mail para criar a senha nova        |
 | `/conta`                      | Minha conta: sair, trocar senha, baixar dados, excluir |
 | `/privacidade`                | Termos de Uso e Política de Privacidade                |
+
+## Páginas da loja
+
+| Página         | O que faz                                                |
+| -------------- | -------------------------------------------------------- |
+| `/`            | Home, que é a loja: um produto no topo e a prateleira    |
+| `/loja`        | A prateleira sozinha, com todos os produtos              |
+| `/loja/[slug]` | Página do produto: fotos, preço, nome da criança, compra |
+| `/sacola`      | Sacola de compras, guardada no navegador                 |
+| `/checkout`    | Dados de quem recebe e endereço de entrega               |
+| `/pedido/[id]` | Pedido recebido e o caminho dele até a entrega           |
+| `/aplicativo`  | Como ativar o aplicativo, para quem já comprou           |
+| `/duvidas`     | As perguntas de antes da compra                          |
+| `/tabuleiro`   | Landing do tabuleiro, que termina pondo ele na sacola    |
+
+A loja ainda é só frontend. O catálogo está em `components/loja/catalogo.js`: quatro
+tabuleiros, cada um com uma cidade diferente, e dois kits, todos na mesma prateleira. A
+sacola fica no navegador e o checkout termina num pedido de exemplo, sem pagamento: as
+telas avisam disso. Só o tabuleiro vermelho tem fotos de verdade; as imagens em
+`public/loja` são ilustrativas, feitas da arte dele e de uma foto que o site já tinha,
+e as telas também avisam. Os pontos em que o backend entra estão marcados com `TODO` em
+`components/loja/`.
 
 ## API
 
