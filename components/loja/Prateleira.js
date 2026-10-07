@@ -6,7 +6,20 @@ import CartaoDoProduto from "components/loja/CartaoDoProduto.js";
 // iguais, tabuleiros e kits juntos. Na home ela mostra o catálogo inteiro; na
 // página de um produto, mostra os outros. Em /loja o título da página já é
 // "Loja", então o daqui vai `oculto`, só para o leitor de tela.
-function Prateleira({ id, titulo, texto, produtos, oculto = false }) {
+//
+// `naDobra` é para a prateleira que aparece logo que a página abre, na home e
+// em /loja: as fotos da primeira fileira carregam junto com a página. Sem
+// isso a maior imagem da tela chegava atrasada, e o Next avisa no console.
+const PRIMEIRA_FILEIRA = 3;
+
+function Prateleira({
+  id,
+  titulo,
+  texto,
+  produtos,
+  oculto = false,
+  naDobra = false,
+}) {
   const temIlustrativa = produtos.some(
     (produto) => produto.fotos[0].ilustrativa,
   );
@@ -24,9 +37,12 @@ function Prateleira({ id, titulo, texto, produtos, oculto = false }) {
         )}
 
         <ul className={estilos.prateleira}>
-          {produtos.map((produto) => (
+          {produtos.map((produto, posicao) => (
             <li key={produto.slug}>
-              <CartaoDoProduto produto={produto} />
+              <CartaoDoProduto
+                produto={produto}
+                adiantado={naDobra && posicao < PRIMEIRA_FILEIRA}
+              />
             </li>
           ))}
         </ul>

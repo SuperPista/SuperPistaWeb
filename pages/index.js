@@ -50,6 +50,7 @@ function Home() {
             titulo="Produtos"
             texto="Quatro tabuleiros, cada um com uma cidade diferente, e os kits para completar a brincadeira."
             produtos={todosOsProdutos()}
+            naDobra
           />
           <Destaques />
           <FaixaDoApp />

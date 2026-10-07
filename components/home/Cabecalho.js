@@ -43,6 +43,11 @@ const GAVETA = "gaveta";
 // A vitrine e a gaveta ficam sempre na página e abrem descendo de dentro do
 // cabeçalho: quem mostra e esconde é o CSS, pelo `data-aberta`. Fechadas, elas
 // ficam com `visibility: hidden`, fora do Tab e do leitor de tela.
+//
+// As fotos da vitrine só entram na página na primeira vez em que ela abre.
+// Antes disso seriam seis imagens a mais em toda página, escondidas, e quando
+// uma delas é a mesma foto grande da página (a do herói, a da galeria) o Next
+// confunde as duas e avisa no console que a maior imagem está atrasada.
 function Cabecalho() {
   const router = useRouter();
   const { entrou } = useConta();
@@ -54,6 +59,7 @@ function Cabecalho() {
   const espera = useRef(null);
   const mouseEmCima = useRef(false);
   const [aberto, setAberto] = useState(null);
+  const [vitrineJaAbriu, setVitrineJaAbriu] = useState(false);
 
   const produtos = todosOsProdutos();
   const conta = entrou
@@ -116,6 +122,11 @@ function Cabecalho() {
     setAberto((agora) => (agora === qual ? null : qual));
   }
 
+  function abrirVitrine() {
+    setVitrineJaAbriu(true);
+    setAberto(VITRINE);
+  }
+
   // Só o mouse abre a vitrine por passar em cima; no toque não existe "em
   // cima", e quem abre é a seta. A saída espera um instante, para um desvio do
   // ponteiro no caminho até a vitrine não fechar tudo.
@@ -123,7 +134,7 @@ function Cabecalho() {
     if (evento.pointerType === "mouse") {
       clearTimeout(espera.current);
       mouseEmCima.current = true;
-      setAberto(VITRINE);
+      abrirVitrine();
     }
   }
 
@@ -140,12 +151,12 @@ function Cabecalho() {
   // clique ali fecharia o que a pessoa acabou de abrir. Para o mouse o clique
   // só garante que está aberta; no teclado e no toque, alterna.
   function aoClicarNaSeta() {
-    if (mouseEmCima.current) {
-      setAberto(VITRINE);
+    if (mouseEmCima.current || aberto !== VITRINE) {
+      abrirVitrine();
       return;
     }
 
-    alternar(VITRINE);
+    setAberto(null);
   }
 
   return (
@@ -208,28 +219,29 @@ function Cabecalho() {
                     className={`${landing.container} ${estilos.vitrineDoMenuGrade}`}
                   >
                     <ul className={estilos.menuProdutos}>
-                      {produtos.map((produto) => (
-                        <li key={produto.slug}>
-                          <Link
-                            className={estilos.menuProduto}
-                            href={linkDoProduto(produto.slug)}
-                          >
-                            <span className={estilos.menuProdutoFoto}>
-                              <Retrato
-                                produto={produto}
-                                sizes="180px"
-                                decorativa
-                              />
-                            </span>
-                            <span className={estilos.menuProdutoNome}>
-                              {produto.nomeCurto}
-                            </span>
-                            <span className={landing.dado}>
-                              {formatarReais(produto.preco)}
-                            </span>
-                          </Link>
-                        </li>
-                      ))}
+                      {vitrineJaAbriu &&
+                        produtos.map((produto) => (
+                          <li key={produto.slug}>
+                            <Link
+                              className={estilos.menuProduto}
+                              href={linkDoProduto(produto.slug)}
+                            >
+                              <span className={estilos.menuProdutoFoto}>
+                                <Retrato
+                                  produto={produto}
+                                  sizes="180px"
+                                  decorativa
+                                />
+                              </span>
+                              <span className={estilos.menuProdutoNome}>
+                                {produto.nomeCurto}
+                              </span>
+                              <span className={landing.dado}>
+                                {formatarReais(produto.preco)}
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
                     </ul>
                     <Link className={estilos.menuVerTudo} href={LINK_LOJA}>
                       Ver a loja inteira

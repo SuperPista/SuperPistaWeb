@@ -12,8 +12,9 @@ import { linkDoProduto } from "components/loja/links.js";
 // grade de caixas. O tabuleiro pede o nome da criança antes da compra, então
 // o botão dele leva para a página; o resto vai direto para a sacola. A foto
 // também é link, mas fica fora do Tab e do leitor de tela, que já têm o link
-// do nome.
-function CartaoDoProduto({ produto }) {
+// do nome. `adiantado` é para os cartões da primeira fileira, que carregam a
+// foto junto com a página.
+function CartaoDoProduto({ produto, adiantado = false }) {
   const endereco = linkDoProduto(produto.slug);
 
   return (
@@ -28,6 +29,7 @@ function CartaoDoProduto({ produto }) {
           produto={produto}
           sizes="(min-width: 900px) 380px, 46vw"
           decorativa
+          adiantada={adiantado}
         />
       </Link>
 

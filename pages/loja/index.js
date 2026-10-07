@@ -65,6 +65,7 @@ function Loja() {
         titulo="Produtos"
         produtos={daColecao(colecao)}
         oculto
+        naDobra
       />
       <Faixa />
     </Moldura>
