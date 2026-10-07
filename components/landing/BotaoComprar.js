@@ -1,7 +1,7 @@
 import estilos from "components/landing/landing.module.css";
 
-// TODO: apontar para o checkout real (Mercado Pago ou PagSeguro).
-// Enquanto ele não existe, todos os botões levam para a oferta no fim da página.
+// Todos os botões da landing levam para a oferta no fim da página. É o botão
+// da oferta (components/landing/Oferta.js) que põe o tabuleiro na sacola.
 export const LINK_CHECKOUT = "#comprar";
 
 // Na landing cada botão fala da cena da dobra em que está, então o texto vem

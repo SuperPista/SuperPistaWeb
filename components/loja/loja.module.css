@@ -1,0 +1,1129 @@
+/* Loja do Super Pista: vitrine, página do produto, sacola, checkout e pedido.
+   O sistema visual vem da landing (components/landing/landing.module.css) e
+   da home: container, tipografia, botões, faixas e a placa das telas da conta.
+   Aqui ficam só as peças da compra. O preço é escrito como cartaz de loja de
+   brinquedo, com os reais grandes e o cifrão e os centavos pequenos no alto. */
+
+.pagina {
+  /* os mesmos tokens da landing, repetidos para o lint validar este arquivo */
+  --preto: #000000;
+  --branco: #ffffff;
+  --amarelo: #ffd100;
+  --vermelho: #e4002b;
+  --cinza: #565656;
+}
+
+.somenteLeitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.cobrir {
+  object-fit: cover;
+}
+
+/* arte recortada, sem fundo: aparece inteira, com folga em volta */
+.conter {
+  padding: 5%;
+  object-fit: contain;
+}
+
+/* ---------- preço ---------- */
+
+.preco {
+  --tamanho: 2.3rem;
+
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  margin: 0;
+}
+
+.precoGrande {
+  --tamanho: clamp(3.2rem, 8vw, 4.4rem);
+}
+
+.precoAntes {
+  color: var(--cinza);
+  text-decoration: line-through;
+}
+
+.precoAgora {
+  display: flex;
+  align-items: flex-start;
+  font-size: var(--tamanho);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.86;
+  letter-spacing: -0.03em;
+}
+
+.cifrao,
+.centavos {
+  font-size: 0.4em;
+  font-stretch: 112%;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.cifrao {
+  margin-right: 0.22em;
+}
+
+/* ---------- sacola no cabeçalho ---------- */
+
+/* ícone, nome e quantidade alinhados pelo meio, um ao lado do outro */
+.sacolaLinha {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  vertical-align: top;
+}
+
+/* no celular estreito o botão da sacola fica só com o ícone */
+@media (max-width: 479px) {
+  .sacolaTexto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* a quantidade vai dentro do botão, numa bolinha preta */
+.sacolaConta {
+  display: grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  margin-right: -6px;
+  padding-inline: 6px;
+  border-radius: 999px;
+  background-color: var(--preto);
+  color: var(--branco);
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* ---------- prateleira ---------- */
+
+.prateleiraSecao {
+  padding-block: clamp(48px, 6vw, 84px);
+}
+
+.prateleiraCabeca {
+  display: grid;
+  gap: 8px 40px;
+  margin-bottom: clamp(24px, 3vw, 38px);
+}
+
+@media (min-width: 760px) {
+  .prateleiraCabeca {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+.prateleiraTitulo {
+  margin: 0;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+/* loja no celular é de dois em dois; no desktop, de três em três, que fecha
+   duas linhas cheias com os seis produtos */
+.prateleira {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 900px) {
+  .prateleira {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 44px 28px;
+  }
+}
+
+.prateleiraNota {
+  margin: clamp(22px, 3vw, 32px) 0 0;
+  color: var(--cinza);
+}
+
+/* Só a foto tem borda: o nome, o preço e o botão ficam soltos embaixo dela,
+   para a prateleira não virar uma grade de caixas. */
+.cartao {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  height: 100%;
+  color: var(--preto);
+}
+
+.cartaoFoto {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 6px;
+  overflow: hidden;
+  border: 3px solid var(--preto);
+  background-color: #ededed;
+  transition:
+    translate 120ms ease,
+    box-shadow 120ms ease;
+}
+
+/* a foto levanta quando o ponteiro chega no cartão, como os botões da marca
+   afundam quando são apertados */
+.cartao:hover .cartaoFoto {
+  translate: -3px -3px;
+  box-shadow: 6px 6px 0 var(--amarelo);
+}
+
+.cartaoNome {
+  margin: 0;
+  font-size: 1.06rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.2;
+}
+
+.cartaoNome a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cartaoNome a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--vermelho);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+.cartao .preco {
+  --tamanho: 1.6rem;
+}
+
+/* empurra o botão para o pé, para ficarem alinhados na linha mesmo quando um
+   nome quebra em duas linhas e o do vizinho não */
+.cartaoAcao {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+/* Três seletores de classe, para vencer o .botaoCompacto da landing. No
+   celular o cartão é estreito e o rótulo dos kits quebra em duas linhas:
+   entrelinha curta, para a pílula não ficar alta demais. */
+.prateleira .cartao .cartaoBotao {
+  width: 100%;
+  padding: 10px 8px;
+  box-shadow: 4px 4px 0 var(--preto);
+  font-size: 0.9rem;
+  line-height: 1.2;
+  white-space: normal;
+}
+
+.prateleira .cartao .cartaoBotao:hover {
+  box-shadow: 2px 2px 0 var(--preto);
+}
+
+.prateleira .cartao .cartaoBotao:active {
+  box-shadow: 0 0 0 var(--preto);
+}
+
+/* quantos deste produto já estão na sacola, no canto da foto */
+.cartaoSelo {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  margin: 0;
+  padding: 2px 12px;
+  border-radius: 999px;
+  background-color: var(--preto);
+  color: var(--branco);
+  line-height: 1.6;
+}
+
+.cartaoSelo:empty {
+  display: none;
+}
+
+@media (min-width: 560px) {
+  .cartaoNome {
+    font-size: 1.24rem;
+  }
+
+  .cartao .preco {
+    --tamanho: 1.95rem;
+  }
+
+  /* com largura, o botão fica do tamanho do texto, e não do cartão */
+  .prateleira .cartao .cartaoBotao {
+    width: auto;
+    padding: 11px 24px;
+    font-size: 0.98rem;
+    line-height: inherit;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartaoFoto {
+    transition: none;
+  }
+}
+
+/* ---------- página da loja ---------- */
+
+.lojaTopo {
+  padding-top: clamp(32px, 4vw, 56px);
+}
+
+.pagina .lojaTexto {
+  margin-top: 14px;
+}
+
+.lojaTopo + .prateleiraSecao {
+  padding-top: clamp(26px, 3vw, 38px);
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.filtro {
+  padding: 8px 16px;
+  border: 3px solid var(--preto);
+  background-color: var(--branco);
+  color: var(--preto);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.filtro:hover {
+  background-color: var(--amarelo);
+}
+
+.filtro[aria-pressed="true"] {
+  background-color: var(--preto);
+  color: var(--branco);
+}
+
+.filtroConta {
+  margin-left: 8px;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+/* ---------- página do produto ---------- */
+
+.produtoTopo {
+  padding-block: clamp(28px, 4vw, 48px) clamp(64px, 8vw, 116px);
+}
+
+.trilha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0 0 clamp(22px, 3vw, 32px);
+  padding: 0;
+  list-style: none;
+  color: var(--cinza);
+}
+
+.trilha li + li::before {
+  content: "/";
+  margin-right: 10px;
+}
+
+.trilha a {
+  color: var(--preto);
+  font-weight: 700;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.produto {
+  display: grid;
+  gap: clamp(36px, 4vw, 60px);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .produto {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  }
+
+  /* as fotos acompanham a rolagem enquanto a coluna da compra passa */
+  .galeria {
+    position: sticky;
+    top: 112px;
+  }
+}
+
+.galeria {
+  display: grid;
+  gap: 18px;
+}
+
+.fotoPrincipal {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 3px solid var(--preto);
+  background-color: #ededed;
+  box-shadow: 10px 10px 0 var(--preto);
+}
+
+.fotoNota {
+  margin: 0;
+  color: var(--cinza);
+}
+
+.miniaturas {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  /* a folga da direita é a da sombra da foto principal, para alinhar */
+  padding: 0 10px 0 0;
+  list-style: none;
+}
+
+.miniatura {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  overflow: hidden;
+  border: 3px solid var(--preto);
+  background-color: #ededed;
+  cursor: pointer;
+}
+
+/* a foto que está em cima fica marcada por uma barra vermelha embaixo */
+.miniatura[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 7px;
+  background-color: var(--vermelho);
+}
+
+.compra {
+  display: grid;
+  justify-items: start;
+  gap: 24px;
+}
+
+/* o nome completo do produto é comprido: um degrau abaixo do h1 da landing */
+.produtoTitulo {
+  margin: 0;
+  font-size: clamp(1.8rem, 3.6vw, 2.7rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.compraResumo {
+  margin: 0;
+  max-width: 44ch;
+  font-size: 1.06rem;
+}
+
+/* O aplicativo vem com o tabuleiro, e isso fica dito ao lado do preço. A
+   sombra é vermelha porque o vermelho é a cor do aplicativo no site. */
+.appDestaque {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  justify-self: stretch;
+  gap: 16px;
+  align-items: center;
+  /* a folga da direita e de baixo é a da sombra */
+  margin: 0 6px 6px 0;
+  padding: 12px;
+  border: 3px solid var(--preto);
+  background-color: var(--branco);
+  box-shadow: 6px 6px 0 var(--vermelho);
+  color: var(--preto);
+  text-decoration: none;
+}
+
+.appDestaqueFoto {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 3px solid var(--preto);
+  background-color: var(--preto);
+}
+
+.appDestaqueTexto {
+  display: grid;
+  gap: 4px;
+  font-size: 0.96rem;
+  line-height: 1.4;
+}
+
+.appDestaqueTexto strong {
+  font-size: 1.04rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.25;
+}
+
+.appDestaqueLink {
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.appDestaque:hover .appDestaqueLink {
+  text-decoration-color: var(--vermelho);
+}
+
+/* o campo do nome foi desenhado para fundo escuro, então ganha uma caixa preta */
+.nomeCaixa {
+  display: grid;
+  justify-self: stretch;
+  gap: 22px;
+  padding: 22px 24px 24px;
+  background-color: var(--preto);
+  color: var(--branco);
+}
+
+.nomeCaixaTitulo {
+  margin: 0;
+  font-size: 1.14rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.25;
+}
+
+.nomeCaixaTexto {
+  margin: 6px 0 0;
+  color: rgb(255 255 255 / 72%);
+  font-size: 0.96rem;
+  line-height: 1.45;
+}
+
+/* o campo traz a margem de quando vem depois de um parágrafo */
+.nomeCampo > div {
+  margin-top: 0;
+  max-width: none;
+}
+
+/* no celular a prévia vem antes do campo, para o teclado não cobrir o nome */
+.nomePrevia {
+  order: -1;
+  justify-self: center;
+  width: 150px;
+}
+
+/* com largura, a prévia sobe para o lado do título e o campo fica com a
+   linha inteira: um nome de dez letras precisa caber sem cortar */
+@media (min-width: 560px) {
+  .nomeCaixa {
+    grid-template-columns: minmax(0, 1fr) 132px;
+    align-items: center;
+  }
+
+  .nomePrevia {
+    order: 0;
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+  }
+
+  .nomeCampo {
+    grid-column: 1 / -1;
+  }
+}
+
+.compraLinha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-self: stretch;
+  gap: 18px 22px;
+}
+
+.compraLinha > button:last-child {
+  flex: 1 1 220px;
+}
+
+.quantidade {
+  display: inline-flex;
+  align-items: stretch;
+  border: 3px solid var(--preto);
+  background-color: var(--branco);
+}
+
+.quantidade button {
+  width: 46px;
+  min-height: 46px;
+  padding: 0;
+  border: 0;
+  background-color: var(--branco);
+  color: var(--preto);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.quantidade button:hover:not(:disabled) {
+  background-color: var(--amarelo);
+}
+
+.quantidade button:disabled {
+  color: rgb(0 0 0 / 28%);
+  cursor: default;
+}
+
+.quantidadeValor {
+  display: grid;
+  place-items: center;
+  min-width: 50px;
+  border-inline: 3px solid var(--preto);
+  font-weight: 800;
+  font-stretch: 112%;
+}
+
+.naSacola {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  justify-self: stretch;
+  gap: 8px 20px;
+  padding: 14px 16px;
+  border: 3px solid var(--preto);
+  background-color: var(--amarelo);
+  font-weight: 600;
+}
+
+.naSacola p {
+  margin: 0;
+}
+
+.naSacola a {
+  color: inherit;
+  font-weight: 800;
+  font-stretch: 112%;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.garantias {
+  display: grid;
+  justify-self: stretch;
+  gap: 8px;
+  margin: 0;
+  padding: 20px 0 0;
+  border-top: 2px dashed rgb(0 0 0 / 45%);
+  list-style: none;
+}
+
+.garantias li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.garantias li::before {
+  content: "";
+  flex: none;
+  width: 9px;
+  height: 9px;
+  background-color: var(--vermelho);
+}
+
+.oQueVem {
+  display: grid;
+  gap: clamp(28px, 4vw, 56px);
+}
+
+@media (min-width: 860px) {
+  .oQueVem {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+/* ---------- caminho da compra ---------- */
+
+.percurso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 0;
+  margin: 0 0 clamp(26px, 4vw, 40px);
+  padding: 0;
+  list-style: none;
+  color: var(--cinza);
+}
+
+.etapa {
+  display: flex;
+  align-items: center;
+}
+
+/* entre uma etapa e outra, um pedaço do eixo tracejado da pista */
+.etapa + .etapa::before {
+  content: "";
+  width: 30px;
+  height: 4px;
+  margin-inline: 10px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--preto) 0 8px,
+    transparent 8px 14px
+  );
+}
+
+.etapa a {
+  color: var(--preto);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.etapaAtual > span {
+  padding: 3px 12px;
+  border: 3px solid var(--preto);
+  background-color: var(--amarelo);
+  color: var(--preto);
+  font-weight: 800;
+}
+
+/* ---------- sacola, checkout e pedido ---------- */
+
+.compraSecao {
+  padding-block: clamp(32px, 4vw, 52px) clamp(64px, 8vw, 116px);
+}
+
+.tituloDaTela {
+  margin: 0;
+  font-size: clamp(2.1rem, 5vw, 3.2rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.espera {
+  margin: 20px 0 0;
+  color: var(--cinza);
+}
+
+.duasColunas {
+  display: grid;
+  gap: clamp(32px, 4vw, 56px);
+  align-items: start;
+  margin-top: clamp(26px, 3vw, 38px);
+}
+
+@media (min-width: 900px) {
+  .duasColunas {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+}
+
+.linhas {
+  margin: 0;
+  padding: 0;
+  border-top: 3px solid var(--preto);
+  list-style: none;
+}
+
+.linha {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 14px 18px;
+  padding-block: 22px;
+  border-bottom: 2px dashed rgb(0 0 0 / 45%);
+}
+
+.linhaFoto {
+  position: relative;
+  align-self: start;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 3px solid var(--preto);
+  background-color: #ededed;
+}
+
+.linhaTexto {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 10px;
+}
+
+.linhaNome {
+  margin: 0;
+  font-size: 1.14rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.25;
+}
+
+.linhaNome a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.linhaNome a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--vermelho);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+.linhaPeca {
+  margin: 0;
+  color: var(--cinza);
+}
+
+/* o nome como vai no círculo amarelo da peça */
+.etiqueta {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 12px;
+  border: 2px solid var(--preto);
+  border-radius: 999px;
+  background-color: var(--amarelo);
+  color: var(--preto);
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: 0.04em;
+}
+
+.linhaAcoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 22px;
+  margin-top: 4px;
+}
+
+.linhaValor {
+  grid-column: 2;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 900;
+  font-stretch: 112%;
+  white-space: nowrap;
+}
+
+@media (min-width: 620px) {
+  .linha {
+    grid-template-columns: 132px minmax(0, 1fr) auto;
+  }
+
+  .linhaValor {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+.depoisDaLista {
+  margin: 24px 0 0;
+}
+
+.linkForte {
+  color: inherit;
+  font-weight: 800;
+  font-stretch: 112%;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.linkForte:hover {
+  text-decoration-color: var(--vermelho);
+}
+
+.vazia {
+  display: grid;
+  justify-items: start;
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.vazia p {
+  margin: 0;
+  max-width: 44ch;
+  font-size: 1.1rem;
+}
+
+/* ---------- resumo ---------- */
+
+.resumo {
+  display: grid;
+  gap: 20px;
+  padding: 24px 26px 28px;
+  border: 3px solid var(--preto);
+  background-color: var(--amarelo);
+}
+
+@media (min-width: 900px) {
+  .resumo {
+    position: sticky;
+    top: 112px;
+  }
+}
+
+.resumoItens {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0 0 18px;
+  border-bottom: 2px dashed rgb(0 0 0 / 45%);
+  list-style: none;
+}
+
+.resumoItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 16px;
+  line-height: 1.35;
+}
+
+.resumoItem strong {
+  font-weight: 800;
+}
+
+.resumoItemPeca {
+  grid-column: 1 / -1;
+}
+
+.contas {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.contaLinha {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.contaLinha dd {
+  margin: 0;
+  font-weight: 800;
+}
+
+.contaTotal {
+  padding-top: 14px;
+  border-top: 3px solid var(--preto);
+  font-size: 1.36rem;
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 1.1;
+}
+
+.contaTotal dd {
+  font-weight: 900;
+}
+
+.resumoNota {
+  margin: 0;
+}
+
+.resumo > a,
+.resumo > button {
+  width: 100%;
+}
+
+/* botão esperando: sem o afundar do :hover e do :active do .botao */
+.resumo > button:disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ---------- checkout ---------- */
+
+.bloco {
+  display: grid;
+  gap: 22px;
+}
+
+.bloco + .bloco {
+  margin-top: 36px;
+  padding-top: 32px;
+  border-top: 2px dashed rgb(0 0 0 / 45%);
+}
+
+.blocoTitulo {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.2;
+}
+
+.blocoTexto {
+  margin: -10px 0 0;
+  max-width: 52ch;
+  color: var(--cinza);
+}
+
+.campos {
+  display: grid;
+  gap: 22px 18px;
+}
+
+@media (min-width: 620px) {
+  .campos {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .inteiro {
+    grid-column: 1 / -1;
+  }
+
+  .metade {
+    grid-column: span 3;
+  }
+
+  .doisTercos {
+    grid-column: span 4;
+  }
+
+  .terco {
+    grid-column: span 2;
+  }
+}
+
+/* a mesma entrada dos campos da conta, com a seta desenhada no traço */
+.selecao {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 44px 13px 16px;
+  border: 3px solid var(--preto);
+  border-radius: 0;
+  background-color: var(--branco);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--preto) 50%),
+    linear-gradient(135deg, var(--preto) 50%, transparent 50%);
+  background-position:
+    calc(100% - 24px) 55%,
+    calc(100% - 16px) 55%;
+  background-repeat: no-repeat;
+  background-size:
+    8px 8px,
+    8px 8px;
+  color: var(--preto);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.06rem;
+  font-weight: 600;
+  line-height: 1.4;
+  appearance: none;
+}
+
+.selecao[aria-invalid="true"] {
+  border-color: var(--vermelho);
+}
+
+.pagina select:focus-visible {
+  outline: 3px solid var(--vermelho);
+  outline-offset: 4px;
+}
+
+/* o que ainda é de mentira fica marcado na própria tela */
+.exemplo {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 3px dashed var(--preto);
+}
+
+.exemplo p {
+  margin: 0;
+}
+
+.exemploTitulo {
+  font-weight: 800;
+  font-stretch: 112%;
+}
+
+.resumo .exemplo {
+  background-color: var(--branco);
+}
+
+/* ---------- pedido ---------- */
+
+.pedidoDados {
+  margin: 14px 0 0;
+  color: var(--cinza);
+}
+
+.pedidoDados strong {
+  color: var(--preto);
+  overflow-wrap: anywhere;
+}
+
+.pedidoAviso {
+  margin-top: 22px;
+}
+
+.pedidoBloco {
+  display: grid;
+  gap: 16px;
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 2px dashed rgb(0 0 0 / 45%);
+}
+
+.pedidoBloco p {
+  margin: 0;
+}
+
+.endereco {
+  font-style: normal;
+  line-height: 1.5;
+}
+
+/* etapa que ainda não chegou: fica apagada no caminho */
+.aFazer {
+  color: var(--cinza);
+}
