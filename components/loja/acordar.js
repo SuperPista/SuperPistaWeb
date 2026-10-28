@@ -1,5 +1,5 @@
-// A sacola, o pedido e o nome da criança ficam guardados no navegador. Eles
-// nascem vazios, iguais no servidor e no navegador, e só leem o que estava
+// A sacola, o último pedido e o nome da criança ficam guardados no navegador.
+// Eles nascem vazios, iguais no servidor e no navegador, e só leem o que estava
 // guardado depois de a página montar: sem isso o HTML do servidor e a primeira
 // renderização sairiam diferentes. Quem chama é o pages/_app.js, uma vez só.
 //

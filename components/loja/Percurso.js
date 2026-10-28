@@ -10,11 +10,14 @@ const ETAPAS = [
   { rotulo: "Pedido feito" },
 ];
 
+// O pedido é gravado ao sair de "Dados e entrega". Do pagamento em diante, a
+// sacola já não muda mais nada nele.
+const ULTIMA_ETAPA_COM_VOLTA = 1;
+
 // Onde a pessoa está na compra, da sacola ao pedido feito. `atual` conta de
-// zero. Dá para voltar à sacola enquanto o pedido não foi feito; depois dele
-// não há mais o que mudar.
+// zero. Dá para voltar à sacola enquanto o pedido não foi gravado.
 function Percurso({ atual }) {
-  const feito = atual === ETAPAS.length - 1;
+  const feito = atual > ULTIMA_ETAPA_COM_VOLTA;
 
   return (
     <nav aria-label="Etapas da compra">

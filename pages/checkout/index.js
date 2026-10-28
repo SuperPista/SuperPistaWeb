@@ -5,13 +5,15 @@ import landing from "components/landing/landing.module.css";
 import estilos from "components/loja/loja.module.css";
 import Faixa from "components/landing/Faixa.js";
 import Moldura from "components/conta/Moldura.js";
+import Aviso from "components/conta/Aviso.js";
 import Campo from "components/conta/Campo.js";
+import { pedir } from "components/conta/pedir.js";
 import useConta from "components/conta/useConta.js";
 import Percurso from "components/loja/Percurso.js";
 import Resumo from "components/loja/Resumo.js";
 import Selecao from "components/loja/Selecao.js";
 import useSacola, { useResumoDaSacola } from "components/loja/useSacola.js";
-import usePedido, { montarPedidoDeExemplo } from "components/loja/usePedido.js";
+import { useUltimoPedido } from "components/loja/usePedido.js";
 import {
   DADOS_VAZIOS,
   ESTADOS,
@@ -22,20 +24,31 @@ import {
 } from "components/loja/campos.js";
 import { LINK_SACOLA, linkDoPedido } from "components/loja/links.js";
 
+// Quando a falha é do nosso lado ou da AbacatePay, a mensagem da API não diz
+// nada útil para quem está comprando. O que importa é saber que nada foi
+// cobrado.
+const ERRO_AO_ABRIR_O_PAGAMENTO = {
+  message: "Não conseguimos abrir o pagamento.",
+  action: "Nada foi cobrado. Tente de novo em alguns minutos.",
+};
+
 // Dados de quem recebe e endereço de entrega. A compra não pede conta: basta
 // o e-mail. Quem já entrou no site encontra o e-mail da conta preenchido.
 //
-// TODO: o pagamento ainda não existe. O botão monta um pedido de exemplo no
-// navegador (components/loja/usePedido.js) e a tela avisa disso.
+// O botão grava o pedido (POST /api/v1/orders) e leva a pessoa ao checkout da
+// AbacatePay, onde ela escolhe Pix, boleto ou cartão. De lá ela volta para a
+// página do pedido.
 function Checkout() {
   const router = useRouter();
   const idFormulario = useId();
   const idQuem = useId();
   const idOnde = useId();
 
-  const pronto = useSacola((estado) => estado.pronto);
+  const sacolaPronta = useSacola((estado) => estado.pronto);
   const esvaziar = useSacola((estado) => estado.esvaziar);
-  const registrar = usePedido((estado) => estado.registrar);
+  const ultimoPronto = useUltimoPedido((estado) => estado.pronto);
+  const ultimoPedido = useUltimoPedido((estado) => estado.id);
+  const registrar = useUltimoPedido((estado) => estado.registrar);
   const resumo = useResumoDaSacola();
   const { usuario } = useConta();
 
@@ -43,6 +56,9 @@ function Checkout() {
   const [mexeuNoEmail, setMexeuNoEmail] = useState(false);
   const [conferir, setConferir] = useState(false);
   const [enviando, setEnviando] = useState(false);
+  const [erro, setErro] = useState(null);
+
+  const pronto = sacolaPronta && ultimoPronto;
 
   // o e-mail da conta vale até a pessoa mexer no campo
   const valores =
@@ -52,11 +68,27 @@ function Checkout() {
   // para ninguém levar bronca enquanto ainda está digitando.
   const erros = conferir ? conferirDados(valores) : {};
 
+  // Sacola vazia não tem o que fechar. Se a pessoa acabou de fazer um pedido
+  // nesta aba, é que voltou da AbacatePay pelo navegador: vai para o pedido,
+  // onde está o botão de pagar.
   useEffect(() => {
     if (pronto && resumo.vazia && !enviando) {
-      router.replace(LINK_SACOLA);
+      router.replace(ultimoPedido ? linkDoPedido(ultimoPedido) : LINK_SACOLA);
     }
-  }, [pronto, resumo.vazia, enviando, router]);
+  }, [pronto, resumo.vazia, enviando, ultimoPedido, router]);
+
+  // O navegador pode devolver a página do jeito que ela estava ao sair para a
+  // AbacatePay, ainda "fechando o pedido". Isto destrava o efeito acima.
+  useEffect(() => {
+    function aoVoltar(evento) {
+      if (evento.persisted) {
+        setEnviando(false);
+      }
+    }
+
+    window.addEventListener("pageshow", aoVoltar);
+    return () => window.removeEventListener("pageshow", aoVoltar);
+  }, []);
 
   function aoMudar(campo, formatar = (texto) => texto) {
     return (evento) => {
@@ -70,7 +102,7 @@ function Checkout() {
     };
   }
 
-  function aoEnviar(evento) {
+  async function aoEnviar(evento) {
     evento.preventDefault();
     setConferir(true);
 
@@ -82,24 +114,49 @@ function Checkout() {
     }
 
     setEnviando(true);
+    setErro(null);
 
-    const pedido = montarPedidoDeExemplo({
-      resumo,
-      comprador: { nome: valores.nome.trim(), email: valores.email.trim() },
-      entrega: {
-        cep: valores.cep,
-        rua: valores.rua.trim(),
-        numero: valores.numero.trim(),
-        complemento: valores.complemento.trim(),
-        bairro: valores.bairro.trim(),
-        cidade: valores.cidade.trim(),
-        estado: valores.estado,
+    // Só a quantidade e o nome de cada linha: o preço quem decide é o servidor.
+    const resposta = await pedir("/api/v1/orders", {
+      metodo: "POST",
+      corpo: {
+        customer: {
+          name: valores.nome,
+          email: valores.email,
+          phone: valores.celular,
+          tax_id: valores.cpf,
+        },
+        shipping_address: {
+          zip_code: valores.cep,
+          street: valores.rua,
+          number: valores.numero,
+          complement: valores.complemento,
+          neighborhood: valores.bairro,
+          city: valores.cidade,
+          state: valores.estado,
+        },
+        items: resumo.itens.map((item) => ({
+          slug: item.slug,
+          quantity: item.quantidade,
+          child_name: item.nome,
+          article: item.artigo,
+        })),
       },
     });
 
-    registrar(pedido);
+    if (!resposta.ok) {
+      setErro(
+        resposta.status === 400 ? resposta.corpo : ERRO_AO_ABRIR_O_PAGAMENTO,
+      );
+      setEnviando(false);
+      return;
+    }
+
+    // A sacola esvazia aqui, e não quando o pagamento é confirmado: o boleto
+    // pode levar dias. Quem não pagar ainda tem o botão na página do pedido.
+    registrar(resposta.corpo.id);
     esvaziar();
-    router.push(linkDoPedido(pedido.id));
+    window.location.assign(resposta.corpo.payment_url);
   }
 
   return (
@@ -260,25 +317,18 @@ function Checkout() {
               </form>
 
               <Resumo titulo="Seu pedido" contas={resumo} comItens>
-                <div className={estilos.exemplo}>
-                  <p className={estilos.exemploTitulo}>
-                    O pagamento ainda não está ligado
-                  </p>
-                  <p>
-                    A loja está em montagem. O botão abaixo mostra um pedido de
-                    exemplo: nada é cobrado e nada é enviado para a Super Pista.
-                  </p>
-                </div>
+                <Aviso erro={erro} />
                 <button
                   className={landing.botao}
                   type="submit"
                   form={idFormulario}
                   disabled={enviando}
                 >
-                  Ir para o pagamento
+                  {enviando ? "Abrindo o pagamento" : "Ir para o pagamento"}
                 </button>
                 <p className={`${estilos.resumoNota} ${landing.dado}`}>
-                  Na próxima etapa você escolhe Pix, boleto ou cartão.
+                  Na próxima etapa, na página da AbacatePay, você escolhe Pix,
+                  boleto ou cartão.
                 </p>
               </Resumo>
             </div>
