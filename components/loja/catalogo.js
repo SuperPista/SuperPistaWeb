@@ -1,7 +1,6 @@
 // Catálogo da loja. Enquanto não existe a API de produtos, é daqui que a
 // vitrine, a página do produto, a sacola e a oferta da landing leem nome,
-// preço e fotos. Quando o servidor passar a responder por isso, o preço que
-// vale é o dele: o que está aqui só serve para mostrar.
+// preço e fotos, e o servidor lê o mesmo arquivo para calcular o pedido.
 //
 // Há dois tipos de produto. Cada tabuleiro é uma cidade diferente, conhecida
 // pela cor, e é um produto à parte, com descrição própria. Os kits são o que
@@ -9,11 +8,15 @@
 // juntos, na mesma prateleira.
 //
 // Só o tabuleiro vermelho está à venda. Os outros levam `emBreve: true`:
-// aparecem na vitrine sem preço e sem botão de compra.
+// aparecem na vitrine sem preço e sem botão de compra, e o servidor recusa o
+// pedido que vier com eles.
 //
-// Os valores ficam em centavos (components/loja/dinheiro.js).
+// Os valores ficam em centavos (components/loja/dinheiro.js). O preço do
+// tabuleiro vermelho é o do produto dele na AbacatePay, e o servidor confere
+// os dois antes de cobrar (models/payment.js).
 //
-// TODO: todo preço e parcelamento daqui ainda é de exemplo.
+// TODO: o parcelamento e os preços dos produtos que vêm em breve ainda são de
+// exemplo.
 // TODO: os tabuleiros amarelo, verde e azul e os dois kits ainda não têm foto
 // nem descrição oficial. O nome e o resumo deles são provisórios, e as imagens
 // em public/loja são ilustrativas, feitas do que o site já tinha: a arte do
@@ -114,7 +117,7 @@ function tabuleiro({ cor, tinta, resumo, fotos, emBreve = false }) {
     nomeCurto: `Tabuleiro ${cor}`,
     cor: { nome: cor, tinta },
     resumo,
-    preco: 24900,
+    preco: 24990,
     precoAntes: 34900,
     parcelas: { vezes: 12, valor: 2430 },
     // o nome ou apelido da criança sai impresso numa das peças, sem custo
