@@ -72,6 +72,14 @@ describe("components/loja/catalogo.js", () => {
       });
     });
 
+    test("only the red board is for sale", () => {
+      const aVenda = todosOsProdutos()
+        .filter((produto) => !produto.emBreve)
+        .map((produto) => produto.slug);
+
+      expect(aVenda).toEqual([SLUG_DO_TABULEIRO]);
+    });
+
     test("only the red board has real photos", () => {
       const comFotoDeVerdade = todosOsProdutos()
         .filter((produto) => !produto.fotos[0].ilustrativa)

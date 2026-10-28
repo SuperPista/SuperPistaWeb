@@ -56,12 +56,13 @@ export function removerLinha(linhas, chave) {
 
 // O que as telas mostram: cada linha com o seu produto e o seu valor, e os
 // totais. A sacola fica guardada no navegador por dias, então uma linha pode
-// apontar para um produto que já saiu do catálogo: essa linha é ignorada.
+// apontar para um produto que já saiu do catálogo ou que deixou de estar à
+// venda: essa linha é ignorada.
 export function resumirSacola(linhas) {
   const itens = linhas.flatMap((linha) => {
     const produto = produtoPorSlug(linha.slug);
 
-    if (!produto) {
+    if (!produto || produto.emBreve) {
       return [];
     }
 

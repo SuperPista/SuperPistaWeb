@@ -7,7 +7,8 @@ import Preco from "components/loja/Preco.js";
 import Quantidade from "components/loja/Quantidade.js";
 import useSacola from "components/loja/useSacola.js";
 import { nomeNaPeca } from "components/loja/sacola.js";
-import { LINK_SACOLA } from "components/loja/links.js";
+import { SLUG_DO_TABULEIRO, produtoPorSlug } from "components/loja/catalogo.js";
+import { LINK_SACOLA, linkDoProduto } from "components/loja/links.js";
 import CampoDoNome from "components/nome/CampoDoNome.js";
 import Medalhao from "components/nome/Medalhao.js";
 import useNomeDaCrianca from "components/nome/useNomeDaCrianca.js";
@@ -17,7 +18,9 @@ import useNomeDaCrianca from "components/nome/useNomeDaCrianca.js";
 // e o botão. O quadro do aplicativo leva para a explicação inteira, mais
 // abaixo na mesma página. O nome da criança é o mesmo
 // da prévia da home e da landing: quem já escreveu lá encontra o campo
-// preenchido, e ele continua lá ao passar de um tabuleiro para outro.
+// preenchido, e ele continua lá ao passar de um tabuleiro para outro. O que
+// ainda não está à venda fica sem preço e sem compra: no lugar, o aviso de que
+// vem em breve e o link para o tabuleiro vermelho, que já está.
 function Compra({ produto }) {
   const { nome, artigo, mudarNome, escolherArtigo } = useNomeDaCrianca();
   const adicionar = useSacola((estado) => estado.adicionar);
@@ -46,7 +49,7 @@ function Compra({ produto }) {
     <div className={estilos.compra}>
       <h1 className={estilos.produtoTitulo}>{produto.nome}</h1>
       <p className={estilos.compraResumo}>{produto.resumo}</p>
-      <Preco produto={produto} grande />
+      {produto.emBreve ? <EmBreve /> : <Preco produto={produto} grande />}
 
       {produto.comAplicativo && (
         <a className={estilos.appDestaque} href="#aplicativo">
@@ -70,7 +73,7 @@ function Compra({ produto }) {
         </a>
       )}
 
-      {produto.aceitaNome && (
+      {produto.aceitaNome && !produto.emBreve && (
         <div className={estilos.nomeCaixa}>
           <div>
             <h2 className={estilos.nomeCaixaTitulo}>
@@ -95,27 +98,31 @@ function Compra({ produto }) {
         </div>
       )}
 
-      <div className={estilos.compraLinha}>
-        <Quantidade valor={quantidade} aoMudar={setQuantidade} />
-        <button
-          className={landing.botao}
-          type="button"
-          onClick={colocarNaSacola}
-        >
-          Colocar na sacola
-        </button>
-      </div>
-
-      {/* a região existe desde o começo, para o leitor de tela anunciar o
-          que entra nela */}
-      <div role="status">
-        {colocado && (
-          <div className={estilos.naSacola}>
-            <p>Está na sacola: {colocado}</p>
-            <Link href={LINK_SACOLA}>Ver a sacola</Link>
+      {!produto.emBreve && (
+        <>
+          <div className={estilos.compraLinha}>
+            <Quantidade valor={quantidade} aoMudar={setQuantidade} />
+            <button
+              className={landing.botao}
+              type="button"
+              onClick={colocarNaSacola}
+            >
+              Colocar na sacola
+            </button>
           </div>
-        )}
-      </div>
+
+          {/* a região existe desde o começo, para o leitor de tela anunciar o
+              que entra nela */}
+          <div role="status">
+            {colocado && (
+              <div className={estilos.naSacola}>
+                <p>Está na sacola: {colocado}</p>
+                <Link href={LINK_SACOLA}>Ver a sacola</Link>
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
       {produto.garantias && (
         <ul className={`${estilos.garantias} ${landing.dado}`}>
@@ -124,6 +131,19 @@ function Compra({ produto }) {
           ))}
         </ul>
       )}
+    </div>
+  );
+}
+
+function EmBreve() {
+  const tabuleiro = produtoPorSlug(SLUG_DO_TABULEIRO);
+
+  return (
+    <div className={estilos.emBreve}>
+      <p>Em breve na loja: este produto ainda não está à venda.</p>
+      <Link href={linkDoProduto(tabuleiro.slug)}>
+        Ver o {tabuleiro.nomeCurto}
+      </Link>
     </div>
   );
 }

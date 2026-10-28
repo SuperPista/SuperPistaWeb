@@ -237,7 +237,9 @@ function Cabecalho() {
                                 {produto.nomeCurto}
                               </span>
                               <span className={landing.dado}>
-                                {formatarReais(produto.preco)}
+                                {produto.emBreve
+                                  ? "Em breve"
+                                  : formatarReais(produto.preco)}
                               </span>
                             </Link>
                           </li>

@@ -253,7 +253,8 @@
   box-shadow: 0 0 0 var(--preto);
 }
 
-/* quantos deste produto já estão na sacola, no canto da foto */
+/* quantos deste produto já estão na sacola, ou que ele vem em breve, no canto
+   da foto */
 .cartaoSelo {
   position: absolute;
   top: 13px;
@@ -626,7 +627,10 @@
   font-stretch: 112%;
 }
 
-.naSacola {
+/* a caixa amarela do que acabou de entrar na sacola, e do produto que ainda
+   vem em breve */
+.naSacola,
+.emBreve {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -639,11 +643,13 @@
   font-weight: 600;
 }
 
-.naSacola p {
+.naSacola p,
+.emBreve p {
   margin: 0;
 }
 
-.naSacola a {
+.naSacola a,
+.emBreve a {
   color: inherit;
   font-weight: 800;
   font-stretch: 112%;

@@ -8,6 +8,9 @@
 // completa a cidade para quem quer mais brinquedos. Na vitrine todos aparecem
 // juntos, na mesma prateleira.
 //
+// Só o tabuleiro vermelho está à venda. Os outros levam `emBreve: true`:
+// aparecem na vitrine sem preço e sem botão de compra.
+//
 // Os valores ficam em centavos (components/loja/dinheiro.js).
 //
 // TODO: todo preço e parcelamento daqui ainda é de exemplo.
@@ -103,7 +106,7 @@ function arteIlustrativa(cor) {
 }
 
 // Cada tabuleiro é uma cidade diferente, conhecida pela cor.
-function tabuleiro({ cor, tinta, resumo, fotos }) {
+function tabuleiro({ cor, tinta, resumo, fotos, emBreve = false }) {
   return {
     slug: `tabuleiro-${cor.toLowerCase()}`,
     colecao: TABULEIROS,
@@ -119,6 +122,7 @@ function tabuleiro({ cor, tinta, resumo, fotos }) {
     // o cartão que vem na sacola ativa o aplicativo de Realidade Aumentada
     comAplicativo: true,
     fotos,
+    emBreve,
     itens: ITENS_DO_TABULEIRO,
     garantias: [
       "Com o aplicativo de Realidade Aumentada",
@@ -129,7 +133,7 @@ function tabuleiro({ cor, tinta, resumo, fotos }) {
   };
 }
 
-function kit({ slug, nome, resumo, preco, fotos }) {
+function kit({ slug, nome, resumo, preco, fotos, emBreve = false }) {
   return {
     slug,
     colecao: KITS,
@@ -140,6 +144,7 @@ function kit({ slug, nome, resumo, preco, fotos }) {
     aceitaNome: false,
     comAplicativo: false,
     fotos,
+    emBreve,
     garantias: ["Frete grátis para todo o Brasil", "Sete dias para devolver"],
   };
 }
@@ -159,6 +164,7 @@ const PRODUTOS = [
     resumo:
       "A cidade amarela do Super Pista, diferente das outras três, com pista de carrinhos em quatro peças de MDF. Com o aplicativo de Realidade Aumentada, ela aparece de pé em 3D no celular.",
     fotos: [arteIlustrativa("amarelo")],
+    emBreve: true,
   }),
   tabuleiro({
     cor: "Verde",
@@ -166,6 +172,7 @@ const PRODUTOS = [
     resumo:
       "A cidade verde do Super Pista, diferente das outras três, com pista de carrinhos em quatro peças de MDF. Com o aplicativo de Realidade Aumentada, ela aparece de pé em 3D no celular.",
     fotos: [arteIlustrativa("verde")],
+    emBreve: true,
   }),
   tabuleiro({
     cor: "Azul",
@@ -173,6 +180,7 @@ const PRODUTOS = [
     resumo:
       "A cidade azul do Super Pista, diferente das outras três, com pista de carrinhos em quatro peças de MDF. Com o aplicativo de Realidade Aumentada, ela aparece de pé em 3D no celular.",
     fotos: [arteIlustrativa("azul")],
+    emBreve: true,
   }),
   kit({
     slug: "kit-de-carrinhos",
@@ -180,6 +188,7 @@ const PRODUTOS = [
     resumo:
       "Carrinhos para as ruas, os estacionamentos e a pista do tabuleiro Super Pista.",
     preco: 5990,
+    emBreve: true,
     fotos: [
       {
         src: "/loja/kit-de-carrinhos.webp",
@@ -197,6 +206,7 @@ const PRODUTOS = [
     resumo:
       "Blocos de montar para levantar casas e prédios em cima da cidade do tabuleiro.",
     preco: 7990,
+    emBreve: true,
     fotos: [
       {
         src: "/loja/kit-de-blocos.webp",

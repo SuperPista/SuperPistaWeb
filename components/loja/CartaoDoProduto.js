@@ -10,12 +10,14 @@ import { linkDoProduto } from "components/loja/links.js";
 // Um produto na prateleira: a foto na moldura e, soltos embaixo dela, o nome,
 // o preço e o botão. Só a foto tem borda, para a prateleira não virar uma
 // grade de caixas. O tabuleiro pede o nome da criança antes da compra, então
-// o botão dele leva para a página; o resto vai direto para a sacola. A foto
-// também é link, mas fica fora do Tab e do leitor de tela, que já têm o link
-// do nome. `adiantado` é para os cartões da primeira fileira, que carregam a
-// foto junto com a página.
+// o botão dele leva para a página; o resto vai direto para a sacola. O que
+// ainda não está à venda troca o preço pelo selo "Em breve", no canto da foto,
+// e o botão também leva para a página. A foto também é link, mas fica fora do
+// Tab e do leitor de tela, que já têm o link do nome. `adiantado` é para os
+// cartões da primeira fileira, que carregam a foto junto com a página.
 function CartaoDoProduto({ produto, adiantado = false }) {
   const endereco = linkDoProduto(produto.slug);
+  const vaiParaAPagina = produto.emBreve || produto.colecao === TABULEIROS;
 
   return (
     <article className={estilos.cartao}>
@@ -36,10 +38,14 @@ function CartaoDoProduto({ produto, adiantado = false }) {
       <h3 className={estilos.cartaoNome}>
         <Link href={endereco}>{produto.nomeCurto}</Link>
       </h3>
-      <Preco produto={produto} semAntes />
+      {produto.emBreve ? (
+        <p className={`${estilos.cartaoSelo} ${landing.dado}`}>Em breve</p>
+      ) : (
+        <Preco produto={produto} semAntes />
+      )}
 
       <div className={estilos.cartaoAcao}>
-        {produto.colecao === TABULEIROS ? (
+        {vaiParaAPagina ? (
           <Link
             className={`${landing.botao} ${landing.botaoCompacto} ${estilos.cartaoBotao}`}
             href={endereco}

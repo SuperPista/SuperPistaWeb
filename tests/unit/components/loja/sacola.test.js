@@ -173,6 +173,18 @@ describe("components/loja/sacola.js", () => {
       expect(resumo.vazia).toBe(true);
       expect(resumo.total).toBe(0);
     });
+
+    test("ignores a product that is coming soon", () => {
+      const resumo = resumirSacola([
+        { slug: "kit-de-carrinhos", quantidade: 1, nome: "", artigo: "" },
+        { slug: SLUG_DO_TABULEIRO, quantidade: 1, nome: "", artigo: "" },
+      ]);
+
+      expect(resumo.itens.map((item) => item.slug)).toEqual([
+        SLUG_DO_TABULEIRO,
+      ]);
+      expect(resumo.total).toBe(tabuleiro.preco + resumo.frete);
+    });
   });
 
   describe(".nomeNaPeca()", () => {
