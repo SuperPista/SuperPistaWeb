@@ -17,6 +17,8 @@
     "migrations:up": "node infra/scripts/migrate.js",
     "migrations:up:dev": "node-pg-migrate -m infra/migrations --envPath .env.development up",
     "migrations:up:dry": "node-pg-migrate -m infra/migrations --envPath .env.development --dry-run up",
+    "orders:grant-access": "node infra/scripts/grant-orders-access.js",
+    "orders:grant-access:dev": "node --env-file=.env.development infra/scripts/grant-orders-access.js",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
     "lint:eslint:check": "eslint . --max-warnings 0",

@@ -156,6 +156,21 @@ describe("POST /api/v1/orders", () => {
       expect(abacatepay.requestsTo("GET /products/get")).toHaveLength(0);
     });
 
+    // A rota lê a sessão só no GET. Um cookie vencido no navegador de quem
+    // compra não pode virar 401 na compra, que nem pede conta.
+    test("With a session cookie that is no longer valid", async () => {
+      const response = await fetch(`${webserver.origin}/api/v1/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: "session_id=sessao-que-nao-existe",
+        },
+        body: JSON.stringify(orchestrator.buildOrderInput()),
+      });
+
+      expect(response.status).toBe(201);
+    });
+
     test("With an invalid CPF", async () => {
       const ordersBefore = await countOrders();
       const input = orchestrator.buildOrderInput();

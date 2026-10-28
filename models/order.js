@@ -252,6 +252,21 @@ async function findOneById(id) {
   }
 }
 
+// Todos os pedidos, do mais novo para o mais antigo, para a página de vendas.
+// Sem paginação: a loja ainda vende pouco, e a lista inteira cabe numa tela.
+async function findAll() {
+  const results = await database.query(`
+    SELECT
+      *
+    FROM
+      orders
+    ORDER BY
+      created_at DESC
+  ;`);
+
+  return results.rows;
+}
+
 // Muda a situação do pedido só se ela permitir (TRANSITIONS). Assim o mesmo
 // aviso de pagamento chegando duas vezes, ou fora de ordem, não estraga nada.
 // Devolve o pedido atualizado, ou null quando não havia o que mudar.
@@ -304,6 +319,7 @@ const order = {
   prepare,
   create,
   findOneById,
+  findAll,
   transitionByCheckoutId,
   toPublic,
 };

@@ -24,6 +24,9 @@ const availableFeatures = [
   // STATUS
   "read:status",
   "read:status:all",
+
+  // ORDER
+  "read:order:all",
 ];
 
 function can(user, feature, resource) {
@@ -136,6 +139,33 @@ function filterOutput(user, feature, resource) {
     }
 
     return output;
+  }
+
+  // A lista de vendas de quem cuida da loja: além do que a página do pedido
+  // mostra, o contato e o CPF de quem comprou, para entregar e emitir a nota.
+  // O link de pagamento fica de fora: ele é de quem compra.
+  if (feature === "read:order:all") {
+    return resource.map((order) => {
+      return {
+        id: order.id,
+        code: order.code,
+        status: order.status,
+        items: order.items,
+        subtotal: order.subtotal,
+        shipping: order.shipping,
+        total: order.total,
+        customer_name: order.customer_name,
+        customer_email: order.customer_email,
+        customer_phone: order.customer_phone,
+        customer_tax_id: order.customer_tax_id,
+        shipping_address: order.shipping_address,
+        abacatepay_checkout_id: order.abacatepay_checkout_id,
+        dev_mode: order.dev_mode,
+        paid_at: order.paid_at,
+        created_at: order.created_at,
+        updated_at: order.updated_at,
+      };
+    });
   }
 }
 

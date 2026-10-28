@@ -54,19 +54,21 @@ arquivo vai para o git, então a chave de produção nunca entra nele. Sem a cha
 
 ## Scripts
 
-| Script                      | O que faz                                            |
-| --------------------------- | ---------------------------------------------------- |
-| `npm run dev`               | Sobe os serviços, roda as migrations e inicia o site |
-| `npm test`                  | Roda a suíte completa de testes                      |
-| `npm run test:watch`        | Roda os testes em modo watch                         |
-| `npm run services:up`       | Sobe apenas os containers                            |
-| `npm run services:stop`     | Para os containers                                   |
-| `npm run services:down`     | Remove os containers                                 |
-| `npm run migrations:create` | Cria uma nova migration                              |
-| `npm run migrations:up:dev` | Aplica as migrations pendentes no banco local        |
-| `npm run migrations:up`     | Aplica as migrations com o ambiente do deploy        |
-| `npm run lint:prettier:fix` | Formata o código                                     |
-| `npm run commit`            | Commit guiado pelo Commitizen                        |
+| Script                                        | O que faz                                               |
+| --------------------------------------------- | ------------------------------------------------------- |
+| `npm run dev`                                 | Sobe os serviços, roda as migrations e inicia o site    |
+| `npm test`                                    | Roda a suíte completa de testes                         |
+| `npm run test:watch`                          | Roda os testes em modo watch                            |
+| `npm run services:up`                         | Sobe apenas os containers                               |
+| `npm run services:stop`                       | Para os containers                                      |
+| `npm run services:down`                       | Remove os containers                                    |
+| `npm run migrations:create`                   | Cria uma nova migration                                 |
+| `npm run migrations:up:dev`                   | Aplica as migrations pendentes no banco local           |
+| `npm run migrations:up`                       | Aplica as migrations com o ambiente do deploy           |
+| `npm run orders:grant-access:dev -- <e-mail>` | Libera a página de vendas para uma conta no banco local |
+| `npm run orders:grant-access -- <e-mail>`     | O mesmo, com o ambiente do deploy                       |
+| `npm run lint:prettier:fix`                   | Formata o código                                        |
+| `npm run commit`                              | Commit guiado pelo Commitizen                           |
 
 ## Testes
 
@@ -124,6 +126,7 @@ Todo pull request dispara dois workflows no GitHub Actions:
 | `/aplicativo`  | Como ativar o aplicativo, para quem já comprou           |
 | `/duvidas`     | As perguntas de antes da compra                          |
 | `/tabuleiro`   | Landing do tabuleiro, que termina pondo ele na sacola    |
+| `/vendas`      | Os pedidos, para quem cuida da loja (veja "Vendas")      |
 
 O catálogo está em `components/loja/catalogo.js`: quatro tabuleiros, cada um com uma
 cidade diferente, e dois kits, todos na mesma prateleira. Ainda não há API de produtos, e o
@@ -175,6 +178,24 @@ O webhook é cadastrado no painel da AbacatePay com a URL
 `checkout.refunded`, e um secret, que vai também em `ABACATEPAY_WEBHOOK_SECRET`. A
 AbacatePay só aceita URL HTTPS pública.
 
+### Vendas
+
+A página `/vendas` lista os pedidos, do mais novo para o mais antigo, com quem comprou
+(e-mail, celular e CPF, para a nota), o endereço de entrega e o nome que sai em cada peça.
+Os botões de cima separam pagos, os que falta pagar e os encerrados, e o topo soma o que
+foi pago; pedido de teste aparece marcado e fica fora da soma.
+
+O site não tem conta de administrador. Quem cuida da loja cria uma conta normal, ativa
+pelo e-mail e ganha a feature `read:order:all` pelo script, uma conta de cada vez:
+
+```bash
+npm run orders:grant-access:dev -- voce@exemplo.com   # banco local
+npm run orders:grant-access -- voce@exemplo.com       # com as variáveis POSTGRES_* do deploy
+```
+
+Depois disso, a Minha conta mostra o botão "Ver as vendas". A lista vem inteira, sem
+paginação.
+
 ### Não verificado
 
 Os testes automáticos rodam contra a AbacatePay de mentira. Com a de verdade, no Dev mode,
@@ -192,25 +213,26 @@ de R$ 20,83.
 
 ## API
 
-| Endpoint                                | Descrição                          |
-| --------------------------------------- | ---------------------------------- |
-| `GET /api/v1/status`                    | Status do sistema e do banco       |
-| `POST /api/v1/users`                    | Cria uma conta                     |
-| `GET /api/v1/users/[username]`          | Dados de um usuário (com sessão)   |
-| `PATCH /api/v1/users/[username]`        | Atualiza username ou e-mail        |
-| `DELETE /api/v1/users/[username]`       | Exclui a conta                     |
-| `GET /api/v1/user`                      | Usuário da sessão atual            |
-| `POST /api/v1/user/password`            | Troca a senha, pedindo a atual     |
-| `GET /api/v1/user/export`               | Baixa os dados da conta (LGPD)     |
-| `POST /api/v1/sessions`                 | Login                              |
-| `DELETE /api/v1/sessions`               | Logout                             |
-| `PATCH /api/v1/activations/[token_id]`  | Ativa a conta pelo token do e-mail |
-| `POST /api/v1/password-resets`          | Envia o link de senha nova         |
-| `PATCH /api/v1/password-resets/[token]` | Grava a senha nova pelo link       |
-| `POST /api/v1/orders`                   | Grava o pedido e abre o pagamento  |
-| `GET /api/v1/orders/[id]`               | Pedido, para quem tem o link       |
-| `POST /api/v1/webhooks/abacatepay`      | Avisos de pagamento da AbacatePay  |
-| `POST /api/v1/migrations`               | Aplica migrations                  |
+| Endpoint                                | Descrição                           |
+| --------------------------------------- | ----------------------------------- |
+| `GET /api/v1/status`                    | Status do sistema e do banco        |
+| `POST /api/v1/users`                    | Cria uma conta                      |
+| `GET /api/v1/users/[username]`          | Dados de um usuário (com sessão)    |
+| `PATCH /api/v1/users/[username]`        | Atualiza username ou e-mail         |
+| `DELETE /api/v1/users/[username]`       | Exclui a conta                      |
+| `GET /api/v1/user`                      | Usuário da sessão atual             |
+| `POST /api/v1/user/password`            | Troca a senha, pedindo a atual      |
+| `GET /api/v1/user/export`               | Baixa os dados da conta (LGPD)      |
+| `POST /api/v1/sessions`                 | Login                               |
+| `DELETE /api/v1/sessions`               | Logout                              |
+| `PATCH /api/v1/activations/[token_id]`  | Ativa a conta pelo token do e-mail  |
+| `POST /api/v1/password-resets`          | Envia o link de senha nova          |
+| `PATCH /api/v1/password-resets/[token]` | Grava a senha nova pelo link        |
+| `POST /api/v1/orders`                   | Grava o pedido e abre o pagamento   |
+| `GET /api/v1/orders`                    | Lista os pedidos (`read:order:all`) |
+| `GET /api/v1/orders/[id]`               | Pedido, para quem tem o link        |
+| `POST /api/v1/webhooks/abacatepay`      | Avisos de pagamento da AbacatePay   |
+| `POST /api/v1/migrations`               | Aplica migrations                   |
 
 O cadastro e o pedido de senha nova respondem igual exista a conta ou não, para não
 revelar quem é cliente. Os dois mandam no máximo um e-mail a cada 5 minutos por conta.

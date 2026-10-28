@@ -48,8 +48,9 @@ export const useUltimoPedido = create(
 );
 
 // O pedido da API no formato que as telas da loja já usam, igual ao da
-// sacola: o Resumo e o nomeNaPeca leem os dois.
-function pedidoDaApi(corpo) {
+// sacola: o Resumo e o nomeNaPeca leem os dois. A página de vendas parte
+// daqui também (components/vendas/vendas.js).
+export function pedidoDaApi(corpo) {
   const endereco = corpo.shipping_address;
 
   return {
