@@ -5,6 +5,7 @@ import {
   formatarCelular,
   formatarCep,
   formatarCpf,
+  preencherPeloCep,
 } from "components/loja/campos.js";
 
 const DADOS_CERTOS = {
@@ -82,6 +83,72 @@ describe("components/loja/campos.js", () => {
       "000.000.000-00",
     ])("with an invalid CPF: %j", (cpf) => {
       expect(cpfValido(cpf)).toBe(false);
+    });
+  });
+
+  describe(".preencherPeloCep()", () => {
+    const PAULISTA = {
+      rua: "Avenida Paulista",
+      bairro: "Bela Vista",
+      cidade: "São Paulo",
+      estado: "SP",
+    };
+    const ACRELANDIA = {
+      rua: "",
+      bairro: "",
+      cidade: "Acrelândia",
+      estado: "AC",
+    };
+
+    test("with the address still empty", () => {
+      const dados = { ...DADOS_VAZIOS, cep: "01310-100" };
+
+      expect(preencherPeloCep(dados, PAULISTA)).toEqual({
+        ...dados,
+        ...PAULISTA,
+      });
+    });
+
+    test("keeps what the person wrote", () => {
+      const dados = {
+        ...DADOS_VAZIOS,
+        rua: "Av. Paulista",
+        numero: "1000",
+        complemento: "Apto 12",
+      };
+
+      expect(preencherPeloCep(dados, PAULISTA)).toEqual({
+        ...dados,
+        bairro: "Bela Vista",
+        cidade: "São Paulo",
+        estado: "SP",
+      });
+    });
+
+    test("swaps the address filled by the previous zip code", () => {
+      const dados = { ...DADOS_VAZIOS, ...PAULISTA, numero: "1000" };
+
+      expect(preencherPeloCep(dados, ACRELANDIA, PAULISTA)).toEqual({
+        ...dados,
+        ...ACRELANDIA,
+      });
+    });
+
+    test("clears the previous address when the new zip code finds nothing", () => {
+      const dados = { ...DADOS_VAZIOS, ...PAULISTA, rua: "Rua Augusta" };
+
+      expect(preencherPeloCep(dados, {}, PAULISTA)).toEqual({
+        ...DADOS_VAZIOS,
+        rua: "Rua Augusta",
+      });
+    });
+
+    test("does not touch the other fields", () => {
+      const dados = { ...DADOS_CERTOS, rua: "", bairro: "" };
+      const novos = preencherPeloCep(dados, PAULISTA);
+
+      expect(novos).toEqual(DADOS_CERTOS);
+      expect(dados.rua).toBe("");
     });
   });
 

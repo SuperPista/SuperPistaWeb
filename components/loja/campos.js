@@ -107,6 +107,25 @@ export const DADOS_VAZIOS = {
   estado: "",
 };
 
+const CAMPOS_DO_CEP = ["rua", "bairro", "cidade", "estado"];
+
+// Põe nos dados o endereço que o CEP trouxe sem apagar o que a pessoa
+// escreveu: um campo só muda se está vazio ou se ainda tem o que o CEP
+// anterior pôs nele. Assim, trocar o CEP troca o endereço, e o que o
+// navegador ou a pessoa preencheram fica. CEP que não trouxe nada (`achado`
+// vazio) limpa o endereço do CEP anterior.
+export function preencherPeloCep(dados, achado, anterior = {}) {
+  const novos = { ...dados };
+
+  for (const campo of CAMPOS_DO_CEP) {
+    if (dados[campo] === "" || dados[campo] === anterior[campo]) {
+      novos[campo] = achado[campo] || "";
+    }
+  }
+
+  return novos;
+}
+
 // Devolve um erro por campo, com o nome do campo como chave, na ordem em que
 // aparecem na tela. Sem erro, o objeto volta vazio. O complemento é o único
 // campo opcional.

@@ -14,6 +14,7 @@ import Resumo from "components/loja/Resumo.js";
 import Selecao from "components/loja/Selecao.js";
 import useSacola, { useResumoDaSacola } from "components/loja/useSacola.js";
 import { useUltimoPedido } from "components/loja/usePedido.js";
+import useEnderecoPeloCep from "components/loja/useEnderecoPeloCep.js";
 import {
   DADOS_VAZIOS,
   ESTADOS,
@@ -57,6 +58,7 @@ function Checkout() {
   const [conferir, setConferir] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState(null);
+  const enderecoPeloCep = useEnderecoPeloCep(setDados);
 
   const pronto = sacolaPronta && ultimoPronto;
 
@@ -99,6 +101,10 @@ function Checkout() {
       }
 
       setDados((atuais) => ({ ...atuais, [campo]: valor }));
+
+      if (campo === "cep") {
+        enderecoPeloCep.buscar(valor);
+      }
     };
   }
 
@@ -246,10 +252,16 @@ function Checkout() {
                         autoComplete="postal-code"
                         inputMode="numeric"
                         placeholder="00000-000"
+                        dica={enderecoPeloCep.aviso}
                         erro={erros.cep}
                         value={valores.cep}
                         onChange={aoMudar("cep", formatarCep)}
                       />
+                      {/* A dica só é lida quando o foco chega ao CEP. Aqui o
+                          leitor de tela anuncia o aviso assim que ele muda. */}
+                      <p className={estilos.somenteLeitor} role="status">
+                        {enderecoPeloCep.aviso}
+                      </p>
                     </div>
                     <div className={estilos.doisTercos}>
                       <Campo

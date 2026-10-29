@@ -156,6 +156,13 @@ pedido é gravado; enquanto falta pagar, a página do pedido tem o botão para p
 - **Confirmação:** chega pelo webhook. Enquanto o pedido espera, a página dele também
   pergunta à AbacatePay a cada 5 segundos, o que cobre o webhook atrasado e o
   desenvolvimento local, onde o webhook não chega.
+- **Endereço pelo CEP:** quando o CEP fica completo, o checkout pergunta a
+  `GET /api/v1/zip-codes/[zip_code]` e preenche rua, bairro, cidade e estado. Só mudam os
+  campos vazios ou os que o CEP anterior preencheu: o que a pessoa ou o navegador
+  escreveram fica. Quem consulta a ViaCEP é o servidor, então ela vê só o CEP, e não o IP
+  de quem compra. A resposta sai com `s-maxage` de uma semana, para a CDN guardar (ainda
+  não conferido na Vercel). Se a ViaCEP não achar o CEP ou não responder, a pessoa
+  escreve o endereço à mão.
 - **Dados do cliente:** o site cadastra o cliente na AbacatePay com nome, e-mail, celular
   e CPF, e o checkout dela já abre com isso preenchido. O endereço não vai: o link de
   pagamento leva `skip_address=true`, que tira a etapa de endereço do checkout (Pix e
