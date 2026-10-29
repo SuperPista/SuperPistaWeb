@@ -79,9 +79,10 @@ npm test
 Os testes de integração sobem o Next.js e conversam com a API de verdade, então precisam
 dos serviços do Docker rodando — o próprio `npm test` cuida disso.
 
-Eles nunca falam com a AbacatePay: o `npm test` sobe o Next com `ABACATEPAY_API_URL`
-apontando para uma AbacatePay de mentira (`tests/abacatepayFake.js`, na porta 4010), que
-cada teste liga e desliga. Por isso os testes da loja não passam no `npm run test:watch`
+Eles nunca falam com a AbacatePay nem com a ViaCEP: o `npm test` sobe o Next com
+`ABACATEPAY_API_URL` e `VIACEP_API_URL` apontando para versões de mentira
+(`tests/abacatepayFake.js`, na porta 4010, e `tests/viacepFake.js`, na 4011), que cada
+teste liga e desliga. Por isso os testes da loja não passam no `npm run test:watch`
 com o servidor do `npm run dev`, que aponta para a AbacatePay de verdade.
 
 ## Commits
@@ -232,6 +233,7 @@ de R$ 20,83.
 | `GET /api/v1/orders`                    | Lista os pedidos (`read:order:all`) |
 | `GET /api/v1/orders/[id]`               | Pedido, para quem tem o link        |
 | `POST /api/v1/webhooks/abacatepay`      | Avisos de pagamento da AbacatePay   |
+| `GET /api/v1/zip-codes/[zip_code]`      | Endereço de um CEP, pela ViaCEP     |
 | `POST /api/v1/migrations`               | Aplica migrations                   |
 
 O cadastro e o pedido de senha nova respondem igual exista a conta ou não, para não

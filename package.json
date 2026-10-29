@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npm run services:up && npm run services:wait:database && npm run migrations:up:dev && next dev",
     "vercel-build": "npm run migrations:up && next build",
-    "test": "npm run services:up && ABACATEPAY_API_URL=http://localhost:4010/v2 ABACATEPAY_API_KEY=abc_test_key ABACATEPAY_WEBHOOK_SECRET=test_webhook_secret ABACATEPAY_PRODUCT_TABULEIRO_VERMELHO=prod_test_tabuleiro_vermelho concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand --verbose\"",
+    "test": "npm run services:up && ABACATEPAY_API_URL=http://localhost:4010/v2 ABACATEPAY_API_KEY=abc_test_key ABACATEPAY_WEBHOOK_SECRET=test_webhook_secret ABACATEPAY_PRODUCT_TABULEIRO_VERMELHO=prod_test_tabuleiro_vermelho VIACEP_API_URL=http://localhost:4011/ws concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand --verbose\"",
     "posttest": "npm run services:stop",
     "test:watch": "jest --watchAll --runInBand --verbose",
     "services:up": "docker compose -f infra/compose.yaml up -d",
