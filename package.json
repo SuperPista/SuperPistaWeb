@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npm run services:up && npm run services:wait:database && npm run migrations:up:dev && next dev",
     "vercel-build": "npm run migrations:up && next build",
-    "test": "npm run services:up && concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand --verbose\"",
+    "test": "npm run services:up && ABACATEPAY_API_URL=http://localhost:4010/v2 ABACATEPAY_API_KEY=abc_test_key ABACATEPAY_WEBHOOK_SECRET=test_webhook_secret ABACATEPAY_PRODUCT_TABULEIRO_VERMELHO=prod_test_tabuleiro_vermelho VIACEP_API_URL=http://localhost:4011/ws concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand --verbose\"",
     "posttest": "npm run services:stop",
     "test:watch": "jest --watchAll --runInBand --verbose",
     "services:up": "docker compose -f infra/compose.yaml up -d",
@@ -17,6 +17,8 @@
     "migrations:up": "node infra/scripts/migrate.js",
     "migrations:up:dev": "node-pg-migrate -m infra/migrations --envPath .env.development up",
     "migrations:up:dry": "node-pg-migrate -m infra/migrations --envPath .env.development --dry-run up",
+    "orders:grant-access": "node infra/scripts/grant-orders-access.js",
+    "orders:grant-access:dev": "node --env-file=.env.development infra/scripts/grant-orders-access.js",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
     "lint:eslint:check": "eslint . --max-warnings 0",
@@ -37,7 +39,8 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "swr": "2.4.1",
-    "uuid": "11.1.0"
+    "uuid": "11.1.0",
+    "zustand": "5.0.15"
   },
   "devDependencies": {
     "@commitlint/cli": "20.5.0",

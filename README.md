@@ -12,7 +12,8 @@ a conta criada aqui.
 
 - **Login e contas** — cadastro, ativação por e-mail, login, recuperação de senha e a
   área Minha conta (trocar senha, baixar os dados e excluir a conta).
-- **Loja** — página de venda do tabuleiro Super Pista.
+- **Loja** — vitrine, sacola, checkout e pedido, com o pagamento na
+  [AbacatePay](https://www.abacatepay.com/) (Pix, boleto e cartão).
 
 Qualquer coisa fora disso (gameplay, rastreamento de marcadores, AR) fica no aplicativo.
 
@@ -20,6 +21,8 @@ Qualquer coisa fora disso (gameplay, rastreamento de marcadores, AR) fica no apl
 
 - [Next.js](https://nextjs.org/) + React (páginas e API Routes)
 - PostgreSQL com migrations via [node-pg-migrate](https://github.com/salsita/node-pg-migrate)
+- [Zustand](https://zustand.docs.pmnd.rs/) para o que fica guardado no navegador (sacola e nome da criança)
+- [AbacatePay](https://docs.abacatepay.com/) (API v2) para o pagamento, no checkout hospedado dela
 - Docker Compose para os serviços de desenvolvimento (banco e servidor de e-mail)
 - Jest para testes unitários e de integração
 
@@ -44,21 +47,28 @@ migrations e inicia o Next.js em <http://localhost:3000>.
 Os e-mails de ativação enviados em desenvolvimento não saem para a internet: eles caem no
 MailCatcher, que pode ser aberto em <http://localhost:1080>.
 
+Os pedidos feitos em desenvolvimento usam a chave do Dev mode da AbacatePay que está no
+`.env.development` (veja [Pagamento](#pagamento)), e os pagamentos são simulados. Esse
+arquivo vai para o git, então a chave de produção nunca entra nele. Sem a chave, o botão
+"Ir para o pagamento" responde com erro e nada é gravado.
+
 ## Scripts
 
-| Script                      | O que faz                                            |
-| --------------------------- | ---------------------------------------------------- |
-| `npm run dev`               | Sobe os serviços, roda as migrations e inicia o site |
-| `npm test`                  | Roda a suíte completa de testes                      |
-| `npm run test:watch`        | Roda os testes em modo watch                         |
-| `npm run services:up`       | Sobe apenas os containers                            |
-| `npm run services:stop`     | Para os containers                                   |
-| `npm run services:down`     | Remove os containers                                 |
-| `npm run migrations:create` | Cria uma nova migration                              |
-| `npm run migrations:up:dev` | Aplica as migrations pendentes no banco local        |
-| `npm run migrations:up`     | Aplica as migrations com o ambiente do deploy        |
-| `npm run lint:prettier:fix` | Formata o código                                     |
-| `npm run commit`            | Commit guiado pelo Commitizen                        |
+| Script                                        | O que faz                                               |
+| --------------------------------------------- | ------------------------------------------------------- |
+| `npm run dev`                                 | Sobe os serviços, roda as migrations e inicia o site    |
+| `npm test`                                    | Roda a suíte completa de testes                         |
+| `npm run test:watch`                          | Roda os testes em modo watch                            |
+| `npm run services:up`                         | Sobe apenas os containers                               |
+| `npm run services:stop`                       | Para os containers                                      |
+| `npm run services:down`                       | Remove os containers                                    |
+| `npm run migrations:create`                   | Cria uma nova migration                                 |
+| `npm run migrations:up:dev`                   | Aplica as migrations pendentes no banco local           |
+| `npm run migrations:up`                       | Aplica as migrations com o ambiente do deploy           |
+| `npm run orders:grant-access:dev -- <e-mail>` | Libera a página de vendas para uma conta no banco local |
+| `npm run orders:grant-access -- <e-mail>`     | O mesmo, com o ambiente do deploy                       |
+| `npm run lint:prettier:fix`                   | Formata o código                                        |
+| `npm run commit`                              | Commit guiado pelo Commitizen                           |
 
 ## Testes
 
@@ -68,6 +78,12 @@ npm test
 
 Os testes de integração sobem o Next.js e conversam com a API de verdade, então precisam
 dos serviços do Docker rodando — o próprio `npm test` cuida disso.
+
+Eles nunca falam com a AbacatePay nem com a ViaCEP: o `npm test` sobe o Next com
+`ABACATEPAY_API_URL` e `VIACEP_API_URL` apontando para versões de mentira
+(`tests/abacatepayFake.js`, na porta 4010, e `tests/viacepFake.js`, na 4011), que cada
+teste liga e desliga. Por isso os testes da loja não passam no `npm run test:watch`
+com o servidor do `npm run dev`, que aponta para a AbacatePay de verdade.
 
 ## Commits
 
@@ -98,24 +114,134 @@ Todo pull request dispara dois workflows no GitHub Actions:
 | `/conta`                      | Minha conta: sair, trocar senha, baixar dados, excluir |
 | `/privacidade`                | Termos de Uso e Política de Privacidade                |
 
+## Páginas da loja
+
+| Página         | O que faz                                                |
+| -------------- | -------------------------------------------------------- |
+| `/`            | Home, que é a loja: um produto no topo e a prateleira    |
+| `/loja`        | A prateleira sozinha, com todos os produtos              |
+| `/loja/[slug]` | Página do produto: fotos, preço, nome da criança, compra |
+| `/sacola`      | Sacola de compras, guardada no navegador                 |
+| `/checkout`    | Dados de quem recebe e entrega; leva ao pagamento        |
+| `/pedido/[id]` | O pedido: botão de pagar e o caminho até a entrega       |
+| `/aplicativo`  | Como ativar o aplicativo, para quem já comprou           |
+| `/duvidas`     | As perguntas de antes da compra                          |
+| `/tabuleiro`   | Landing do tabuleiro, que termina pondo ele na sacola    |
+| `/vendas`      | Os pedidos, para quem cuida da loja (veja "Vendas")      |
+
+O catálogo está em `components/loja/catalogo.js`: quatro tabuleiros, cada um com uma
+cidade diferente, e dois kits, todos na mesma prateleira. Ainda não há API de produtos, e o
+servidor lê o mesmo arquivo para calcular o pedido. A sacola fica no navegador. Só o
+tabuleiro vermelho tem fotos de verdade; as imagens em `public/loja` são ilustrativas,
+feitas da arte dele e de uma foto que o site já tinha, e as telas avisam disso.
+
+Só o tabuleiro vermelho está à venda. Os outros produtos levam `emBreve: true` no
+catálogo: aparecem na vitrine com o selo "Em breve", sem preço e sem botão de compra, e o
+servidor recusa o pedido que vier com eles.
+
+## Pagamento
+
+O checkout grava o pedido (`POST /api/v1/orders`) e manda a pessoa para o checkout
+hospedado da AbacatePay, onde ela paga com Pix, boleto ou cartão em até 12x (no mínimo
+R$ 10,00 por parcela). De lá ela volta para `/pedido/[id]`. A sacola esvazia quando o
+pedido é gravado; enquanto falta pagar, a página do pedido tem o botão para pagar.
+
+- **Preço:** quem calcula o total é o servidor, a partir do catálogo. O navegador manda só
+  produto, quantidade e nome da criança.
+- **Produtos na AbacatePay:** cada produto à venda é cadastrado à mão no painel dela, e o
+  id de lá vai no ambiente, numa variável com o nome do produto
+  (`ABACATEPAY_PRODUCT_TABULEIRO_VERMELHO`). Antes do primeiro pedido, o servidor confere
+  se o preço do painel é o mesmo do `catalogo.js`. Se não for, ou se a soma do checkout
+  não bater com o total do site, o pedido é recusado: um preço novo muda nos dois lugares.
+- **Confirmação:** chega pelo webhook. Enquanto o pedido espera, a página dele também
+  pergunta à AbacatePay a cada 5 segundos, o que cobre o webhook atrasado e o
+  desenvolvimento local, onde o webhook não chega.
+- **Endereço pelo CEP:** quando o CEP fica completo, o checkout pergunta a
+  `GET /api/v1/zip-codes/[zip_code]` e preenche rua, bairro, cidade e estado. Só mudam os
+  campos vazios ou os que o CEP anterior preencheu: o que a pessoa ou o navegador
+  escreveram fica. Quem consulta a ViaCEP é o servidor, então ela vê só o CEP, e não o IP
+  de quem compra. A resposta sai com `s-maxage` de uma semana, para a CDN guardar (ainda
+  não conferido na Vercel). Se a ViaCEP não achar o CEP ou não responder, a pessoa
+  escreve o endereço à mão.
+- **Dados do cliente:** o site cadastra o cliente na AbacatePay com nome, e-mail, celular
+  e CPF, e o checkout dela já abre com isso preenchido. O endereço não vai: o link de
+  pagamento leva `skip_address=true`, que tira a etapa de endereço do checkout (Pix e
+  boleto não usam endereço; no cartão, a cobrança sai sem ele). A entrega usa o endereço
+  gravado no pedido. A AbacatePay guarda um cliente por CPF: quem compra de novo com o
+  mesmo CPF vê lá o cadastro da primeira compra.
+
+### Configuração
+
+| Variável                                | O que é                                                          |
+| --------------------------------------- | ---------------------------------------------------------------- |
+| `ABACATEPAY_API_KEY`                    | Chave de API. A do Dev mode simula os pagamentos                 |
+| `ABACATEPAY_WEBHOOK_SECRET`             | O secret cadastrado no webhook; sem ele, todo webhook é recusado |
+| `ABACATEPAY_PRODUCT_TABULEIRO_VERMELHO` | Id do produto no painel. Muda entre o Dev mode e a produção      |
+
+A chave precisa das permissões `PRODUCT:READ`, `CUSTOMER:CREATE`, `CHECKOUT:CREATE` e
+`CHECKOUT:READ`. As permissões de uma chave não mudam depois de criada.
+
+O webhook é cadastrado no painel da AbacatePay com a URL
+`https://superpista.com/api/v1/webhooks/abacatepay`, os eventos `checkout.completed` e
+`checkout.refunded`, e um secret, que vai também em `ABACATEPAY_WEBHOOK_SECRET`. A
+AbacatePay só aceita URL HTTPS pública.
+
+### Vendas
+
+A página `/vendas` lista os pedidos, do mais novo para o mais antigo, com quem comprou
+(e-mail, celular e CPF, para a nota), o endereço de entrega e o nome que sai em cada peça.
+Os botões de cima separam pagos, os que falta pagar e os encerrados, e o topo soma o que
+foi pago; pedido de teste aparece marcado e fica fora da soma.
+
+O site não tem conta de administrador. Quem cuida da loja cria uma conta normal, ativa
+pelo e-mail e ganha a feature `read:order:all` pelo script, uma conta de cada vez:
+
+```bash
+npm run orders:grant-access:dev -- voce@exemplo.com   # banco local
+npm run orders:grant-access -- voce@exemplo.com       # com as variáveis POSTGRES_* do deploy
+```
+
+Depois disso, a Minha conta mostra o botão "Ver as vendas". A lista vem inteira, sem
+paginação.
+
+### Não verificado
+
+Os testes automáticos rodam contra a AbacatePay de mentira. Com a de verdade, no Dev mode,
+já se viu que ela aceita `returnUrl` e `completionUrl` em `http://localhost:3000` e que o
+checkout pedia o endereço de novo antes do `skip_address`. Ainda falta conferir:
+
+- se o checkout abre com os dados do cliente já preenchidos;
+- se o `skip_address=true` tira a etapa de endereço com o cartão (a flag não vale em conta
+  cujo cartão ainda passa pelo processador antigo da AbacatePay);
+- se a volta pelo `completionUrl` acontece depois do Pix, do cartão e do boleto.
+
+O catálogo mostra o tabuleiro em "12x de R$ 24,30", que soma mais que o preço. Sem repasse
+de taxa (`card.passFeesToCustomer`), a AbacatePay parcela o preço sem juros: 12x de cerca
+de R$ 20,83.
+
 ## API
 
-| Endpoint                                | Descrição                          |
-| --------------------------------------- | ---------------------------------- |
-| `GET /api/v1/status`                    | Status do sistema e do banco       |
-| `POST /api/v1/users`                    | Cria uma conta                     |
-| `GET /api/v1/users/[username]`          | Dados de um usuário (com sessão)   |
-| `PATCH /api/v1/users/[username]`        | Atualiza username ou e-mail        |
-| `DELETE /api/v1/users/[username]`       | Exclui a conta                     |
-| `GET /api/v1/user`                      | Usuário da sessão atual            |
-| `POST /api/v1/user/password`            | Troca a senha, pedindo a atual     |
-| `GET /api/v1/user/export`               | Baixa os dados da conta (LGPD)     |
-| `POST /api/v1/sessions`                 | Login                              |
-| `DELETE /api/v1/sessions`               | Logout                             |
-| `PATCH /api/v1/activations/[token_id]`  | Ativa a conta pelo token do e-mail |
-| `POST /api/v1/password-resets`          | Envia o link de senha nova         |
-| `PATCH /api/v1/password-resets/[token]` | Grava a senha nova pelo link       |
-| `POST /api/v1/migrations`               | Aplica migrations                  |
+| Endpoint                                | Descrição                           |
+| --------------------------------------- | ----------------------------------- |
+| `GET /api/v1/status`                    | Status do sistema e do banco        |
+| `POST /api/v1/users`                    | Cria uma conta                      |
+| `GET /api/v1/users/[username]`          | Dados de um usuário (com sessão)    |
+| `PATCH /api/v1/users/[username]`        | Atualiza username ou e-mail         |
+| `DELETE /api/v1/users/[username]`       | Exclui a conta                      |
+| `GET /api/v1/user`                      | Usuário da sessão atual             |
+| `POST /api/v1/user/password`            | Troca a senha, pedindo a atual      |
+| `GET /api/v1/user/export`               | Baixa os dados da conta (LGPD)      |
+| `POST /api/v1/sessions`                 | Login                               |
+| `DELETE /api/v1/sessions`               | Logout                              |
+| `PATCH /api/v1/activations/[token_id]`  | Ativa a conta pelo token do e-mail  |
+| `POST /api/v1/password-resets`          | Envia o link de senha nova          |
+| `PATCH /api/v1/password-resets/[token]` | Grava a senha nova pelo link        |
+| `POST /api/v1/orders`                   | Grava o pedido e abre o pagamento   |
+| `GET /api/v1/orders`                    | Lista os pedidos (`read:order:all`) |
+| `GET /api/v1/orders/[id]`               | Pedido, para quem tem o link        |
+| `POST /api/v1/webhooks/abacatepay`      | Avisos de pagamento da AbacatePay   |
+| `GET /api/v1/zip-codes/[zip_code]`      | Endereço de um CEP, pela ViaCEP     |
+| `POST /api/v1/migrations`               | Aplica migrations                   |
 
 O cadastro e o pedido de senha nova respondem igual exista a conta ou não, para não
 revelar quem é cliente. Os dois mandam no máximo um e-mail a cada 5 minutos por conta.
@@ -125,6 +251,11 @@ revelar quem é cliente. Os dois mandam no máximo um e-mail a cada 5 minutos po
 O build da Vercel roda `vercel-build`, que aplica as migrations antes do `next build`.
 Ele usa as variáveis `POSTGRES_*` do ambiente do deploy, inclusive nos deploys de
 preview: confira que o preview não aponta para o banco de produção.
+
+As variáveis `ABACATEPAY_*` também vivem no painel do deploy. No preview, use a chave do
+Dev mode: com a chave de produção, um pedido de teste cobra de verdade. O id do produto
+acompanha a chave: o do Dev mode só existe no Dev mode, e a produção precisa do produto
+cadastrado no painel de produção.
 
 ## Licença
 

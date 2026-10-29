@@ -11,6 +11,7 @@ import BaixarDados from "components/conta/BaixarDados.js";
 import ExcluirConta from "components/conta/ExcluirConta.js";
 import useConta from "components/conta/useConta.js";
 import { LINK_LOGIN } from "components/conta/links.js";
+import { LINK_VENDAS } from "components/loja/links.js";
 
 // Área de quem está logado. O site não é o jogo: aqui fica o que é da conta,
 // e o aplicativo usa o mesmo e-mail e a mesma senha.
@@ -77,6 +78,15 @@ function Conta() {
         Aqui você cuida da sua conta. No aplicativo, entre com{" "}
         <strong>{usuario.email}</strong> e a mesma senha do site.
       </p>
+
+      {/* só quem cuida da loja tem a feature (pages/vendas) */}
+      {usuario.features?.includes("read:order:all") && (
+        <div className={estilos.acoes}>
+          <Link className={landing.botao} href={LINK_VENDAS}>
+            Ver as vendas
+          </Link>
+        </div>
+      )}
 
       <TrocarSenha />
 

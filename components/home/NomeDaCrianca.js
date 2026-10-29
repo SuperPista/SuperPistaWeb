@@ -18,9 +18,10 @@ const VIDEOS = [
   },
 ];
 
-// Crianças mostrando a peça com o nome. O botão abre a prévia para testar um
-// nome sem sair da home.
-function NomeDaCrianca() {
+// Crianças mostrando a peça com o nome, na página do tabuleiro. `previa` põe o
+// botão que abre a prévia num popup; a página do tabuleiro não precisa dele,
+// porque o campo do nome já está lá em cima, ao lado do preço.
+function NomeDaCrianca({ previa = true }) {
   return (
     <section className={`${landing.secao} ${landing.claro}`} id="nome">
       <div className={`${landing.container} ${estilos.nomeGrade}`}>
@@ -33,7 +34,7 @@ function NomeDaCrianca() {
           <p className={landing.corpoEscuro}>
             Se preferir, o tabuleiro vem só com a marca Super Pista.
           </p>
-          <PopupDoNome />
+          {previa && <PopupDoNome />}
         </div>
 
         <ul className={estilos.nomes}>

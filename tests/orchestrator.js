@@ -6,7 +6,9 @@ import migrator from "models/migrator.js";
 import user from "models/user.js";
 import session from "models/session.js";
 import activation from "models/activation.js";
+import order from "models/order.js";
 import webserver from "infra/webserver.js";
+import { SLUG_DO_TABULEIRO } from "components/loja/catalogo.js";
 
 const emailHttpUrl = `http://${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`;
 
@@ -133,6 +135,56 @@ async function addFeaturesToUser(userObject, features) {
   return updatedUser;
 }
 
+// O corpo de um POST /api/v1/orders que passa em todas as conferências.
+function buildOrderInput(overrides) {
+  return {
+    customer: {
+      name: "Marina Albuquerque",
+      email: "marina@example.com",
+      phone: "(11) 98765-4321",
+      tax_id: "529.982.247-25",
+    },
+    shipping_address: {
+      zip_code: "01310-100",
+      street: "Avenida Paulista",
+      number: "1000",
+      complement: "Apto 12",
+      neighborhood: "Bela Vista",
+      city: "São Paulo",
+      state: "SP",
+    },
+    items: [
+      {
+        slug: SLUG_DO_TABULEIRO,
+        quantity: 1,
+        child_name: "Celinha",
+        article: "da",
+      },
+      {
+        slug: SLUG_DO_TABULEIRO,
+        quantity: 1,
+        child_name: "Daniel",
+        article: "do",
+      },
+      { slug: SLUG_DO_TABULEIRO, quantity: 2, child_name: "", article: "" },
+    ],
+    ...overrides,
+  };
+}
+
+// Um pedido gravado direto no banco, sem passar pela AbacatePay, com o id de
+// checkout que o teste escolher.
+async function createOrder({ checkoutId } = {}) {
+  const prepared = order.prepare(buildOrderInput());
+  const id = checkoutId || `bill_${prepared.id}`;
+
+  return await order.create(prepared, {
+    id,
+    url: `https://app.abacatepay.com/pay/${id}`,
+    devMode: true,
+  });
+}
+
 const orchestrator = {
   waitForAllServices,
   clearDatabase,
@@ -147,6 +199,8 @@ const orchestrator = {
   createOldActivationToken,
   activateUser,
   addFeaturesToUser,
+  buildOrderInput,
+  createOrder,
 };
 
 export default orchestrator;

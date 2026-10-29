@@ -7,15 +7,29 @@ import {
   LINK_CRIAR_CONTA,
   LINK_PRIVACIDADE,
 } from "components/conta/links.js";
+import {
+  LINK_APLICATIVO,
+  LINK_DUVIDAS,
+  LINK_SACOLA,
+} from "components/loja/links.js";
 
 const COLUNAS = [
   {
     titulo: "Loja",
     links: [
-      { rotulo: "Como brinca", destino: "/#como-brinca" },
-      { rotulo: "Nome da criança", destino: "/#nome" },
-      { rotulo: "Dúvidas", destino: "/#perguntas" },
-      { rotulo: "Comprar", destino: "/#comprar" },
+      { rotulo: "Produtos", destino: "/#produtos" },
+      { rotulo: "Sacola", destino: LINK_SACOLA },
+    ],
+  },
+  {
+    titulo: "Ajuda",
+    links: [
+      { rotulo: "Dúvidas", destino: LINK_DUVIDAS },
+      { rotulo: "Aplicativo", destino: LINK_APLICATIVO },
+      {
+        rotulo: "contato@superpista.com",
+        destino: "mailto:contato@superpista.com",
+      },
     ],
   },
   {
@@ -24,15 +38,6 @@ const COLUNAS = [
       { rotulo: "Login", destino: LINK_LOGIN },
       { rotulo: "Criar conta", destino: LINK_CRIAR_CONTA },
       { rotulo: "Termos e privacidade", destino: LINK_PRIVACIDADE },
-    ],
-  },
-  {
-    titulo: "Contato",
-    links: [
-      {
-        rotulo: "contato@superpista.com",
-        destino: "mailto:contato@superpista.com",
-      },
     ],
   },
 ];
@@ -50,9 +55,6 @@ function Rodape() {
               width={640}
               height={414}
             />
-            <p className={estilos.rodapeLema}>
-              É hora das brincadeiras saudáveis!
-            </p>
           </div>
 
           {COLUNAS.map((coluna) => (
