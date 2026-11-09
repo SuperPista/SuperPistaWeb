@@ -101,6 +101,7 @@ describe("POST /api/v1/orders", () => {
         dev_mode: true,
         paid_at: null,
         created_at: responseBody.created_at,
+        activation_codes: [],
       });
       expect(responseBody.code).toMatch(/^SP-[2-9A-HJ-NP-Z]{6}$/);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();

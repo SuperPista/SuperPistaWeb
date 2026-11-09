@@ -80,7 +80,18 @@ describe("GET /api/v1/orders", () => {
         paid_at: null,
         created_at: newest.created_at.toISOString(),
         updated_at: newest.updated_at.toISOString(),
+        activation_codes: expect.arrayContaining([
+          expect.objectContaining({
+            order_id: newest.id,
+            board: "vermelho",
+            devices_count: 0,
+            code: expect.stringMatching(
+              /^[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}$/,
+            ),
+          }),
+        ]),
       });
+      expect(responseBody[0].activation_codes).toHaveLength(4);
       expect(responseBody[1].created_at < responseBody[0].created_at).toBe(
         true,
       );
