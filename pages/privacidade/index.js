@@ -6,9 +6,9 @@ import Faixa from "components/landing/Faixa.js";
 import Moldura from "components/conta/Moldura.js";
 import { LINK_CONTA } from "components/conta/links.js";
 
-// Termos de Uso e Política de Privacidade da conta Super Pista. O texto
-// descreve o que o sistema faz hoje (models/, pages/api/). Quando a loja
-// passar a receber pedidos, os dados do pedido e do pagamento entram aqui.
+// Termos de Uso e Política de Privacidade da conta e da loja Super Pista. O
+// texto descreve o que o sistema faz hoje (models/, pages/api/): o que muda
+// nos dados da conta, do pedido ou do pagamento muda aqui também.
 //
 // A página segue o desenho de "Antes de comprar" da home: título e contato
 // numa coluna que acompanha a rolagem, e o texto ao lado.
@@ -24,7 +24,7 @@ function Privacidade() {
             <div className={landing.faqTexto}>
               <h1 className={landing.h2}>Termos de Uso e Privacidade</h1>
               <p className={estilos.atualizado}>
-                Última atualização: 28 de setembro de 2026.
+                Última atualização: 28 de outubro de 2026.
               </p>
             </div>
             <div className={landing.faqContato}>
@@ -46,21 +46,23 @@ function Privacidade() {
             <h2>O que estes termos cobrem</h2>
             <p>
               Estes Termos de Uso e esta Política de Privacidade valem para o
-              site superpista.com e para a conta Super Pista, que também é usada
-              no aplicativo. Ao criar a conta, você declara que leu e aceita o
-              que está aqui.
+              site superpista.com, para a conta Super Pista, que também é usada
+              no aplicativo, e para os pedidos feitos na loja. Ao criar a conta,
+              você declara que leu e aceita o que está aqui.
             </p>
 
-            <h2>A conta é de um adulto</h2>
+            <h2>A conta e os pedidos são de um adulto</h2>
             <p>
-              A conta deve ser criada por um adulto: pai, mãe ou responsável. As
-              crianças brincam com o tabuleiro e com o aplicativo sempre com um
-              adulto por perto. Não pedimos dados das crianças para criar a
-              conta.
+              A conta deve ser criada por um adulto: pai, mãe ou responsável, e
+              os pedidos da loja também são feitos por um adulto. As crianças
+              brincam com o tabuleiro e com o aplicativo sempre com um adulto
+              por perto. Não pedimos dados das crianças para criar a conta.
             </p>
             <p>
-              O nome que você digita na prévia do tabuleiro, no site, fica só no
-              seu navegador e não é enviado para nós.
+              O nome que você digita na prévia do tabuleiro e a sacola de
+              compras ficam só no seu navegador. O nome só chega até nós quando
+              você fecha um pedido com ele: vai junto com o pedido, para ser
+              impresso no tabuleiro. Pode ser um apelido.
             </p>
 
             <h2>Os dados que guardamos</h2>
@@ -84,6 +86,13 @@ function Privacidade() {
                 Registros de acesso: ações como criar a conta, entrar, sair e
                 trocar a senha, com a data e o endereço IP de onde vieram.
               </li>
+              <li>
+                Dos pedidos: nome, e-mail, celular e CPF de quem compra, o
+                endereço de entrega, os produtos com o nome que vai impresso em
+                cada tabuleiro, os valores e a situação do pagamento. Os dados
+                do cartão são digitados na página da AbacatePay e não passam por
+                nós.
+              </li>
             </ul>
 
             <h2>Para que usamos</h2>
@@ -92,6 +101,10 @@ function Privacidade() {
               <li>
                 Mandar os e-mails da conta: ativação, link para criar uma senha
                 nova e avisos de segurança, como o de senha trocada.
+              </li>
+              <li>
+                Cobrar, entregar e emitir a nota fiscal dos pedidos, e falar com
+                você sobre eles por e-mail ou celular.
               </li>
               <li>
                 Proteger a conta contra acesso indevido e investigar abusos.
@@ -108,14 +121,31 @@ function Privacidade() {
               (LGPD, art. 7º, V). Os registros de acesso existem por obrigação
               legal (art. 7º, II, e Marco Civil da Internet, art. 15) e pelo
               nosso interesse legítimo em manter a conta segura (art. 7º, IX).
+              Os dados dos pedidos servem para cumprir a compra (art. 7º, V) e
+              ficam guardados por obrigação fiscal (art. 7º, II).
             </p>
 
             <h2>Com quem compartilhamos</h2>
             <p>
-              Só com as empresas que hospedam o site e o banco de dados e com o
-              serviço que entrega os e-mails da conta. Elas usam os dados apenas
-              para prestar esse serviço. Também entregamos dados a autoridades
-              quando a lei ou uma ordem judicial exigir.
+              Só com as empresas que hospedam o site e o banco de dados, com o
+              serviço que entrega os e-mails da conta e, nos pedidos, com quem
+              cobra e com quem entrega:
+            </p>
+            <ul>
+              <li>
+                A AbacatePay processa o pagamento e recebe o nome, o e-mail, o
+                celular e o CPF de quem compra, os produtos e o valor. O
+                endereço e o nome impresso no tabuleiro não vão para ela.
+              </li>
+              <li>
+                Quem faz a entrega recebe o nome de quem compra e o endereço de
+                entrega.
+              </li>
+            </ul>
+            <p>
+              Essas empresas usam os dados apenas para prestar o serviço delas.
+              Também entregamos dados a autoridades quando a lei ou uma ordem
+              judicial exigir.
             </p>
 
             <h2>Por quanto tempo</h2>
@@ -130,6 +160,10 @@ function Privacidade() {
                 prazo que o Marco Civil da Internet exige, mesmo depois que a
                 conta é excluída.
               </li>
+              <li>
+                Os pedidos ficam guardados por pelo menos 5 anos, o prazo que a
+                lei fiscal exige para os registros de venda.
+              </li>
             </ul>
 
             <h2>Os seus direitos</h2>
@@ -142,6 +176,12 @@ function Privacidade() {
               <a href="mailto:contato@superpista.com">contato@superpista.com</a>
               .
             </p>
+            <p>
+              Os pedidos não ficam na conta, porque dá para comprar sem ela.
+              Para receber, corrigir ou apagar os dados de um pedido, escreva
+              para o mesmo e-mail. Os dados de um pedido pago ficam até o fim do
+              prazo fiscal, mesmo se você pedir para apagar (LGPD, art. 16, I).
+            </p>
 
             <h2>Segurança</h2>
             <p>
@@ -149,6 +189,11 @@ function Privacidade() {
               lido por scripts da página e os links enviados por e-mail vencem e
               funcionam uma vez só. Quando a senha é trocada, avisamos por
               e-mail e encerramos as outras sessões.
+            </p>
+            <p>
+              O link do pedido não dá para adivinhar, mas mostra o seu nome e o
+              endereço de entrega. Só passe o link para quem pode ver esses
+              dados.
             </p>
             <p>
               Encontrou uma falha de segurança? Conte para a gente em

@@ -1,9 +1,11 @@
 import { useId } from "react";
 import estilos from "components/nome/nome.module.css";
 import { NOME_DE_EXEMPLO } from "components/nome/useNomeDaCrianca.js";
-
-const LIMITE_DE_LETRAS = 10;
-const ARTIGOS = ["da", "do"];
+import {
+  ARTIGOS,
+  LIMITE_DE_LETRAS,
+  limparNome,
+} from "components/nome/regras.js";
 
 // Campo controlado do nome da criança: quem usa guarda o nome e o artigo com o
 // useNomeDaCrianca e passa os mesmos valores para o Medalhao. O campo só aceita
@@ -14,11 +16,7 @@ function CampoDoNome({ nome, artigo, aoMudar, aoEscolherArtigo }) {
   const id = useId();
 
   function aoDigitar(evento) {
-    const somenteLetras = evento.target.value
-      .replace(/[^A-Za-z]/g, "")
-      .slice(0, LIMITE_DE_LETRAS);
-
-    aoMudar(somenteLetras);
+    aoMudar(limparNome(evento.target.value));
   }
 
   return (

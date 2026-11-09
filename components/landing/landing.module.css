@@ -1034,6 +1034,11 @@
   color: var(--branco);
 }
 
+.ofertaNome {
+  margin: -8px 0 0;
+  color: var(--amarelo);
+}
+
 .garantia {
   display: flex;
   flex-wrap: wrap;

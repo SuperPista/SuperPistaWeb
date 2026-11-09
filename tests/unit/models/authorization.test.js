@@ -126,6 +126,36 @@ describe("models/authorization.js", () => {
       expect(result).not.toHaveProperty("email");
       expect(result).not.toHaveProperty("password");
     });
+
+    // A lista de vendas mostra o contato e o CPF, para entregar e emitir a
+    // nota, mas o link de pagamento é de quem compra.
+    test("`read:order:all` keeps the buyer data and drops the payment link", () => {
+      const [result] = authorization.filterOutput(
+        { features: ["read:order:all"] },
+        "read:order:all",
+        [
+          {
+            id: "order",
+            code: "SP-7KQ2MX",
+            status: "paid",
+            customer_email: "marina@example.com",
+            customer_phone: "11987654321",
+            customer_tax_id: "52998224725",
+            payment_url: "https://app.abacatepay.com/pay/bill_abc",
+          },
+        ],
+      );
+
+      expect(result).toMatchObject({
+        id: "order",
+        code: "SP-7KQ2MX",
+        status: "paid",
+        customer_email: "marina@example.com",
+        customer_phone: "11987654321",
+        customer_tax_id: "52998224725",
+      });
+      expect(result).not.toHaveProperty("payment_url");
+    });
   });
 
   describe(".can() with `delete:user`", () => {
