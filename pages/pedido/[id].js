@@ -183,6 +183,27 @@ function Pedido() {
                 </div>
               )}
 
+              {Array.isArray(pedido.codigosAtivacao) &&
+                pedido.codigosAtivacao.length > 0 && (
+                  <div className={estilos.pedidoBloco}>
+                    <h2 className={conta.secaoTitulo}>
+                      Ativação do aplicativo
+                    </h2>
+                    <p>
+                      Use o código abaixo no aplicativo Super Pista para liberar
+                      a cidade do tabuleiro. Cada código pode ser usado em até 2
+                      aparelhos diferentes:
+                    </p>
+                    <ul>
+                      {pedido.codigosAtivacao.map((item) => (
+                        <li key={item.id || item.code}>
+                          <strong>{item.code}</strong> (Tabuleiro {item.board})
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
               <div className={estilos.pedidoBloco}>
                 <h2 className={conta.secaoTitulo}>Entrega</h2>
                 <address className={estilos.endereco}>

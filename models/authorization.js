@@ -164,6 +164,7 @@ function filterOutput(user, feature, resource) {
         paid_at: order.paid_at,
         created_at: order.created_at,
         updated_at: order.updated_at,
+        activation_codes: order.activation_codes || [],
       };
     });
   }

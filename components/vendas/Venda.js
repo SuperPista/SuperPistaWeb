@@ -78,6 +78,25 @@ function Venda({ venda }) {
           </address>
         </div>
 
+        {Array.isArray(venda.codigosAtivacao) &&
+          venda.codigosAtivacao.length > 0 && (
+            <div className={estilos.pedidoBloco}>
+              <h3 className={conta.secaoTitulo}>
+                Cartão do app (anotar na sacola)
+              </h3>
+              <ul>
+                {venda.codigosAtivacao.map((item) => (
+                  <li key={item.id || item.code}>
+                    <strong>{item.code}</strong> (Tabuleiro {item.board})
+                    {item.devices_count !== undefined && (
+                      <span> — {item.devices_count} de 2 aparelhos</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
         <div className={estilos.pedidoBloco}>
           <p>
             <Link className={estilos.linkForte} href={linkDoPedido(venda.id)}>

@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import database from "infra/database.js";
 import emailValidation from "infra/emailValidation.js";
 import { NotFoundError, ValidationError } from "infra/errors.js";
+import activationCode from "models/activationCode.js";
 import { produtoPorSlug } from "components/loja/catalogo.js";
 import { LIMITE_POR_LINHA, resumirSacola } from "components/loja/sacola.js";
 import { conferirDados, formatarCep } from "components/loja/campos.js";
@@ -214,7 +215,14 @@ async function create(prepared, checkout) {
     ],
   });
 
-  return results.rows[0];
+  const createdOrder = results.rows[0];
+  const createdCodes = await activationCode.createForOrder(
+    prepared.id,
+    prepared.items,
+  );
+  createdOrder.activation_codes = createdCodes;
+
+  return createdOrder;
 }
 
 async function findOneById(id) {
@@ -242,7 +250,10 @@ async function findOneById(id) {
     throwNotFound();
   }
 
-  return results.rows[0];
+  const foundOrder = results.rows[0];
+  foundOrder.activation_codes = await activationCode.findAllByOrderId(id);
+
+  return foundOrder;
 
   function throwNotFound() {
     throw new NotFoundError({
@@ -264,7 +275,27 @@ async function findAll() {
       created_at DESC
   ;`);
 
-  return results.rows;
+  const orders = results.rows;
+
+  if (orders.length > 0) {
+    const codes = await activationCode.findAllByOrderIds(
+      orders.map((o) => o.id),
+    );
+    const codesByOrderId = new Map();
+
+    for (const code of codes) {
+      if (!codesByOrderId.has(code.order_id)) {
+        codesByOrderId.set(code.order_id, []);
+      }
+      codesByOrderId.get(code.order_id).push(code);
+    }
+
+    for (const item of orders) {
+      item.activation_codes = codesByOrderId.get(item.id) || [];
+    }
+  }
+
+  return orders;
 }
 
 // Muda a situação do pedido só se ela permitir (TRANSITIONS). Assim o mesmo
@@ -312,6 +343,8 @@ function toPublic(order) {
     dev_mode: order.dev_mode,
     paid_at: order.paid_at,
     created_at: order.created_at,
+    activation_codes:
+      order.status === "paid" ? order.activation_codes || [] : [],
   };
 }
 

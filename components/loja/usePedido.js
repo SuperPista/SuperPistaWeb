@@ -79,6 +79,7 @@ export function pedidoDaApi(corpo) {
     subtotal: corpo.subtotal,
     frete: corpo.shipping,
     total: corpo.total,
+    codigosAtivacao: corpo.activation_codes || [],
     comprador: { nome: corpo.customer_name },
     entrega: {
       cep: endereco.zip_code,

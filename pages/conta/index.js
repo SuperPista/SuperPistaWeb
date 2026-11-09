@@ -6,6 +6,7 @@ import landing from "components/landing/landing.module.css";
 import estilos from "components/conta/conta.module.css";
 import PaginaDaConta from "components/conta/PaginaDaConta.js";
 import Titulo from "components/conta/Titulo.js";
+import MeusCodigos from "components/conta/MeusCodigos.js";
 import TrocarSenha from "components/conta/TrocarSenha.js";
 import BaixarDados from "components/conta/BaixarDados.js";
 import ExcluirConta from "components/conta/ExcluirConta.js";
@@ -87,6 +88,8 @@ function Conta() {
           </Link>
         </div>
       )}
+
+      <MeusCodigos />
 
       <TrocarSenha />
 
