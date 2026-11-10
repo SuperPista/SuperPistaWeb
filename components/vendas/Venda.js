@@ -1,5 +1,6 @@
 import { useId } from "react";
 import Link from "next/link";
+import { tabuleirosDoCodigo } from "components/loja/tabuleirosDoCodigo.js";
 
 import landing from "components/landing/landing.module.css";
 import conta from "components/conta/conta.module.css";
@@ -84,10 +85,15 @@ function Venda({ venda }) {
               <h3 className={conta.secaoTitulo}>
                 Cartão do app (anotar na sacola)
               </h3>
+              <p>
+                {venda.codigosAtivacao.length === 1
+                  ? "Um código libera todos os tabuleiros indicados abaixo."
+                  : "Cada código libera os tabuleiros indicados ao lado dele."}
+              </p>
               <ul>
                 {venda.codigosAtivacao.map((item) => (
                   <li key={item.id || item.code}>
-                    <strong>{item.code}</strong> (Tabuleiro {item.board})
+                    <strong>{item.code}</strong> ({tabuleirosDoCodigo(item)})
                     {item.devices_count !== undefined && (
                       <span> — {item.devices_count} de 2 aparelhos</span>
                     )}

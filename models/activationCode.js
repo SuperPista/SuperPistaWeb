@@ -33,54 +33,68 @@ function newCodeString() {
   return `${part1}-${part2}`;
 }
 
-async function createForOrder(orderId, items) {
-  if (!Array.isArray(items) || items.length === 0) {
-    return [];
+// Quantidades e nomes diferentes da mesma cor compartilham o mesmo direito.
+function boardsForItems(items) {
+  if (!Array.isArray(items)) return [];
+  return [
+    ...new Set(
+      items.flatMap((item) => {
+        const config = BOARD_CONFIG[item?.slug];
+        return typeof config?.board === "string" &&
+          Number.isInteger(item.quantity) &&
+          item.quantity > 0
+          ? [config.board]
+          : [];
+      }),
+    ),
+  ];
+}
+
+async function createForOrder(orderId, items, client = null) {
+  const boards = boardsForItems(items);
+  if (boards.length === 0) return [];
+
+  if (!client) {
+    return database.transaction((connection) =>
+      createForOrder(orderId, items, connection),
+    );
   }
 
-  const codesToInsert = [];
-
-  for (const item of items) {
-    const config = BOARD_CONFIG[item.slug];
-    if (!config) {
-      continue;
-    }
-
-    const quantity =
-      Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1;
-
-    for (let q = 0; q < quantity; q += 1) {
-      codesToInsert.push({
-        id: crypto.randomUUID(),
-        code: newCodeString(),
-        board: config.board,
-        orderId,
-      });
-    }
+  // A trava no pedido evita dois códigos quando duas chamadas se sobrepõem.
+  const orderResult = await client.query({
+    text: "SELECT id FROM orders WHERE id = $1 FOR UPDATE;",
+    values: [orderId],
+  });
+  if (orderResult.rowCount === 0) {
+    throw new NotFoundError({ message: "O pedido não foi encontrado." });
   }
 
-  if (codesToInsert.length === 0) {
-    return [];
-  }
+  const existing = await client.query({
+    text: "SELECT id, code, board, boards, order_id, created_at FROM activation_codes WHERE order_id = $1 ORDER BY created_at ASC;",
+    values: [orderId],
+  });
+  if (existing.rowCount > 0) return existing.rows;
 
-  const createdCodes = [];
-
-  for (const item of codesToInsert) {
-    const result = await database.query({
+  // Uma colisão aleatória no texto do código tenta outro sem abortar a transação.
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const result = await client.query({
       text: `
-        INSERT INTO
-          activation_codes (id, code, board, order_id)
-        VALUES
-          ($1, $2, $3, $4)
-        RETURNING
-          id, code, board, order_id, created_at
+        INSERT INTO activation_codes (id, code, board, boards, order_id)
+        VALUES ($1, $2, $3, $4, $5)
+        ON CONFLICT (code) DO NOTHING
+        RETURNING id, code, board, boards, order_id, created_at
       ;`,
-      values: [item.id, item.code, item.board, item.orderId],
+      values: [
+        crypto.randomUUID(),
+        newCodeString(),
+        boards[0],
+        boards,
+        orderId,
+      ],
     });
-    createdCodes.push(result.rows[0]);
+    if (result.rowCount > 0) return result.rows;
   }
-
-  return createdCodes;
+  throw new Error("Não foi possível gerar um código de ativação único.");
 }
 
 async function findAllByOrderId(orderId) {
@@ -90,6 +104,7 @@ async function findAllByOrderId(orderId) {
         ac.id,
         ac.code,
         ac.board,
+        ac.boards,
         ac.order_id,
         ac.created_at,
         count(acd.id)::int AS devices_count
@@ -121,6 +136,7 @@ async function findAllByOrderIds(orderIds) {
         ac.id,
         ac.code,
         ac.board,
+        ac.boards,
         ac.order_id,
         ac.created_at,
         count(acd.id)::int AS devices_count
@@ -152,6 +168,7 @@ async function findAllByCustomerEmail(email) {
         ac.id,
         ac.code,
         ac.board,
+        ac.boards,
         ac.order_id,
         ac.created_at,
         o.code AS order_code,
@@ -201,86 +218,70 @@ async function activate({ code, deviceId, userId = null }) {
     });
   }
 
-  const codeResult = await database.query({
-    text: `
-      SELECT
-        *
-      FROM
-        activation_codes
-      WHERE
-        code = $1
-      LIMIT
-        1
-    ;`,
-    values: [cleanCode],
-  });
-
-  if (codeResult.rowCount === 0) {
-    throw new NotFoundError({
-      message: "Código de ativação não encontrado.",
-      action:
-        "Confira se digitou exatamente como impresso no cartão da sacola.",
+  return database.transaction(async (client) => {
+    // Serializa as ativações de um código para garantir o limite de aparelhos.
+    const codeResult = await client.query({
+      text: `
+        SELECT ac.*, o.status AS order_status
+        FROM activation_codes ac
+        LEFT JOIN orders o ON o.id = ac.order_id
+        WHERE ac.code = $1
+        FOR UPDATE OF ac
+      ;`,
+      values: [cleanCode],
     });
-  }
 
-  const activationCode = codeResult.rows[0];
+    if (codeResult.rowCount === 0) {
+      throw new NotFoundError({
+        message: "Código de ativação não encontrado.",
+        action:
+          "Confira se digitou exatamente como impresso no cartão da sacola.",
+      });
+    }
 
-  const devicesResult = await database.query({
-    text: `
-      SELECT
-        id, device_id, created_at
-      FROM
-        activation_code_devices
-      WHERE
-        code_id = $1
-      ORDER BY
-        created_at ASC
-    ;`,
-    values: [activationCode.id],
-  });
+    const activation = codeResult.rows[0];
+    if (activation.order_id && activation.order_status !== "paid") {
+      throw new ForbiddenError({
+        message: "Este código não tem um pedido com pagamento confirmado.",
+        action: "Confira a situação do pagamento na página do pedido.",
+      });
+    }
 
-  const registeredDevices = devicesResult.rows;
-  const alreadyActive = registeredDevices.some(
-    (device) => device.device_id === cleanDeviceId,
-  );
+    const devicesResult = await client.query({
+      text: "SELECT device_id FROM activation_code_devices WHERE code_id = $1;",
+      values: [activation.id],
+    });
+    const alreadyActive = devicesResult.rows.some(
+      (device) => device.device_id === cleanDeviceId,
+    );
 
-  if (alreadyActive) {
+    if (!alreadyActive) {
+      if (devicesResult.rowCount >= MAX_DEVICES_PER_CODE) {
+        throw new ForbiddenError({
+          message:
+            "Este código já atingiu o limite de 2 aparelhos cadastrados.",
+          action:
+            "Os tabuleiros deste código podem ser jogados nos 2 primeiros aparelhos cadastrados.",
+        });
+      }
+      await client.query({
+        text: `INSERT INTO activation_code_devices (id, code_id, device_id, user_id)
+               VALUES ($1, $2, $3, $4);`,
+        values: [crypto.randomUUID(), activation.id, cleanDeviceId, userId],
+      });
+    }
+
     return {
       success: true,
-      board: activationCode.board,
-      code: activationCode.code,
-      alreadyActive: true,
-      devicesCount: registeredDevices.length,
+      // Mantido para versões antigas do app; boards é a lista completa.
+      board: activation.board,
+      boards: activation.boards,
+      code: activation.code,
+      alreadyActive,
+      devicesCount: devicesResult.rowCount + (alreadyActive ? 0 : 1),
       maxDevices: MAX_DEVICES_PER_CODE,
     };
-  }
-
-  if (registeredDevices.length >= MAX_DEVICES_PER_CODE) {
-    throw new ForbiddenError({
-      message: "Este código já atingiu o limite de 2 aparelhos cadastrados.",
-      action:
-        "O tabuleiro só pode ser jogado nos 2 primeiros aparelhos que usaram este código.",
-    });
-  }
-
-  await database.query({
-    text: `
-      INSERT INTO
-        activation_code_devices (id, code_id, device_id, user_id)
-      VALUES
-        ($1, $2, $3, $4)
-    ;`,
-    values: [crypto.randomUUID(), activationCode.id, cleanDeviceId, userId],
   });
-
-  return {
-    success: true,
-    board: activationCode.board,
-    code: activationCode.code,
-    alreadyActive: false,
-    devicesCount: registeredDevices.length + 1,
-    maxDevices: MAX_DEVICES_PER_CODE,
-  };
 }
 
 async function findActiveBoardsByDevice(deviceId) {
@@ -293,15 +294,18 @@ async function findActiveBoardsByDevice(deviceId) {
   const result = await database.query({
     text: `
       SELECT DISTINCT
-        ac.board
+        unlocked.board
       FROM
         activation_codes ac
       INNER JOIN
         activation_code_devices acd ON acd.code_id = ac.id
+      CROSS JOIN LATERAL unnest(ac.boards) AS unlocked(board)
+      LEFT JOIN orders o ON o.id = ac.order_id
       WHERE
         acd.device_id = $1
+        AND (ac.order_id IS NULL OR o.status = 'paid')
       ORDER BY
-        ac.board ASC
+        unlocked.board ASC
     ;`,
     values: [cleanDeviceId],
   });
@@ -312,6 +316,7 @@ async function findActiveBoardsByDevice(deviceId) {
 const activationCode = {
   BOARD_CONFIG,
   MAX_DEVICES_PER_CODE,
+  boardsForItems,
   createForOrder,
   findAllByOrderId,
   findAllByOrderIds,

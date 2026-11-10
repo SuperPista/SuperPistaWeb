@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useSWR from "swr";
+import { tabuleirosDoCodigo } from "components/loja/tabuleirosDoCodigo.js";
 
 import estilos from "components/conta/conta.module.css";
 import { pedir } from "components/conta/pedir.js";
@@ -46,9 +47,9 @@ function MeusCodigos() {
       <div className={estilos.campo}>
         <h2 className={estilos.secaoTitulo}>Tabuleiros e códigos do app</h2>
         <p className={estilos.dica}>
-          Quando você comprar um tabuleiro na loja, o código de ativação do
-          aplicativo aparece aqui. Cada código pode ser usado em até 2 aparelhos
-          diferentes.
+          Quando você comprar na loja, um único código de ativação por pedido
+          aparece aqui e libera todos os tabuleiros comprados nele. Cada código
+          pode ser usado em até 2 aparelhos diferentes.
         </p>
       </div>
     );
@@ -58,16 +59,17 @@ function MeusCodigos() {
     <div className={estilos.campo}>
       <h2 className={estilos.secaoTitulo}>Meus tabuleiros e códigos do app</h2>
       <p className={estilos.explica}>
-        Use os códigos abaixo no aplicativo Super Pista para liberar a cidade
-        correspondente em Realidade Aumentada. Cada código funciona em até 2
-        aparelhos:
+        Em novas compras, cada pedido recebe um código para liberar todos os
+        tabuleiros comprados nele. Use os códigos abaixo no aplicativo Super
+        Pista; cada um libera os tabuleiros indicados em até 2 aparelhos:
       </p>
 
       <ul className={estilos.lista}>
         {ativacoes.map((item) => (
           <li key={item.id} className={estilos.itemCodigo}>
             <div>
-              <strong>Tabuleiro {item.board}</strong> — Pedido {item.order_code}
+              <strong>{tabuleirosDoCodigo(item)}</strong> — Pedido{" "}
+              {item.order_code}
               <br />
               <span className={estilos.dica}>
                 Aparelhos ativos: {item.devices_count} de 2

@@ -184,8 +184,9 @@ function prepare(input) {
 }
 
 async function create(prepared, checkout) {
-  const results = await database.query({
-    text: `
+  return database.transaction(async (client) => {
+    const results = await client.query({
+      text: `
       INSERT INTO
         orders (
           id, code, items, subtotal, shipping, total,
@@ -197,32 +198,34 @@ async function create(prepared, checkout) {
       RETURNING
         *
     ;`,
-    values: [
+      values: [
+        prepared.id,
+        prepared.code,
+        JSON.stringify(prepared.items),
+        prepared.subtotal,
+        prepared.shipping,
+        prepared.total,
+        prepared.customer.name,
+        prepared.customer.email,
+        prepared.customer.phone,
+        prepared.customer.tax_id,
+        JSON.stringify(prepared.shipping_address),
+        checkout.id,
+        checkout.url,
+        checkout.devMode,
+      ],
+    });
+
+    const createdOrder = results.rows[0];
+    const createdCodes = await activationCode.createForOrder(
       prepared.id,
-      prepared.code,
-      JSON.stringify(prepared.items),
-      prepared.subtotal,
-      prepared.shipping,
-      prepared.total,
-      prepared.customer.name,
-      prepared.customer.email,
-      prepared.customer.phone,
-      prepared.customer.tax_id,
-      JSON.stringify(prepared.shipping_address),
-      checkout.id,
-      checkout.url,
-      checkout.devMode,
-    ],
+      prepared.items,
+      client,
+    );
+    createdOrder.activation_codes = createdCodes;
+
+    return createdOrder;
   });
-
-  const createdOrder = results.rows[0];
-  const createdCodes = await activationCode.createForOrder(
-    prepared.id,
-    prepared.items,
-  );
-  createdOrder.activation_codes = createdCodes;
-
-  return createdOrder;
 }
 
 async function findOneById(id) {
@@ -322,7 +325,10 @@ async function transitionByCheckoutId(checkoutId, status) {
     values: [checkoutId, status, TRANSITIONS[status]],
   });
 
-  return results.rows[0] || null;
+  const updated = results.rows[0];
+  if (!updated) return null;
+  updated.activation_codes = await activationCode.findAllByOrderId(updated.id);
+  return updated;
 }
 
 // O que a página do pedido mostra. A compra não pede conta, então quem tem o

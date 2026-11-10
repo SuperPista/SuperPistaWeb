@@ -58,6 +58,8 @@ describe("GET /api/v1/orders/[id]", () => {
 
       const responseBody = await response.json();
       expect(responseBody.status).toBe("paid");
+      expect(responseBody.activation_codes).toHaveLength(1);
+      expect(responseBody.activation_codes[0].boards).toEqual(["vermelho"]);
       expect(responseBody.payment_url).toBeNull();
       expect(Date.parse(responseBody.paid_at)).not.toBeNaN();
 
