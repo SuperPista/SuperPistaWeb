@@ -32,9 +32,27 @@ async function getNewClient() {
   return client;
 }
 
+// Todas as operações usam a mesma conexão: pedido/código e limite de aparelhos
+// precisam ser confirmados juntos, inclusive quando chegam pedidos simultâneos.
+async function transaction(work) {
+  const client = await getNewClient();
+  try {
+    await client.query("BEGIN");
+    const result = await work(client);
+    await client.query("COMMIT");
+    return result;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    await client.end();
+  }
+}
+
 const database = {
   query,
   getNewClient,
+  transaction,
 };
 
 export default database;

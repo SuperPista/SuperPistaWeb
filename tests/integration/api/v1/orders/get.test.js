@@ -91,7 +91,7 @@ describe("GET /api/v1/orders", () => {
           }),
         ]),
       });
-      expect(responseBody[0].activation_codes).toHaveLength(4);
+      expect(responseBody[0].activation_codes).toHaveLength(1);
       expect(responseBody[1].created_at < responseBody[0].created_at).toBe(
         true,
       );

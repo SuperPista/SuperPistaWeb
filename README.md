@@ -259,3 +259,44 @@ cadastrado no painel de produção.
 ## Licença
 
 MIT — veja [LICENSE](LICENSE).
+
+## Códigos de ativação por pedido
+
+Novos pedidos com tabuleiros recebem **um único código**, independentemente da
+quantidade de unidades, nomes personalizados ou cores. O código libera somente
+as cores dos tabuleiros comprados: vermelho + amarelo libera essas duas cidades;
+duas unidades vermelhas continuam liberando apenas vermelho. Kits não concedem
+acesso ao app nem geram código quando comprados sozinhos.
+
+O código é reservado junto com o pedido em uma transação e entregue ao cliente
+após a confirmação de pagamento. A página de vendas permite consultar o código,
+os tabuleiros vinculados e a quantidade de aparelhos cadastrados. A página do
+pedido e a conta do comprador mostram a mesma lista de tabuleiros.
+
+Cada código mantém o limite de **dois aparelhos**, compartilhado entre todos os
+seus tabuleiros. Reativar no mesmo aparelho não gasta outra vaga. As travas no
+banco impedem duplicação de códigos e ultrapassagem do limite em chamadas
+simultâneas. A ativação e a consulta de acesso exigem pedido pago; códigos
+avulsos sem pedido continuam aceitos.
+
+A migração `1794300000000_add-boards-to-activation-codes.js` acrescenta `boards`
+à tabela de códigos e preenche os códigos antigos com `[board]`. Não troca os
+códigos já entregues, não agrupa pedidos antigos e não amplia seus direitos.
+Execute as migrações antes de iniciar a nova versão do servidor. A geração de
+novos códigos deve usar `activationCode.createForOrder`.
+
+`POST /api/v1/app/activate` retorna `boards` com a lista completa. O campo `board`
+permanece com a primeira cor para compatibilidade. `GET /api/v1/app/check-access`
+retorna a união das cores dos códigos ativos do aparelho, sem repetições.
+Publicar o app com leitura de `boards` é necessário para liberar todas as cores
+imediatamente: a versão anterior lê apenas `board` na ativação. A degustação de
+três dias do app continua separada dos direitos permanentes comprados. O cache
+local de direitos do app não é removido automaticamente por um estorno.
+
+Testes das regras: `npx jest --runInBand tests/unit/models/activationCode.test.js`.
+Testes com PostgreSQL, usando um banco exclusivo de testes e as variáveis
+`POSTGRES_*` correspondentes:
+`npx jest --runInBand tests/integration/models/activationCode.test.js`.
+Essa suíte reinicia o schema do banco de testes, como as demais integrações do
+projeto, e cobre geração concorrente, limite de aparelhos, confirmação/estorno
+e rollback de pedidos quando a geração do código falha.

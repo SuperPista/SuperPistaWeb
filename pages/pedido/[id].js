@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { tabuleirosDoCodigo } from "components/loja/tabuleirosDoCodigo.js";
 
 import landing from "components/landing/landing.module.css";
 import home from "components/home/home.module.css";
@@ -190,14 +191,16 @@ function Pedido() {
                       Ativação do aplicativo
                     </h2>
                     <p>
-                      Use o código abaixo no aplicativo Super Pista para liberar
-                      a cidade do tabuleiro. Cada código pode ser usado em até 2
-                      aparelhos diferentes:
+                      {pedido.codigosAtivacao.length === 1
+                        ? "Use o código abaixo no aplicativo Super Pista para liberar todos os tabuleiros comprados neste pedido."
+                        : "Use os códigos abaixo no aplicativo Super Pista. Cada código libera os tabuleiros indicados ao lado dele."}{" "}
+                      Cada código pode ser usado em até 2 aparelhos diferentes:
                     </p>
                     <ul>
                       {pedido.codigosAtivacao.map((item) => (
                         <li key={item.id || item.code}>
-                          <strong>{item.code}</strong> (Tabuleiro {item.board})
+                          <strong>{item.code}</strong> (
+                          {tabuleirosDoCodigo(item)})
                         </li>
                       ))}
                     </ul>
