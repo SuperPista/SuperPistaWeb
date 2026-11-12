@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { Archivo } from "next/font/google";
 
 import estilos from "components/landing/landing.module.css";
@@ -13,8 +12,10 @@ import NaSacola from "components/landing/NaSacola.js";
 import Personalizacao from "components/landing/Personalizacao.js";
 import Presente from "components/landing/Presente.js";
 import Autor from "components/landing/Autor.js";
-import Perguntas from "components/landing/Perguntas.js";
+import Perguntas, { PERGUNTAS } from "components/landing/Perguntas.js";
 import Oferta from "components/landing/Oferta.js";
+import Seo, { esquemaDoProduto, esquemaFaq } from "components/loja/Seo.js";
+import { SLUG_DO_TABULEIRO, produtoPorSlug } from "components/loja/catalogo.js";
 
 // Uma família só, em três larguras: 125 para a sinalização, 100 para o texto
 // e 87 para os dados pequenos.
@@ -29,15 +30,20 @@ const archivo = Archivo({
 // A página conta uma história, da infância de quem compra até a sacola chegando
 // em casa, e todo botão leva para a oferta com o gancho da dobra em que está.
 function LandingDoTabuleiro() {
+  const produto = produtoPorSlug(SLUG_DO_TABULEIRO);
+  const dadosEstruturados = [
+    esquemaDoProduto(produto),
+    esquemaFaq(PERGUNTAS),
+  ].filter(Boolean);
+
   return (
     <>
-      <Head>
-        <title>Super Pista: hoje a tarde é no chão da sala</title>
-        <meta
-          name="description"
-          content="Uma cidade com pista de carrinhos e o nome do seu filho, para os brinquedos esquecidos no quarto voltarem à brincadeira e a família sentar junto no chão da sala. Com o app, a cidade surge em 3D no celular."
-        />
-      </Head>
+      <Seo
+        titulo="Super Pista | Tabuleiro Infantil com Realidade Aumentada e Carrinhos"
+        descricao="Uma mini cidade com pista de carrinhos e o nome do seu filho em MDF. Com o app em Realidade Aumentada, a cidade ganha vida em 3D no celular."
+        caminho="/tabuleiro"
+        dadosEstruturados={dadosEstruturados}
+      />
 
       <div className={`${archivo.variable} ${estilos.pagina}`}>
         <Cabecalho />

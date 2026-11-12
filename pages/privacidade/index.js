@@ -17,7 +17,12 @@ import { LINK_CONTA } from "components/conta/links.js";
 // (o controlador, na LGPD) antes de publicar.
 function Privacidade() {
   return (
-    <Moldura titulo="Termos de Uso e Privacidade" indexar>
+    <Moldura
+      titulo="Termos de Uso e Privacidade"
+      descricao="Termos de Uso e Política de Privacidade da conta, da loja e do aplicativo Super Pista."
+      caminho="/privacidade"
+      indexar
+    >
       <section className={landing.secao}>
         <div className={`${landing.container} ${landing.faq}`}>
           <div className={landing.faqLado}>

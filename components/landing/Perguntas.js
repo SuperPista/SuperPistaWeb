@@ -5,7 +5,7 @@ import Descer from "components/landing/Descer.js";
 
 // Respostas conferidas com a descrição oficial do produto.
 // TODO: colocar o prazo real de produção e entrega e confirmar a devolução.
-const PERGUNTAS = [
+export const PERGUNTAS = [
   {
     pergunta: "É um jogo?",
     resposta:

@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+Allow: /tabuleiro
+Allow: /loja
+Allow: /loja/*
+Allow: /duvidas
+Allow: /aplicativo
+Allow: /privacidade
+
+Disallow: /api/
+Disallow: /sacola
+Disallow: /checkout
+Disallow: /pedido/
+Disallow: /conta
+Disallow: /login
+Disallow: /cadastro
+Disallow: /recuperar-senha
+Disallow: /vendas
+Disallow: /status
+
+Sitemap: https://superpista.com/sitemap.xml

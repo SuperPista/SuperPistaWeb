@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { Archivo } from "next/font/google";
 
 import landing from "components/landing/landing.module.css";
@@ -6,6 +5,7 @@ import home from "components/home/home.module.css";
 import estilos from "components/conta/conta.module.css";
 import Cabecalho from "components/home/Cabecalho.js";
 import Rodape from "components/home/Rodape.js";
+import Seo from "components/loja/Seo.js";
 
 // A mesma Archivo da home e da landing, nas mesmas três larguras.
 const archivo = Archivo({
@@ -17,13 +17,34 @@ const archivo = Archivo({
 
 // Casca das páginas fora da home que fazem parte do site: o mesmo cabeçalho,
 // com o menu, e o mesmo rodapé. O miolo vem de quem usa.
-function Moldura({ titulo, indexar = false, classe = "", children }) {
+function Moldura({
+  titulo,
+  descricao,
+  caminho,
+  imagem,
+  tipo,
+  dadosEstruturados,
+  indexar = false,
+  classe = "",
+  children,
+}) {
+  const tituloFormatado = titulo
+    ? titulo.includes("Super Pista")
+      ? titulo
+      : `${titulo} | Super Pista`
+    : "Super Pista";
+
   return (
     <>
-      <Head>
-        <title>{`${titulo} | Super Pista`}</title>
-        {!indexar && <meta name="robots" content="noindex" />}
-      </Head>
+      <Seo
+        titulo={tituloFormatado}
+        descricao={descricao}
+        caminho={caminho}
+        imagem={imagem}
+        tipo={tipo}
+        indexar={indexar}
+        dadosEstruturados={dadosEstruturados}
+      />
 
       <div
         className={`${archivo.variable} ${landing.pagina} ${home.pagina} ${estilos.pagina} ${classe}`}
