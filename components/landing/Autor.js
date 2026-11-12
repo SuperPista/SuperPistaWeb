@@ -2,7 +2,6 @@ import Image from "next/image";
 import estilos from "components/landing/landing.module.css";
 import Descer from "components/landing/Descer.js";
 
-// TODO: conferir a história com o Alexander.
 function Autor() {
   return (
     <section className={estilos.secao} id="autor">
@@ -12,7 +11,7 @@ function Autor() {
             <Image
               className={estilos.fotoImagem}
               src="/landing/alexander.webp"
-              alt="Retrato do Alexander, que criou o Super Pista."
+              alt="Retrato do Alexander, criador da Super Pista."
               fill
               sizes="260px"
             />
@@ -20,16 +19,41 @@ function Autor() {
           <div className={estilos.autorTexto}>
             <h2 className={estilos.h2}>Quem faz o Super Pista</h2>
             <p className={estilos.corpo}>
-              Sou o Alexander. O Super Pista começou de uma cena que se repetia
-              em casa: a criança montando cidade no chão com peça de encaixe e,
-              do lado, o tablet ligado sem ninguém olhar. Em vez de disputar com
-              a tela, resolvi fazer as duas coisas trabalharem juntas.
+              Olá, eu sou Alexander, criador da SUPERPISTA.
             </p>
             <p className={estilos.corpo}>
-              O tabuleiro tem quatro peças de MDF e serve de base para os
-              brinquedos que a criança já tem em casa. Ela monta a cidade do
-              jeito dela e, se quiser, pega o celular para ver de pé o que
-              acabou de montar.
+              Em 2011, quando meu filho Pedro tinha 5 anos, percebi que ele
+              passava tempo demais em frente às telas. Para incentivar
+              brincadeiras mais criativas, criei um tabuleiro com uma mini
+              cidade e pistas para carrinhos, onde ele pudesse usar seus
+              brinquedos físicos.
+            </p>
+            <p className={estilos.corpo}>
+              O resultado foi incrível: Pedro reduziu o tempo de tela, chamou os
+              amigos para brincar e viveu muitas tardes de diversão longe dos
+              eletrônicos.
+            </p>
+            <p className={estilos.corpo}>
+              Hoje, aos 20 anos e cursando tecnologia, ele me ajudou a
+              transformar a ideia na SUPERPISTA. O tabuleiro físico ganhou
+              recursos de Realidade Aumentada, que podem ser ativados em
+              celulares e tablets. Ao apontar a câmera do aplicativo para o
+              cenário, prédios, casas, placas e semáforos em 3D ganham vida na
+              tela.
+            </p>
+            <p className={estilos.corpo}>
+              O tabuleiro também pode ser personalizado com o nome ou apelido da
+              criança e permite brincar com ou sem dispositivos eletrônicos.
+            </p>
+            <p className={estilos.corpo}>
+              Acreditamos que a tecnologia, quando unida aos brinquedos físicos,
+              aproxima pais e filhos, avós e netos, criando momentos de
+              aprendizado e diversão.
+            </p>
+            <p className={estilos.corpo}>
+              As crianças crescem rápido. Não perca esses momentos!
+              <br />
+              Montem, brinquem e divirtam-se!
             </p>
           </div>
         </div>
