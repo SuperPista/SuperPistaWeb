@@ -194,7 +194,8 @@ function Pedido() {
                       {pedido.codigosAtivacao.length === 1
                         ? "Use o código abaixo no aplicativo Super Pista para liberar todos os tabuleiros comprados neste pedido."
                         : "Use os códigos abaixo no aplicativo Super Pista. Cada código libera os tabuleiros indicados ao lado dele."}{" "}
-                      Cada código pode ser usado em até 2 aparelhos diferentes:
+                      Cada código ativa o aplicativo em{" "}
+                      <strong>até 2 aparelhos permanentes</strong>:
                     </p>
                     <ul>
                       {pedido.codigosAtivacao.map((item) => (
@@ -204,6 +205,21 @@ function Pedido() {
                         </li>
                       ))}
                     </ul>
+                    <p className={conta.dica}>
+                      <strong>Funciona sem internet:</strong> a conexão só é
+                      necessária na primeira vez para ativar o código. Depois
+                      disso, a Realidade Aumentada e a cidade 3D funcionam 100%
+                      offline, em qualquer lugar.
+                      <br />
+                      <strong>Trocou de celular?</strong> Se você trocar de
+                      aparelho e precisar liberar o acesso em um novo celular ou
+                      tablet, envie um e-mail para{" "}
+                      <a href="mailto:contato@superpista.com">
+                        contato@superpista.com
+                      </a>{" "}
+                      com o número do seu pedido e nós transferimos o acesso
+                      para o novo aparelho.
+                    </p>
                   </div>
                 )}
 

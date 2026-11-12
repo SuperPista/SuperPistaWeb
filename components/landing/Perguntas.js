@@ -42,9 +42,19 @@ const PERGUNTAS = [
       "Não. A realidade aumentada acontece na tela do celular ou do tablet: você aponta a câmera para a imagem alvo da peça 1 e a mini cidade surge em 3D. Com o botão da câmera, dá para tirar uma foto e compartilhar.",
   },
   {
+    pergunta: "Em quantos aparelhos posso usar o aplicativo?",
+    resposta:
+      "O código do cartão permite ativar o aplicativo em até 2 dispositivos permanentes (por exemplo, no celular e no tablet da família). Além disso, qualquer outro aparelho pode baixar o app e usar por até 3 dias grátis — uma opção excelente para quando um amigo vier brincar em casa e quiser testar a Realidade Aumentada com o seu tabuleiro.",
+  },
+  {
+    pergunta: "O que fazer se eu trocar de celular ou tablet?",
+    resposta:
+      "O seu código de ativação libera o aplicativo em até 2 aparelhos de forma permanente. Se você trocar de celular ou tablet e precisar transferir o acesso para o novo aparelho, basta enviar um e-mail para contato@superpista.com informando o número do seu pedido ou o seu código de ativação. Nossa equipe liberará o acesso no novo dispositivo com total tranquilidade.",
+  },
+  {
     pergunta: "Como ativo o aplicativo?",
     resposta:
-      "Baixe o app Super Pista na Play Store ou na App Store e use grátis por 3 dias. Depois, faça login e digite o código de ativação do cartão que vem com o tabuleiro. Pronto, o aplicativo fica ativado.",
+      "Baixe o app Super Pista na Play Store ou na App Store. Você pode testar grátis por 3 dias em qualquer aparelho. Para liberar o acesso definitivo em até 2 dispositivos, faça login e digite o código do cartão que acompanha o tabuleiro.",
   },
   {
     pergunta: "Funciona no meu celular?",
@@ -54,7 +64,7 @@ const PERGUNTAS = [
   {
     pergunta: "Precisa de internet?",
     resposta:
-      "Para brincar com o tabuleiro, não. Para o aplicativo, sim: a internet é necessária para baixar, fazer login e ativar o código.",
+      "Para o tabuleiro físico, não precisa de nenhuma tela ou conexão. Para o aplicativo, a internet só é necessária na primeira vez para baixar na loja, criar a conta e ativar o código. Depois de ativado, a Realidade Aumentada funciona 100% offline, direto no aparelho, sem precisar de Wi-Fi ou dados móveis — perfeito para viagens e passeios.",
   },
   {
     pergunta: "Em quanto tempo chega?",
@@ -93,7 +103,7 @@ function Perguntas({ comSeta = true }) {
               <Image
                 className={estilos.cobrir}
                 src="/landing/perguntas.webp"
-                alt="Mulher sentada no chão, sorrindo, com uma peça do tabuleiro Super Pista numa mão e o celular com o logo do aplicativo na outra."
+                alt="Mulher sentada no chão, sorrindo entre brinquedos, segurando a peça do tabuleiro Super Pista com o nome Kauan e o celular com o aplicativo aberto."
                 fill
                 sizes="(min-width: 860px) 400px, 92vw"
               />
