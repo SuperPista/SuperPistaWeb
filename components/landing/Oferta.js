@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import estilos from "components/landing/landing.module.css";
 import useNomeDaCrianca from "components/nome/useNomeDaCrianca.js";
 import useSacola from "components/loja/useSacola.js";
-import { formatarReais, partesDoPreco } from "components/loja/dinheiro.js";
+import { formatarReais } from "components/loja/dinheiro.js";
 import { nomeNaPeca } from "components/loja/sacola.js";
 import { SLUG_DO_TABULEIRO, produtoPorSlug } from "components/loja/catalogo.js";
 import { LINK_SACOLA } from "components/loja/links.js";
@@ -49,11 +49,11 @@ function Oferta() {
             de {formatarReais(tabuleiro.precoAntes)}
           </span>
           <span className={estilos.precoAgora}>
-            R$ {partesDoPreco(tabuleiro.preco).reais}
-          </span>
-          <span className={`${estilos.parcelas} ${estilos.dado}`}>
-            ou {tabuleiro.parcelas.vezes}x de{" "}
+            {tabuleiro.parcelas.vezes}x de{" "}
             {formatarReais(tabuleiro.parcelas.valor)}
+          </span>
+          <span className={`${estilos.aVista} ${estilos.dado}`}>
+            ou {formatarReais(tabuleiro.preco)} à vista
           </span>
         </p>
 
@@ -69,6 +69,7 @@ function Oferta() {
 
         <ul className={`${estilos.garantia} ${estilos.dado}`}>
           <li>Frete grátis para todo o Brasil</li>
+          <li>Até 2 dias úteis para produção</li>
           <li>Sete dias para devolver</li>
           <li>Pagamento por Pix, boleto ou cartão</li>
         </ul>

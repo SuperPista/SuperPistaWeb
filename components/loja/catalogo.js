@@ -48,7 +48,8 @@ const ITENS_DO_TABULEIRO = [
   },
   {
     quantidade: "1",
-    descricao: "cartão com o código de ativação do aplicativo",
+    descricao:
+      "cartão com código para ativar o aplicativo em até 2 dispositivos permanentes",
   },
   {
     quantidade: "Grátis",
@@ -58,41 +59,77 @@ const ITENS_DO_TABULEIRO = [
 
 const FOTOS_DO_VERMELHO = [
   {
-    src: "/landing/tabuleiro.webp",
-    largura: 1400,
-    altura: 992,
+    src: "/loja/tabuleiro-vermelho-montado.webp",
+    largura: 1600,
+    altura: 1600,
     descricao:
-      "As quatro peças do tabuleiro vermelho montadas, com ruas, praça, estádio, hospital, escola e o círculo amarelo com o nome Daniel.",
-    // arte recortada, sem fundo: fica inteira na moldura, sem cortar
-    recortada: true,
+      "As quatro peças do tabuleiro vermelho montadas no chão, com ruas, praça, estádio, hospital, escola e o círculo com o nome Kauan.",
   },
   {
-    src: "/landing/sacola-tabuleiro.webp",
-    largura: 1000,
-    altura: 597,
+    src: "/loja/tabuleiro-vermelho-sacola.webp",
+    largura: 1600,
+    altura: 1600,
     descricao:
-      "Sacola do Super Pista em cima do tabuleiro montado, com casinhas e blocos de madeira em volta, num piso de madeira.",
+      "Sacola oficial do Super Pista em cima do tabuleiro montado, cercada por brinquedos, blocos e carrinhos.",
   },
   {
-    src: "/home/passo-pecas.webp",
-    largura: 1100,
-    altura: 722,
+    src: "/loja/tabuleiro-vermelho-pecas.webp",
+    largura: 1600,
+    altura: 1600,
     descricao:
-      "As quatro peças do tabuleiro separadas sobre um piso de madeira, antes de encaixar.",
+      "As quatro peças em MDF do tabuleiro vermelho separadas sobre o piso de madeira, antes de encaixar.",
   },
   {
-    src: "/home/passo-brinquedos.webp",
-    largura: 1100,
-    altura: 698,
+    src: "/loja/tabuleiro-vermelho-brinquedos.webp",
+    largura: 1600,
+    altura: 1600,
     descricao:
-      "Tabuleiro montado com carrinhos, casinhas e bonecos espalhados pelas ruas.",
+      "Tabuleiro montado com carrinhos, pista elevada, casinhas e bonecos espalhados pelas ruas.",
   },
   {
-    src: "/home/passo-cidade-3d.webp",
-    largura: 1100,
-    altura: 746,
+    src: "/loja/tabuleiro-vermelho-3d.webp",
+    largura: 1600,
+    altura: 1600,
     descricao:
-      "A cidade do tabuleiro em 3D, com prédios, estádio e árvores de pé sobre as ruas.",
+      "A cidade do tabuleiro vermelho em 3D com Realidade Aumentada, com prédios, sol e nuvens de pé sobre as ruas.",
+  },
+  {
+    src: "/loja/tabuleiro-vermelho-perspectiva.webp",
+    largura: 1600,
+    altura: 893,
+    descricao:
+      "Tabuleiro vermelho montado visto de frente sobre o piso de madeira.",
+  },
+];
+
+const FOTOS_DO_AMARELO = [
+  {
+    src: "/loja/tabuleiro-amarelo-montado.webp",
+    largura: 1600,
+    altura: 1600,
+    descricao:
+      "As quatro peças do tabuleiro amarelo montadas no chão, com praça, piscina, posto de gasolina, petshop e o círculo com o nome Murilo.",
+  },
+  {
+    src: "/loja/tabuleiro-amarelo-pecas.webp",
+    largura: 1600,
+    altura: 1600,
+    descricao:
+      "As quatro peças em MDF do tabuleiro amarelo separadas sobre o piso de madeira, antes de encaixar.",
+  },
+  {
+    src: "/loja/tabuleiro-amarelo-3d.webp",
+    largura: 1600,
+    altura: 1600,
+    descricao:
+      "A cidade do tabuleiro amarelo em Realidade Aumentada 3D, com prédios, heliponto, torre cilíndrica e sol de pé sobre as ruas.",
+  },
+  {
+    src: "/loja/tabuleiro-amarelo-perspectiva.webp",
+    largura: 1600,
+    altura: 1600,
+    descricao:
+      "Tabuleiro amarelo montado visto de frente sobre o piso de madeira.",
   },
 ];
 
@@ -129,7 +166,7 @@ function tabuleiro({ cor, tinta, resumo, fotos, emBreve = false }) {
     itens: ITENS_DO_TABULEIRO,
     garantias: [
       "Com o aplicativo de Realidade Aumentada",
-      "Feito sob encomenda",
+      "Feito sob encomenda (até 2 dias úteis para produção)",
       "Frete grátis para todo o Brasil",
       "Sete dias para devolver",
     ],
@@ -165,8 +202,8 @@ const PRODUTOS = [
     cor: "Amarelo",
     tinta: "#ffd100",
     resumo:
-      "A cidade amarela do Super Pista, diferente das outras três, com pista de carrinhos em quatro peças de MDF. Com o aplicativo de Realidade Aumentada, ela aparece de pé em 3D no celular.",
-    fotos: [arteIlustrativa("amarelo")],
+      "A cidade amarela do Super Pista tem piscina, posto de gasolina, petshop com veterinária, apartamentos, praça e prédios comerciais em quatro peças de MDF. Com o aplicativo de Realidade Aumentada, ela aparece de pé em 3D no celular.",
+    fotos: FOTOS_DO_AMARELO,
     emBreve: true,
   }),
   tabuleiro({

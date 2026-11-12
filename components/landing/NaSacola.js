@@ -15,7 +15,8 @@ const ITENS = [
   },
   {
     quantidade: "1",
-    descricao: "cartão com o código de ativação do aplicativo",
+    descricao:
+      "cartão com código para ativar o aplicativo em até 2 dispositivos permanentes",
   },
   {
     quantidade: "Grátis",

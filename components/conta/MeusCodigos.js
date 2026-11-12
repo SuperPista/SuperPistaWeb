@@ -88,6 +88,17 @@ function MeusCodigos() {
           </li>
         ))}
       </ul>
+
+      <p className={estilos.dica}>
+        <strong>Uso offline:</strong> após ativar no aplicativo, a Realidade
+        Aumentada funciona direto no aparelho sem precisar de internet.
+        <br />
+        <strong>Troca de aparelho:</strong> se você trocar de celular ou tablet
+        e atingir o limite de 2 aparelhos, escreva para{" "}
+        <a href="mailto:contato@superpista.com">contato@superpista.com</a>{" "}
+        informando seu código e transferimos o acesso para o seu novo
+        dispositivo.
+      </p>
     </div>
   );
 }

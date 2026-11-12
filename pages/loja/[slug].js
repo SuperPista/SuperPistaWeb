@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Link from "next/link";
 
 import landing from "components/landing/landing.module.css";
@@ -13,12 +12,13 @@ import Moldura from "components/conta/Moldura.js";
 import Galeria from "components/loja/Galeria.js";
 import Compra from "components/loja/Compra.js";
 import Prateleira from "components/loja/Prateleira.js";
+import { esquemaDoProduto } from "components/loja/Seo.js";
 import {
   SLUG_DO_TABULEIRO,
   produtoPorSlug,
   todosOsProdutos,
 } from "components/loja/catalogo.js";
-import { LINK_LOJA } from "components/loja/links.js";
+import { LINK_LOJA, linkDoProduto } from "components/loja/links.js";
 
 export function getStaticPaths() {
   return {
@@ -54,12 +54,20 @@ function PaginaDoProduto({ produto }) {
     (outro) => outro.slug !== produto.slug,
   );
 
-  return (
-    <Moldura titulo={produto.nome} indexar classe={estilos.pagina}>
-      <Head>
-        <meta name="description" content={produto.resumo} />
-      </Head>
+  const titulo = `${produto.nome} com Realidade Aumentada`;
+  const foto = produto.fotos?.[0]?.src;
 
+  return (
+    <Moldura
+      titulo={titulo}
+      descricao={produto.resumo}
+      caminho={linkDoProduto(produto.slug)}
+      imagem={foto}
+      tipo="product"
+      dadosEstruturados={esquemaDoProduto(produto)}
+      indexar
+      classe={estilos.pagina}
+    >
       <section className={estilos.produtoTopo}>
         <div className={landing.container}>
           <nav aria-label="Você está em">

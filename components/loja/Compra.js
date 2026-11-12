@@ -65,8 +65,9 @@ function Compra({ produto }) {
           <span className={estilos.appDestaqueTexto}>
             <strong>Vem com o aplicativo de Realidade Aumentada</strong>
             <span>
-              Aponte o celular para o tabuleiro e a cidade aparece de pé, em 3D.
-              O código de ativação vem na sacola.
+              Ative em até 2 aparelhos permanentes com o código da sacola.
+              Funciona offline após ativado, e outros aparelhos podem testar
+              grátis por 3 dias.
             </span>
             <span className={estilos.appDestaqueLink}>Ver como funciona</span>
           </span>

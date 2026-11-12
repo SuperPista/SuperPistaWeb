@@ -17,7 +17,7 @@ const ETAPAS = [
   {
     titulo: "Veja a cidade de pé",
     texto:
-      "Baixe o app Super Pista na Play Store ou na App Store e use grátis por 3 dias. Para continuar, faça login e digite o código do cartão que vem na sacola. Depois é só apontar a câmera para a imagem alvo da peça 1.",
+      "Baixe o app Super Pista na Play Store ou na App Store e teste grátis por 3 dias em qualquer aparelho. Para liberar em até 2 dispositivos permanentes, digite o código do cartão que vem na sacola. Depois de ativado, a cidade surge em 3D direto na tela, mesmo sem internet.",
   },
 ];
 

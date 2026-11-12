@@ -18,6 +18,14 @@ const LEMA = [
   { letra: "A", cor: CORES_DAS_LETRAS[3], desvio: "-0.02em" },
 ];
 
+const ARTE_DO_HEROI = {
+  src: "/landing/tabuleiro.webp",
+  largura: 1400,
+  altura: 992,
+  descricao:
+    "As quatro peças do tabuleiro vermelho montadas, com ruas, praça, estádio, hospital, escola e o círculo amarelo com o nome Daniel.",
+};
+
 // Topo da home, que é uma loja: a primeira coisa na tela é um produto, com
 // preço e botão de compra. O amarelo vai de ponta a ponta, com o lema da marca
 // como chamada, e a arte do tabuleiro vermelho fica apoiada na faixa de
@@ -26,7 +34,7 @@ const LEMA = [
 function Hero() {
   const tabuleiros = produtosDaColecao(TABULEIROS);
   const [destaque] = tabuleiros;
-  const [arte] = destaque.fotos;
+  const arte = ARTE_DO_HEROI;
 
   return (
     <section className={`${landing.claro} ${estilos.heroi}`}>

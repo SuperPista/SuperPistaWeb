@@ -614,6 +614,60 @@
   text-decoration-color: var(--vermelho);
 }
 
+.faqRedes {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 2px dashed rgb(0 0 0 / 25%);
+}
+
+.faqRedesTitulo {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-stretch: 112%;
+}
+
+.faqRedesLista {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redeBotao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 2px solid var(--preto);
+  background-color: var(--branco);
+  color: var(--preto);
+  box-shadow: 2px 2px 0 var(--preto);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.redeBotao:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--preto);
+  background-color: var(--vermelho);
+  color: var(--branco);
+}
+
+.redeBotao:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--preto);
+}
+
 .perguntas {
   border-top: 3px solid var(--preto);
 }
@@ -1022,15 +1076,17 @@
 }
 
 .precoAgora {
-  font-size: clamp(3rem, 9vw, 5rem);
+  font-size: clamp(2.8rem, 8vw, 4.8rem);
   font-weight: 900;
   font-stretch: 125%;
-  line-height: 0.92;
+  line-height: 0.95;
   letter-spacing: -0.03em;
   color: var(--amarelo);
 }
 
-.parcelas {
+.parcelas,
+.aVista {
+  font-size: 1.15rem;
   color: var(--branco);
 }
 

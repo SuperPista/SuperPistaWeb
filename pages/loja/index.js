@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Head from "next/head";
 
 import landing from "components/landing/landing.module.css";
 import estilos from "components/loja/loja.module.css";
@@ -7,6 +6,7 @@ import Faixa from "components/landing/Faixa.js";
 import Moldura from "components/conta/Moldura.js";
 import Prateleira from "components/loja/Prateleira.js";
 import { KITS, TABULEIROS, todosOsProdutos } from "components/loja/catalogo.js";
+import { LINK_LOJA } from "components/loja/links.js";
 
 const FILTROS = [
   { rotulo: "Tudo", colecao: null },
@@ -24,14 +24,13 @@ function Loja() {
     qual ? todos.filter((produto) => produto.colecao === qual) : todos;
 
   return (
-    <Moldura titulo="Loja" indexar classe={estilos.pagina}>
-      <Head>
-        <meta
-          name="description"
-          content="A loja do Super Pista: quatro tabuleiros de mini cidade com pista de carrinhos, cada um com uma cidade diferente, e os kits de carrinhos e de blocos de montar."
-        />
-      </Head>
-
+    <Moldura
+      titulo="Loja de Tabuleiros e Kits"
+      descricao="A loja do Super Pista: quatro tabuleiros de mini cidade com pista de carrinhos em MDF, cada um com uma cidade diferente, e os kits de carrinhos e de blocos de montar."
+      caminho={LINK_LOJA}
+      indexar
+      classe={estilos.pagina}
+    >
       <section className={estilos.lojaTopo}>
         <div className={landing.container}>
           <h1 className={estilos.tituloDaTela}>Loja</h1>

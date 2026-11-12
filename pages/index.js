@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { Archivo } from "next/font/google";
 
 import landing from "components/landing/landing.module.css";
@@ -11,6 +10,7 @@ import Destaques from "components/home/Destaques.js";
 import FaixaDoApp from "components/home/FaixaDoApp.js";
 import Rodape from "components/home/Rodape.js";
 import Prateleira from "components/loja/Prateleira.js";
+import Seo, { esquemaOrganizacaoEWebsite } from "components/loja/Seo.js";
 import { todosOsProdutos } from "components/loja/catalogo.js";
 
 // A mesma Archivo da landing do tabuleiro, nas mesmas três larguras.
@@ -30,13 +30,12 @@ const archivo = Archivo({
 function Home() {
   return (
     <>
-      <Head>
-        <title>Super Pista: é hora das brincadeiras saudáveis</title>
-        <meta
-          name="description"
-          content="Loja do Super Pista: quatro tabuleiros de mini cidade com pista de carrinhos, em MDF e com o nome da criança, e os kits de carrinhos e de blocos de montar."
-        />
-      </Head>
+      <Seo
+        titulo="Super Pista | Mini Cidade com Pista de Carrinhos em MDF"
+        descricao="Loja oficial do Super Pista: tabuleiros infantis de mini cidade com pista de carrinhos em MDF, Realidade Aumentada no celular e nome da criança."
+        caminho="/"
+        dadosEstruturados={esquemaOrganizacaoEWebsite()}
+      />
 
       <div
         className={`${archivo.variable} ${landing.pagina} ${estilos.pagina} ${loja.pagina}`}
