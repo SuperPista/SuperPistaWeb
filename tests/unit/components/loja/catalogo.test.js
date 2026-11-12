@@ -80,12 +80,15 @@ describe("components/loja/catalogo.js", () => {
       expect(aVenda).toEqual([SLUG_DO_TABULEIRO]);
     });
 
-    test("only the red board has real photos", () => {
+    test("only the red and yellow boards have real photos", () => {
       const comFotoDeVerdade = todosOsProdutos()
         .filter((produto) => !produto.fotos[0].ilustrativa)
         .map((produto) => produto.slug);
 
-      expect(comFotoDeVerdade).toEqual([SLUG_DO_TABULEIRO]);
+      expect(comFotoDeVerdade).toEqual([
+        SLUG_DO_TABULEIRO,
+        "tabuleiro-amarelo",
+      ]);
     });
 
     test("the kits do not take a name nor come with the app", () => {
