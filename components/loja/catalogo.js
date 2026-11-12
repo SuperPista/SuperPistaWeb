@@ -59,15 +59,6 @@ const ITENS_DO_TABULEIRO = [
 
 const FOTOS_DO_VERMELHO = [
   {
-    src: "/landing/tabuleiro.webp",
-    largura: 1400,
-    altura: 992,
-    descricao:
-      "As quatro peças do tabuleiro vermelho montadas, com ruas, praça, estádio, hospital, escola e o círculo amarelo com o nome Daniel.",
-    // arte recortada, sem fundo: fica inteira na moldura, sem cortar
-    recortada: true,
-  },
-  {
     src: "/loja/tabuleiro-vermelho-montado.webp",
     largura: 1600,
     altura: 1600,
