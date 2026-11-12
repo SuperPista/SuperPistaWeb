@@ -77,6 +77,18 @@
   margin-right: 0.22em;
 }
 
+.vezes {
+  font-size: 0.44em;
+  font-stretch: 100%;
+  font-weight: 700;
+  margin-right: 0.28em;
+  letter-spacing: 0;
+}
+
+.aVista {
+  color: var(--cinza);
+}
+
 /* ---------- sacola no cabeçalho ---------- */
 
 /* ícone, nome e quantidade alinhados pelo meio, um ao lado do outro */

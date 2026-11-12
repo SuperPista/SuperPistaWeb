@@ -1022,15 +1022,16 @@
 }
 
 .precoAgora {
-  font-size: clamp(3rem, 9vw, 5rem);
+  font-size: clamp(2.4rem, 7vw, 4.2rem);
   font-weight: 900;
   font-stretch: 125%;
-  line-height: 0.92;
+  line-height: 0.95;
   letter-spacing: -0.03em;
   color: var(--amarelo);
 }
 
-.parcelas {
+.parcelas,
+.aVista {
   color: var(--branco);
 }
 
