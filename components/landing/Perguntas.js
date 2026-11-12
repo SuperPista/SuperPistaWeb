@@ -71,7 +71,7 @@ export const PERGUNTAS = [
   {
     pergunta: "Em quanto tempo chega?",
     resposta:
-      "O Super Pista é produzido sob encomenda, então o prazo soma a produção e a entrega para a sua região. O código de rastreio vai por e-mail assim que o pedido é enviado.",
+      "O Super Pista é produzido sob encomenda (são até 2 dias úteis para produção), e o prazo total soma a produção e o transporte para a sua região. O código de rastreio vai por e-mail assim que o pedido é enviado.",
   },
   {
     pergunta: "E se não for o que eu esperava?",

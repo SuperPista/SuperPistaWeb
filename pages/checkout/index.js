@@ -242,7 +242,9 @@ function Checkout() {
                     Onde entregar
                   </h2>
                   <p className={estilos.blocoTexto}>
-                    O frete é grátis para todo o Brasil.
+                    O frete é grátis para todo o Brasil. O tabuleiro é
+                    personalizado sob encomenda (até 2 dias úteis para
+                    produção).
                   </p>
                   <div className={estilos.campos}>
                     <div className={estilos.terco}>

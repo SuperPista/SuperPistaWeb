@@ -166,7 +166,7 @@ function tabuleiro({ cor, tinta, resumo, fotos, emBreve = false }) {
     itens: ITENS_DO_TABULEIRO,
     garantias: [
       "Com o aplicativo de Realidade Aumentada",
-      "Feito sob encomenda",
+      "Feito sob encomenda (até 2 dias úteis para produção)",
       "Frete grátis para todo o Brasil",
       "Sete dias para devolver",
     ],

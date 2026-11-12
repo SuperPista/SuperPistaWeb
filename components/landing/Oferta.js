@@ -69,6 +69,7 @@ function Oferta() {
 
         <ul className={`${estilos.garantia} ${estilos.dado}`}>
           <li>Frete grátis para todo o Brasil</li>
+          <li>Até 2 dias úteis para produção</li>
           <li>Sete dias para devolver</li>
           <li>Pagamento por Pix, boleto ou cartão</li>
         </ul>
