@@ -15,6 +15,7 @@ import {
   LINK_APLICATIVO,
   LINK_DUVIDAS,
   LINK_LOJA,
+  REDES_SOCIAIS,
   linkDoProduto,
 } from "components/loja/links.js";
 
@@ -345,6 +346,27 @@ function Cabecalho() {
               </Link>
             </li>
           </ul>
+
+          <div className={estilos.gavetaRedes}>
+            <span className={estilos.gavetaRedesTitulo}>
+              Siga a Super Pista
+            </span>
+            <ul className={estilos.gavetaRedesLista}>
+              {REDES_SOCIAIS.map((rede) => (
+                <li key={rede.nome}>
+                  <a
+                    className={estilos.redeBotao}
+                    href={rede.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={rede.nome}
+                  >
+                    <Icone nome={rede.icone} tamanho={18} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
       </div>
     </header>

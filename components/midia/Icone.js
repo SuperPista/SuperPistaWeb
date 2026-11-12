@@ -16,6 +16,17 @@ const DESENHOS = {
   menu: <path d="M4 7h16M4 12h16M4 17h16" />,
   fechar: <path d="M6 6l12 12M18 6 6 18" />,
   seta: <path d="M6 9.5l6 6 6-6" />,
+  instagram: (
+    <>
+      <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </>
+  ),
+  facebook: (
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  ),
+  tiktok: <path d="M9 12a4 4 0 1 0 4 4V3a5 5 0 0 0 5 5" />,
 };
 
 function Icone({ nome, tamanho = 22, className }) {

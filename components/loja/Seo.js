@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { urlAbsoluta } from "components/loja/links.js";
+import { REDES_SOCIAIS, urlAbsoluta } from "components/loja/links.js";
 
 const IMAGEM_PADRAO = "/loja/tabuleiro-vermelho-montado.webp";
 
@@ -127,6 +127,7 @@ export function esquemaOrganizacaoEWebsite() {
       name: "Super Pista",
       url: urlAbsoluta("/"),
       logo: urlAbsoluta("/landing/logo-super-pista-3d.webp"),
+      sameAs: REDES_SOCIAIS.map((rede) => rede.url),
       contactPoint: {
         "@type": "ContactPoint",
         email: "contato@superpista.com",

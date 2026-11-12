@@ -79,6 +79,11 @@ describe("SEO e Metadados", () => {
       expect(Array.isArray(esquemas)).toBe(true);
       expect(esquemas[0]["@type"]).toBe("Organization");
       expect(esquemas[0].name).toBe("Super Pista");
+      expect(esquemas[0].sameAs).toEqual([
+        "https://instagram.com/superpista",
+        "https://facebook.com/superpista",
+        "https://tiktok.com/@superpista",
+      ]);
       expect(esquemas[0].contactPoint.email).toBe("contato@superpista.com");
       expect(esquemas[1]["@type"]).toBe("WebSite");
     });

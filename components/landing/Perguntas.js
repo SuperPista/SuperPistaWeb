@@ -2,6 +2,8 @@ import { useId, useState } from "react";
 import Image from "next/image";
 import estilos from "components/landing/landing.module.css";
 import Descer from "components/landing/Descer.js";
+import Icone from "components/midia/Icone.js";
+import { REDES_SOCIAIS } from "components/loja/links.js";
 
 // Respostas conferidas com a descrição oficial do produto.
 // TODO: colocar o prazo real de produção e entrega e confirmar a devolução.
@@ -121,6 +123,25 @@ function Perguntas({ comSeta = true }) {
             >
               contato@superpista.com
             </a>
+
+            <div className={estilos.faqRedes}>
+              <p className={estilos.faqRedesTitulo}>Acompanhe a Super Pista:</p>
+              <ul className={estilos.faqRedesLista}>
+                {REDES_SOCIAIS.map((rede) => (
+                  <li key={rede.nome}>
+                    <a
+                      className={estilos.redeBotao}
+                      href={rede.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={rede.nome}
+                    >
+                      <Icone nome={rede.icone} tamanho={20} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 

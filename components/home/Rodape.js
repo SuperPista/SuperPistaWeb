@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import landing from "components/landing/landing.module.css";
 import estilos from "components/home/home.module.css";
+import Icone from "components/midia/Icone.js";
 import {
   LINK_LOGIN,
   LINK_CRIAR_CONTA,
@@ -11,6 +12,7 @@ import {
   LINK_APLICATIVO,
   LINK_DUVIDAS,
   LINK_SACOLA,
+  REDES_SOCIAIS,
 } from "components/loja/links.js";
 
 const COLUNAS = [
@@ -55,6 +57,26 @@ function Rodape() {
               width={640}
               height={414}
             />
+            <div className={estilos.rodapeRedes}>
+              <span className={estilos.rodapeRedesTitulo}>
+                Siga a Super Pista
+              </span>
+              <ul className={estilos.rodapeRedesLista}>
+                {REDES_SOCIAIS.map((rede) => (
+                  <li key={rede.nome}>
+                    <a
+                      className={estilos.redeBotao}
+                      href={rede.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={rede.nome}
+                    >
+                      <Icone nome={rede.icone} tamanho={20} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {COLUNAS.map((coluna) => (

@@ -10,6 +10,28 @@ export const LINK_SACOLA = "/sacola";
 export const LINK_FECHAR_PEDIDO = "/checkout";
 export const LINK_VENDAS = "/vendas";
 
+export const LINK_INSTAGRAM = "https://instagram.com/superpista";
+export const LINK_FACEBOOK = "https://facebook.com/superpista";
+export const LINK_TIKTOK = "https://tiktok.com/@superpista";
+
+export const REDES_SOCIAIS = [
+  {
+    nome: "Instagram",
+    icone: "instagram",
+    url: LINK_INSTAGRAM,
+  },
+  {
+    nome: "Facebook",
+    icone: "facebook",
+    url: LINK_FACEBOOK,
+  },
+  {
+    nome: "TikTok",
+    icone: "tiktok",
+    url: LINK_TIKTOK,
+  },
+];
+
 export function urlAbsoluta(caminho = "") {
   if (!caminho) return DOMINIO;
   if (caminho.startsWith("http://") || caminho.startsWith("https://")) {

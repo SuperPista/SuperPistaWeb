@@ -416,6 +416,28 @@
   }
 }
 
+.gavetaRedes {
+  display: grid;
+  gap: 8px;
+  padding: 14px 0 20px;
+  border-top: 2px dashed rgb(0 0 0 / 45%);
+}
+
+.gavetaRedesTitulo {
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-stretch: 112%;
+  color: var(--cinza);
+}
+
+.gavetaRedesLista {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 /* ---------- herói ---------- */
 
 /* O topo da home vai de ponta a ponta, em amarelo, com o texto de um lado e a
@@ -1142,8 +1164,60 @@
 .rodapeMarca {
   display: grid;
   align-content: start;
-  justify-items: start;
-  gap: 14px;
+  justify-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.rodapeRedes {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.rodapeRedesTitulo {
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-stretch: 112%;
+  color: var(--cinza);
+}
+
+.rodapeRedesLista {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redeBotao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 2px solid var(--preto);
+  background-color: var(--branco);
+  color: var(--preto);
+  box-shadow: 2px 2px 0 var(--preto);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.redeBotao:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--preto);
+  background-color: var(--amarelo);
+}
+
+.redeBotao:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--preto);
 }
 
 .rodapeTitulo {
