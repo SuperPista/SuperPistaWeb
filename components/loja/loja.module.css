@@ -38,7 +38,7 @@
 /* ---------- preço ---------- */
 
 .preco {
-  --tamanho: 2.3rem;
+  --tamanho: 2.5rem;
 
   display: grid;
   justify-items: start;
@@ -47,7 +47,7 @@
 }
 
 .precoGrande {
-  --tamanho: clamp(3.2rem, 8vw, 4.4rem);
+  --tamanho: clamp(3.6rem, 9vw, 5rem);
 }
 
 .precoAntes {
@@ -78,7 +78,7 @@
 }
 
 .vezes {
-  font-size: 0.44em;
+  font-size: 0.48em;
   font-stretch: 100%;
   font-weight: 700;
   margin-right: 0.28em;
@@ -234,7 +234,7 @@
 }
 
 .cartao .preco {
-  --tamanho: 1.6rem;
+  --tamanho: 1.85rem;
 }
 
 /* empurra o botão para o pé, para ficarem alinhados na linha mesmo quando um
@@ -289,7 +289,7 @@
   }
 
   .cartao .preco {
-    --tamanho: 1.95rem;
+    --tamanho: 2.25rem;
   }
 
   /* com largura, o botão fica do tamanho do texto, e não do cartão */
