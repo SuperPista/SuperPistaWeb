@@ -56,6 +56,7 @@ function Rodape() {
               alt="Super Pista"
               width={640}
               height={414}
+              sizes="(min-width: 1055px) 116px, (min-width: 764px) 11vw, 84px"
             />
             <div className={estilos.rodapeRedes}>
               <span className={estilos.rodapeRedesTitulo}>

@@ -20,7 +20,7 @@ function Galeria({ produto }) {
           alt={foto.descricao}
           fill
           sizes="(min-width: 900px) 620px, 92vw"
-          priority
+          preload={indice === 0}
         />
       </div>
 
@@ -49,7 +49,6 @@ function Galeria({ produto }) {
                   alt=""
                   fill
                   sizes="120px"
-                  loading="eager"
                 />
               </button>
             </li>

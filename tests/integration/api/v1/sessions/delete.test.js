@@ -11,6 +11,15 @@ beforeAll(async () => {
 });
 
 describe("DELETE /api/v1/sessions", () => {
+  test("Without a session, returns 401 and clears the cookie", async () => {
+    const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
+      method: "DELETE",
+    });
+    expect(response.status).toBe(401);
+    expect(await response.json()).toMatchObject({ name: "UnauthorizedError" });
+    expect(response.headers.get("set-cookie")).toContain("Max-Age=-1");
+  });
+
   describe("Default user", () => {
     test("With nonexistent session", async () => {
       const nonexistentToken =
