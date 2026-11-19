@@ -357,6 +357,7 @@ function Cabecalho() {
                 <li key={rede.nome}>
                   <a
                     className={estilos.redeBotao}
+                    style={{ "--cor-rede": rede.cor }}
                     href={rede.url}
                     target="_blank"
                     rel="noopener noreferrer"

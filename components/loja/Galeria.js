@@ -11,8 +11,13 @@ function Galeria({ produto }) {
   const [indice, setIndice] = useState(0);
   const foto = fotos[indice];
 
+  const classeGaleria =
+    fotos.length > 1
+      ? `${estilos.galeria} ${estilos.galeriaComMiniaturas}`
+      : estilos.galeria;
+
   return (
-    <div className={estilos.galeria}>
+    <div className={classeGaleria}>
       <div className={estilos.fotoPrincipal}>
         <Image
           className={foto.recortada ? estilos.conter : estilos.cobrir}

@@ -7,6 +7,13 @@ const DESENHOS = {
       <path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
     </>
   ),
+  carrinho: (
+    <>
+      <path d="M3 5h2.5l2.2 10.5h10.8L20.5 8H6.5" />
+      <circle cx="9.5" cy="19.5" r="1.5" />
+      <circle cx="17" cy="19.5" r="1.5" />
+    </>
+  ),
   conta: (
     <>
       <circle cx="12" cy="8" r="4" />
@@ -27,6 +34,13 @@ const DESENHOS = {
     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
   ),
   tiktok: <path d="M9 12a4 4 0 1 0 4 4V3a5 5 0 0 0 5 5" />,
+  pinterest: (
+    <>
+      <circle cx="12" cy="12" r="9.5" />
+      <path d="M10.6 21.2 12.8 12" />
+      <path d="M9.4 14.2c-.9-.7-1.4-1.8-1.4-3 0-2.6 2-4.6 4.6-4.6 2.3 0 4 1.6 4 3.8 0 2.6-1.4 4.5-3.3 4.5-1 0-1.7-.7-1.5-1.6" />
+    </>
+  ),
 };
 
 function Icone({ nome, tamanho = 22, className }) {

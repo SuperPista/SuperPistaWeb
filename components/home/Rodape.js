@@ -20,7 +20,7 @@ const COLUNAS = [
     titulo: "Loja",
     links: [
       { rotulo: "Produtos", destino: "/#produtos" },
-      { rotulo: "Sacola", destino: LINK_SACOLA },
+      { rotulo: "Carrinho", destino: LINK_SACOLA },
     ],
   },
   {
@@ -67,6 +67,7 @@ function Rodape() {
                   <li key={rede.nome}>
                     <a
                       className={estilos.redeBotao}
+                      style={{ "--cor-rede": rede.cor }}
                       href={rede.url}
                       target="_blank"
                       rel="noopener noreferrer"

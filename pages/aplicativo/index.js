@@ -11,7 +11,7 @@ function PaginaDoAplicativo() {
   return (
     <Moldura
       titulo="Como Ativar o Aplicativo com Realidade Aumentada"
-      descricao="Como ativar o aplicativo Super Pista: baixe o app, crie a conta, digite o código do cartão que vem na sacola e veja a cidade em 3D no celular."
+      descricao="Como ativar o aplicativo Super Pista: baixe o app, crie a conta, digite o código de ativação do seu pedido e veja a cidade em 3D no celular."
       caminho={LINK_APLICATIVO}
       indexar
     >

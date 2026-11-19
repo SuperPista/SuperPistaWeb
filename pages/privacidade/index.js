@@ -64,7 +64,7 @@ function Privacidade() {
               por perto. Não pedimos dados das crianças para criar a conta.
             </p>
             <p>
-              O nome que você digita na prévia do tabuleiro e a sacola de
+              O nome que você digita na prévia do tabuleiro e o carrinho de
               compras ficam só no seu navegador. O nome só chega até nós quando
               você fecha um pedido com ele: vai junto com o pedido, para ser
               impresso no tabuleiro. Pode ser um apelido.

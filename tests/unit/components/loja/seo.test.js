@@ -83,6 +83,7 @@ describe("SEO e Metadados", () => {
         "https://instagram.com/superpista",
         "https://facebook.com/superpista",
         "https://tiktok.com/@superpista",
+        "https://pinterest.com/superpista",
       ]);
       expect(esquemas[0].contactPoint.email).toBe("contato@superpista.com");
       expect(esquemas[1]["@type"]).toBe("WebSite");

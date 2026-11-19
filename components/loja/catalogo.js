@@ -47,9 +47,9 @@ const ITENS_DO_TABULEIRO = [
     descricao: "sacola reforçada para levar a cidade para onde a família for",
   },
   {
-    quantidade: "1",
+    quantidade: "App",
     descricao:
-      "cartão com código para ativar o aplicativo em até 2 dispositivos permanentes",
+      "código de ativação no pedido para usar o aplicativo em até 2 dispositivos permanentes",
   },
   {
     quantidade: "Grátis",
@@ -159,7 +159,7 @@ function tabuleiro({ cor, tinta, resumo, fotos, emBreve = false }) {
     parcelas: { vezes: 12, valor: 2430 },
     // o nome ou apelido da criança sai impresso numa das peças, sem custo
     aceitaNome: true,
-    // o cartão que vem na sacola ativa o aplicativo de Realidade Aumentada
+    // o pedido gera o código que ativa o aplicativo de Realidade Aumentada
     comAplicativo: true,
     fotos,
     emBreve,

@@ -11,6 +11,7 @@ import NomeDaCrianca from "components/home/NomeDaCrianca.js";
 import Moldura from "components/conta/Moldura.js";
 import Galeria from "components/loja/Galeria.js";
 import Compra from "components/loja/Compra.js";
+import DescricaoCompleta from "components/loja/DescricaoCompleta.js";
 import Prateleira from "components/loja/Prateleira.js";
 import { esquemaDoProduto } from "components/loja/Seo.js";
 import {
@@ -33,21 +34,7 @@ export function getStaticProps({ params }) {
   return { props: { produto: produtoPorSlug(params.slug) } };
 }
 
-// Página de um produto: as fotos e a compra em cima, embaixo o que ajuda a
-// decidir e, no fim, os outros produtos da loja.
-//
-// Todo tabuleiro vem com o aplicativo de Realidade Aumentada, então a seção
-// dele entra na página de todos; o vídeo é o do tabuleiro vermelho, e a
-// legenda avisa disso nas outras cidades.
-//
-// Como se brinca, as fotos em casa e os vídeos das crianças com o nome mostram
-// o tabuleiro vermelho e falam da cidade dele, então só entram na página dele.
-// Cada um dos outros tabuleiros é outra cidade e ganha as próprias quando
-// tiver fotos.
-//
-// Todos os produtos usam esta mesma rota. A `key` no bloco de cima faz a
-// galeria e a coluna da compra recomeçarem ao ir de um produto para outro, em
-// vez de levarem a foto escolhida e a quantidade junto.
+// A compra fica no início; os detalhes completos seguem abaixo do produto.
 function PaginaDoProduto({ produto }) {
   const temHistoria = produto.slug === SLUG_DO_TABULEIRO;
   const outros = todosOsProdutos().filter(
@@ -66,7 +53,7 @@ function PaginaDoProduto({ produto }) {
       tipo="product"
       dadosEstruturados={esquemaDoProduto(produto)}
       indexar
-      classe={estilos.pagina}
+      classe={`${estilos.pagina} ${estilos.paginaDoProduto}`}
     >
       <section className={estilos.produtoTopo}>
         <div className={landing.container}>
@@ -80,46 +67,63 @@ function PaginaDoProduto({ produto }) {
           </nav>
 
           <div className={estilos.produto} key={produto.slug}>
-            <Galeria produto={produto} />
-            <Compra produto={produto} />
+            <div className={estilos.colunaGaleria}>
+              <Galeria produto={produto} />
+              {temHistoria && (
+                <section
+                  className={estilos.fichaGaleria}
+                  aria-label="Medidas e indicação de uso"
+                >
+                  <dl>
+                    <div>
+                      <dt>Tabuleiro montado</dt>
+                      <dd>76 × 76 cm</dd>
+                    </div>
+                    <div>
+                      <dt>Brincadeira sem tela</dt>
+                      <dd>A partir de 4 anos</dd>
+                    </div>
+                    <div>
+                      <dt>Com celular ou tablet</dt>
+                      <dd>A partir de 6 anos</dd>
+                    </div>
+                  </dl>
+                  <p>
+                    Com celular ou tablet, sempre com um adulto responsável por
+                    perto. Depois de ativado, o aplicativo funciona sem
+                    internet.
+                  </p>
+                  <p>
+                    <strong>Cuidados com o tabuleiro:</strong> a impressão
+                    recebe uma camada protetora; a tinta não é tóxica e não
+                    solta. Guarde em lugar seco, longe da umidade.
+                  </p>
+                </section>
+              )}
+            </div>
+            <div className={estilos.apresentacao}>
+              <h1 className={estilos.produtoTitulo}>{produto.nome}</h1>
+              {!temHistoria && (
+                <p className={estilos.compraResumo}>{produto.resumo}</p>
+              )}
+              <section id="comprar" aria-label="Personalizar e comprar">
+                <Compra produto={produto} compacto key={produto.slug} />
+              </section>
+            </div>
           </div>
         </div>
       </section>
 
       <Faixa />
 
-      {temHistoria && <ComoBrinca />}
-
-      {produto.itens && (
-        <section className={`${landing.secao} ${landing.claro}`} id="o-que-vem">
-          <div className={`${landing.container} ${estilos.oQueVem}`}>
-            <div className={landing.sacolaTexto}>
-              <h2 className={landing.h2}>O que vem na sacola</h2>
-              <p className={landing.corpoEscuro}>
-                Cada Super Pista é feito sob encomenda para a sua família. É
-                abrir no tapete da sala e a brincadeira começa ali mesmo.
-              </p>
-            </div>
-
-            <div className={landing.sacolaLista}>
-              <ul className={landing.itens}>
-                {produto.itens.map((item) => (
-                  <li className={landing.item} key={item.descricao}>
-                    <span className={`${landing.itemQtd} ${landing.dado}`}>
-                      {item.quantidade}
-                    </span>
-                    <span>{item.descricao}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className={`${landing.nota} ${landing.dado}`}>
-                Celular, tablet e brinquedos que aparecem nas fotos e nos vídeos
-                são ilustrativos e não acompanham o produto.
-              </p>
-            </div>
-          </div>
-        </section>
+      {temHistoria && (
+        <>
+          <DescricaoCompleta />
+          <Faixa />
+        </>
       )}
+
+      {temHistoria && <ComoBrinca />}
 
       {produto.comAplicativo && (
         <Aplicativo
@@ -138,10 +142,10 @@ function PaginaDoProduto({ produto }) {
         </>
       )}
 
-      <Prateleira id="mais" titulo="Mais na loja" produtos={outros} />
+      <Perguntas comSeta={false} />
       <Faixa />
 
-      <Perguntas comSeta={false} />
+      <Prateleira id="mais" titulo="Mais na loja" produtos={outros} />
       <Faixa />
     </Moldura>
   );
