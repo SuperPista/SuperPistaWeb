@@ -56,7 +56,7 @@ export const PERGUNTAS = [
   {
     pergunta: "Como ativo o aplicativo?",
     resposta:
-      "Baixe o app Super Pista na Play Store ou na App Store. Você pode testar grátis por 3 dias em qualquer aparelho. Para liberar o acesso definitivo em até 2 dispositivos, faça login e digite o código de ativação disponível no seu pedido e em Minha conta.",
+      "Baixe o app Super Pista na Play Store ou na App Store. Você pode testar grátis por 3 dias em qualquer aparelho. Após a confirmação do pagamento, enviamos o código de ativação para o e-mail informado na compra. Ele também fica disponível no seu pedido e em Minha conta. Para liberar o acesso definitivo em até 2 dispositivos, faça login no aplicativo e digite esse código.",
   },
   {
     pergunta: "Funciona no meu celular?",

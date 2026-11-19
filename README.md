@@ -269,9 +269,31 @@ duas unidades vermelhas continuam liberando apenas vermelho. Kits não concedem
 acesso ao app nem geram código quando comprados sozinhos.
 
 O código é reservado junto com o pedido em uma transação e entregue ao cliente
-após a confirmação de pagamento. A página de vendas permite consultar o código,
+após a confirmação de pagamento, por e-mail para o endereço informado na compra.
+O envio inclui os códigos, os tabuleiros liberados, as instruções de ativação e
+o link do pedido. A página de vendas permite consultar o código,
 os tabuleiros vinculados e a quantidade de aparelhos cadastrados. A página do
 pedido e a conta do comprador mostram a mesma lista de tabuleiros.
+
+A migração `1795089600000_add-activation-email-to-orders.js` registra a data de
+envio em `orders.activation_email_sent_at`. Execute as migrações antes de subir
+esta versão; o `vercel-build` já executa essa etapa. O envio usa as mesmas
+variáveis `EMAIL_SMTP_*` dos e-mails de cadastro e senha.
+
+O webhook de pagamento e a consulta do pedido tentam o envio, sob trava no
+pedido. Uma falha de e-mail mantém o pagamento confirmado e permite nova
+tentativa: o webhook retorna 500 para reentrega, e a página continua mostrando
+o código e tenta novamente nas próximas consultas. Notificações repetidas ou
+simultâneas não reenviam e-mails já registrados. Pedidos não pagos, reembolsados
+ou sem código não geram esse e-mail. Não há envio em lote para pedidos antigos;
+um pedido pago sem registro de envio pode recebê-lo na próxima consulta ou
+notificação de pagamento.
+
+O registro confirma a aceitação pelo SMTP, não a chegada à caixa de entrada.
+Como SMTP e PostgreSQL não compartilham uma transação, uma interrupção depois
+da aceitação e antes da gravação pode causar reenvio; o `Message-ID` permanece
+o mesmo por pedido. Falhas persistentes dependem das reentregas do webhook ou
+de uma nova consulta do pedido; não há uma fila com processamento agendado.
 
 Cada código mantém o limite de **dois aparelhos**, compartilhado entre todos os
 seus tabuleiros. Reativar no mesmo aparelho não gasta outra vaga. As travas no

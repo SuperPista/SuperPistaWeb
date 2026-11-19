@@ -9,6 +9,11 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_SMTP_PASSWORD,
   },
   secure: process.env.NODE_ENV === "production" ? true : false,
+  // Limita a espera para que uma falha de SMTP não retenha a requisição
+  // e a trava do pedido por vários minutos.
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 20000,
 });
 
 async function send(mailOptions) {

@@ -2,6 +2,7 @@ import abacatepay from "infra/abacatepay.js";
 import webserver from "infra/webserver.js";
 import { ServiceError } from "infra/errors.js";
 import order from "models/order.js";
+import orderEmail from "models/orderEmail.js";
 import { produtoPorSlug } from "components/loja/catalogo.js";
 import { formatarCelular, formatarCpf } from "components/loja/campos.js";
 import { linkDoPedido } from "components/loja/links.js";
@@ -166,34 +167,49 @@ async function openCheckout(prepared) {
 // Pergunta à AbacatePay como está o pagamento de um pedido que ainda espera
 // por ele. O webhook não chega ao localhost e pode atrasar, então a página do
 // pedido não depende só dele. Uma falha aqui não impede de mostrar o pedido.
-async function refresh(pendingOrder) {
-  if (pendingOrder.status !== "pending") {
-    return pendingOrder;
-  }
+async function refresh(foundOrder) {
+  let currentOrder = foundOrder;
 
-  try {
-    const checkout = await abacatepay.getCheckout(
-      pendingOrder.abacatepay_checkout_id,
-    );
-    const status = STATUS_FROM_CHECKOUT[checkout?.status];
+  if (foundOrder.status === "pending") {
+    try {
+      const checkout = await abacatepay.getCheckout(
+        foundOrder.abacatepay_checkout_id,
+      );
+      const status = STATUS_FROM_CHECKOUT[checkout?.status];
 
-    if (!status) {
-      return pendingOrder;
+      if (status) {
+        currentOrder =
+          (await order.transitionByCheckoutId(
+            foundOrder.abacatepay_checkout_id,
+            status,
+          )) || (await order.findOneById(foundOrder.id));
+      }
+    } catch (error) {
+      console.error({
+        name: "PaymentRefreshError",
+        underlyingErrorName: error?.name,
+      });
     }
-
-    return (
-      (await order.transitionByCheckoutId(
-        pendingOrder.abacatepay_checkout_id,
-        status,
-      )) || (await order.findOneById(pendingOrder.id))
-    );
-  } catch (error) {
-    console.error({
-      name: "PaymentRefreshError",
-      underlyingErrorName: error?.name,
-    });
-    return pendingOrder;
   }
+
+  if (
+    currentOrder.status === "paid" &&
+    !currentOrder.activation_email_sent_at
+  ) {
+    try {
+      await orderEmail.sendActivationCodes(currentOrder.abacatepay_checkout_id);
+    } catch (error) {
+      // A página continua mostrando o pagamento confirmado e o código.
+      // Outra consulta ou a reentrega do webhook pode tentar o envio de novo.
+      console.error({
+        name: "ActivationEmailError",
+        orderId: currentOrder.id,
+        underlyingErrorName: error?.name,
+      });
+    }
+  }
+
+  return currentOrder;
 }
 
 // Trata um evento do webhook, já autenticado. Evento de outro tipo, ou de um
@@ -213,6 +229,12 @@ async function handleWebhookEvent(event) {
   }
 
   await order.transitionByCheckoutId(checkout.id, status);
+
+  // Mesmo um evento repetido pode estar retomando um envio que falhou.
+  // O registro de envio no banco evita repetir os e-mails já aceitos pelo SMTP.
+  if (status === "paid") {
+    await orderEmail.sendActivationCodes(checkout.id);
+  }
 }
 
 const payment = {

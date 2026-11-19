@@ -15,8 +15,9 @@ afterAll(async () => {
   await abacatepay.stop();
 });
 
-beforeEach(() => {
+beforeEach(async () => {
   abacatepay.reset();
+  await orchestrator.deleteAllEmails();
 });
 
 // O pedido nasce pela rota, para o checkout existir na AbacatePay de mentira.
@@ -46,6 +47,7 @@ describe("GET /api/v1/orders/[id]", () => {
       expect(response.status).toBe(200);
       expect(await response.json()).toEqual(order);
       expect(abacatepay.requestsTo("GET /checkouts/get")).toHaveLength(1);
+      expect(await orchestrator.getAllEmails()).toHaveLength(0);
     });
 
     test("When AbacatePay says the order was paid", async () => {
@@ -62,11 +64,15 @@ describe("GET /api/v1/orders/[id]", () => {
       expect(responseBody.activation_codes[0].boards).toEqual(["vermelho"]);
       expect(responseBody.payment_url).toBeNull();
       expect(Date.parse(responseBody.paid_at)).not.toBeNaN();
+      const message = await orchestrator.getLastEmail();
+      expect(message.text).toContain(responseBody.activation_codes[0].code);
+      expect(message.text).toContain(`${webserver.origin}/pedido/${order.id}`);
 
       // Pedido pago não pergunta mais nada à AbacatePay.
       abacatepay.reset();
       await getOrder(order.id);
       expect(abacatepay.requestsTo("GET /checkouts/get")).toHaveLength(0);
+      expect(await orchestrator.getAllEmails()).toHaveLength(1);
     });
 
     test("When the time to pay is over", async () => {
