@@ -207,7 +207,8 @@ async function activate({ code, deviceId, userId = null }) {
   if (!cleanCode) {
     throw new ValidationError({
       message: "O código de ativação é obrigatório.",
-      action: "Digite o código que veio no cartão do seu tabuleiro.",
+      action:
+        "Digite o código de ativação disponível no seu pedido ou em Minha conta.",
     });
   }
 
@@ -235,7 +236,7 @@ async function activate({ code, deviceId, userId = null }) {
       throw new NotFoundError({
         message: "Código de ativação não encontrado.",
         action:
-          "Confira se digitou exatamente como impresso no cartão da sacola.",
+          "Confira se digitou exatamente como aparece no seu pedido ou em Minha conta.",
       });
     }
 

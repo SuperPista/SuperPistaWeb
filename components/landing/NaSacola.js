@@ -14,9 +14,9 @@ const ITENS = [
     descricao: "sacola reforçada para levar a cidade para onde a família for",
   },
   {
-    quantidade: "1",
+    quantidade: "App",
     descricao:
-      "cartão com código para ativar o aplicativo em até 2 dispositivos permanentes",
+      "código de ativação no pedido para usar o aplicativo em até 2 dispositivos permanentes",
   },
   {
     quantidade: "Grátis",

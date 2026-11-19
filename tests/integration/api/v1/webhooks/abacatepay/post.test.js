@@ -13,6 +13,10 @@ beforeAll(async () => {
   await orchestrator.runPendingMigrations();
 });
 
+beforeEach(async () => {
+  await orchestrator.deleteAllEmails();
+});
+
 function sign(rawBody) {
   return crypto
     .createHmac("sha256", SIGNATURE_KEY)
@@ -75,6 +79,10 @@ describe("POST /api/v1/webhooks/abacatepay", () => {
       const updated = await findOrder(order.id);
       expect(updated.status).toBe("paid");
       expect(updated.paid_at).not.toBeNull();
+      expect(updated.activation_email_sent_at).not.toBeNull();
+      const message = await orchestrator.getLastEmail();
+      expect(message.recipients).toEqual([`<${order.customer_email}>`]);
+      expect(message.text).toContain(order.activation_codes[0].code);
     });
 
     test("With the same event delivered twice", async () => {
@@ -89,6 +97,23 @@ describe("POST /api/v1/webhooks/abacatepay", () => {
 
       expect(response.status).toBe(200);
       expect((await findOrder(order.id)).paid_at).toEqual(paidAt);
+      expect(await orchestrator.getAllEmails()).toHaveLength(1);
+    });
+
+    test("With concurrent payment events", async () => {
+      const order = await orchestrator.createOrder();
+      const body = JSON.stringify(
+        buildEvent("checkout.completed", order.abacatepay_checkout_id),
+      );
+
+      const responses = await Promise.all(
+        Array.from({ length: 4 }, () => postWebhook(body)),
+      );
+
+      expect(responses.map((response) => response.status)).toEqual([
+        200, 200, 200, 200,
+      ]);
+      expect(await orchestrator.getAllEmails()).toHaveLength(1);
     });
 
     test("With a checkout closed by a coupon", async () => {
@@ -105,6 +130,7 @@ describe("POST /api/v1/webhooks/abacatepay", () => {
 
       expect(response.status).toBe(200);
       expect((await findOrder(order.id)).status).toBe("pending");
+      expect(await orchestrator.getAllEmails()).toHaveLength(0);
     });
 
     test("With a refund of a paid order", async () => {
@@ -120,6 +146,11 @@ describe("POST /api/v1/webhooks/abacatepay", () => {
 
       expect(response.status).toBe(200);
       expect((await findOrder(order.id)).status).toBe("refunded");
+      await postWebhook(
+        JSON.stringify(buildEvent("checkout.completed", checkoutId)),
+      );
+      expect((await findOrder(order.id)).status).toBe("refunded");
+      expect(await orchestrator.getAllEmails()).toHaveLength(1);
     });
 
     test("With a refund of an order that was never paid", async () => {
@@ -179,6 +210,7 @@ describe("POST /api/v1/webhooks/abacatepay", () => {
 
       expect(response.status).toBe(401);
       expect((await findOrder(order.id)).status).toBe("pending");
+      expect(await orchestrator.getAllEmails()).toHaveLength(0);
     });
   });
 });

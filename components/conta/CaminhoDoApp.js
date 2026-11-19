@@ -13,8 +13,8 @@ function CaminhoDoApp({ etapaAtual, rotulo = "Você está aqui." }) {
         A conta que levanta a cidade
       </h2>
       <p className={`${landing.corpo} ${home.corpoClaro}`}>
-        É com ela que você entra no aplicativo Super Pista e ativa o código do
-        cartão que vem na sacola.
+        É com ela que você entra no aplicativo Super Pista e usa o código de
+        ativação do seu pedido.
       </p>
 
       <ol className={`${home.etapasApp} ${estilos.etapas}`}>

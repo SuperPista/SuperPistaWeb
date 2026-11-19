@@ -170,6 +170,7 @@ function Cabecalho() {
             alt="Super Pista"
             width={640}
             height={414}
+            sizes="(min-width: 1156px) 104px, (min-width: 867px) 9vw, 78px"
             priority
           />
         </Link>
@@ -356,6 +357,7 @@ function Cabecalho() {
                 <li key={rede.nome}>
                   <a
                     className={estilos.redeBotao}
+                    style={{ "--cor-rede": rede.cor }}
                     href={rede.url}
                     target="_blank"
                     rel="noopener noreferrer"

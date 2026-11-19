@@ -13,22 +13,32 @@ export const LINK_VENDAS = "/vendas";
 export const LINK_INSTAGRAM = "https://instagram.com/superpista";
 export const LINK_FACEBOOK = "https://facebook.com/superpista";
 export const LINK_TIKTOK = "https://tiktok.com/@superpista";
+export const LINK_PINTEREST = "https://pinterest.com/superpista";
 
 export const REDES_SOCIAIS = [
   {
     nome: "Instagram",
     icone: "instagram",
     url: LINK_INSTAGRAM,
+    cor: "#e4405f",
   },
   {
     nome: "Facebook",
     icone: "facebook",
     url: LINK_FACEBOOK,
+    cor: "#0866ff",
   },
   {
     nome: "TikTok",
     icone: "tiktok",
     url: LINK_TIKTOK,
+    cor: "#000000",
+  },
+  {
+    nome: "Pinterest",
+    icone: "pinterest",
+    url: LINK_PINTEREST,
+    cor: "#e60023",
   },
 ];
 

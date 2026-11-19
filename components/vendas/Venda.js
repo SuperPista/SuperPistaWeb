@@ -82,9 +82,7 @@ function Venda({ venda }) {
         {Array.isArray(venda.codigosAtivacao) &&
           venda.codigosAtivacao.length > 0 && (
             <div className={estilos.pedidoBloco}>
-              <h3 className={conta.secaoTitulo}>
-                Cartão do app (anotar na sacola)
-              </h3>
+              <h3 className={conta.secaoTitulo}>Código de ativação do app</h3>
               <p>
                 {venda.codigosAtivacao.length === 1
                   ? "Um código libera todos os tabuleiros indicados abaixo."

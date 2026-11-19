@@ -46,17 +46,17 @@ export const PERGUNTAS = [
   {
     pergunta: "Em quantos aparelhos posso usar o aplicativo?",
     resposta:
-      "O código do cartão permite ativar o aplicativo em até 2 dispositivos permanentes (por exemplo, no celular e no tablet da família). Além disso, qualquer outro aparelho pode baixar o app e usar por até 3 dias grátis — uma opção excelente para quando um amigo vier brincar em casa e quiser testar a Realidade Aumentada com o seu tabuleiro.",
+      "O código de ativação do seu pedido (disponível em Minha conta) permite ativar o aplicativo em até 2 dispositivos permanentes (por exemplo, no celular e no tablet da família). Além disso, qualquer outro aparelho pode baixar o app e usar por até 3 dias grátis — uma opção excelente para quando um amigo vier brincar em casa e quiser testar a Realidade Aumentada com o seu tabuleiro.",
   },
   {
-    pergunta: "O que fazer se eu trocar de celular ou tablet?",
+    pergunta: "O que fazer se eu perder ou trocar de celular ou tablet?",
     resposta:
-      "O seu código de ativação libera o aplicativo em até 2 aparelhos de forma permanente. Se você trocar de celular ou tablet e precisar transferir o acesso para o novo aparelho, basta enviar um e-mail para contato@superpista.com informando o número do seu pedido ou o seu código de ativação. Nossa equipe liberará o acesso no novo dispositivo com total tranquilidade.",
+      "Em caso de perda ou troca do celular ou tablet, solicite um novo acesso ao aplicativo pelo e-mail contato@superpista.com. Informe o número do seu pedido ou o código de ativação para que nossa equipe possa liberar o acesso no novo aparelho.",
   },
   {
     pergunta: "Como ativo o aplicativo?",
     resposta:
-      "Baixe o app Super Pista na Play Store ou na App Store. Você pode testar grátis por 3 dias em qualquer aparelho. Para liberar o acesso definitivo em até 2 dispositivos, faça login e digite o código do cartão que acompanha o tabuleiro.",
+      "Baixe o app Super Pista na Play Store ou na App Store. Você pode testar grátis por 3 dias em qualquer aparelho. Após a confirmação do pagamento, enviamos o código de ativação para o e-mail informado na compra. Ele também fica disponível no seu pedido e em Minha conta. Para liberar o acesso definitivo em até 2 dispositivos, faça login no aplicativo e digite esse código.",
   },
   {
     pergunta: "Funciona no meu celular?",
@@ -131,6 +131,7 @@ function Perguntas({ comSeta = true }) {
                   <li key={rede.nome}>
                     <a
                       className={estilos.redeBotao}
+                      style={{ "--cor-rede": rede.cor }}
                       href={rede.url}
                       target="_blank"
                       rel="noopener noreferrer"

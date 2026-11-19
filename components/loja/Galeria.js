@@ -11,8 +11,13 @@ function Galeria({ produto }) {
   const [indice, setIndice] = useState(0);
   const foto = fotos[indice];
 
+  const classeGaleria =
+    fotos.length > 1
+      ? `${estilos.galeria} ${estilos.galeriaComMiniaturas}`
+      : estilos.galeria;
+
   return (
-    <div className={estilos.galeria}>
+    <div className={classeGaleria}>
       <div className={estilos.fotoPrincipal}>
         <Image
           className={foto.recortada ? estilos.conter : estilos.cobrir}
@@ -20,7 +25,7 @@ function Galeria({ produto }) {
           alt={foto.descricao}
           fill
           sizes="(min-width: 900px) 620px, 92vw"
-          priority
+          preload={indice === 0}
         />
       </div>
 
@@ -49,7 +54,6 @@ function Galeria({ produto }) {
                   alt=""
                   fill
                   sizes="120px"
-                  loading="eager"
                 />
               </button>
             </li>

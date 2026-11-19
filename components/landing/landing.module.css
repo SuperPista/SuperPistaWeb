@@ -639,6 +639,8 @@
 }
 
 .redeBotao {
+  --cor-rede: var(--preto);
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -656,10 +658,11 @@
     color 0.15s ease;
 }
 
-.redeBotao:hover {
+.redeBotao:hover,
+.redeBotao:focus-visible {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--preto);
-  background-color: var(--vermelho);
+  background-color: var(--cor-rede);
   color: var(--branco);
 }
 

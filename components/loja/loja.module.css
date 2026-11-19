@@ -13,6 +13,16 @@
   --cinza: #565656;
 }
 
+/* Página do produto: ritmo vertical mais enxuto entre as seções, sem colar
+   o conteúdo nas bordas nem alterar a landing ou a home. */
+.pagina.paginaDoProduto {
+  --respiro: clamp(36px, 4.5vw, 56px);
+}
+
+.pagina.paginaDoProduto .prateleiraSecao {
+  padding-block: var(--respiro);
+}
+
 .somenteLeitor {
   position: absolute;
   width: 1px;
@@ -1144,4 +1154,145 @@
 /* etapa que ainda não chegou: fica apagada no caminho */
 .aFazer {
   color: var(--cinza);
+}
+
+.compraAcao {
+  display: grid;
+  justify-self: stretch;
+}
+
+.compraAcao .naSacola {
+  margin-top: 14px;
+}
+
+.apresentacao {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+
+.colunaGaleria {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.colunaGaleria .galeria {
+  position: static;
+  gap: 14px;
+}
+
+.colunaGaleria .miniaturas {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  padding-right: 10px;
+}
+
+.fichaGaleria {
+  border-top: 3px solid var(--preto);
+  padding-top: 14px;
+}
+
+.fichaGaleria dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin: 0;
+}
+
+.fichaGaleria dt {
+  color: var(--cinza);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.fichaGaleria dd {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.3;
+}
+
+.fichaGaleria p {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 2px dashed rgb(0 0 0 / 25%);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+/* Primeira dobra da página do produto: compacta para deixar a faixa de pista
+   e o início da seção amarela aparecerem logo abaixo da compra. */
+.pagina.paginaDoProduto .produtoTopo {
+  padding-block: 16px 24px;
+}
+
+.pagina.paginaDoProduto .trilha {
+  margin-bottom: 14px;
+}
+
+@media (min-width: 900px) {
+  .pagina.paginaDoProduto .produto {
+    grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr);
+    gap: clamp(28px, 3.2vw, 48px);
+  }
+
+  .colunaGaleria .galeriaComMiniaturas {
+    grid-template-columns: 60px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+  }
+
+  .colunaGaleria .galeriaComMiniaturas .fotoPrincipal {
+    grid-column: 2;
+    grid-row: 1;
+    aspect-ratio: auto;
+    height: 390px;
+  }
+
+  .colunaGaleria .galeriaComMiniaturas .fotoNota {
+    grid-column: 2;
+  }
+
+  .colunaGaleria .galeriaComMiniaturas .miniaturas {
+    grid-column: 1;
+    grid-row: 1;
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 6px;
+    padding-right: 0;
+  }
+
+  .colunaGaleria .galeriaComMiniaturas .miniatura {
+    aspect-ratio: 1;
+  }
+
+  .apresentacao {
+    gap: 16px;
+  }
+
+  .apresentacao .compra {
+    gap: 16px;
+  }
+
+  .apresentacao .produtoTitulo {
+    font-size: clamp(1.8rem, 2.5vw, 2.25rem);
+  }
+
+  .apresentacao .nomeCaixa {
+    grid-template-columns: minmax(0, 1fr) 88px;
+    gap: 12px 16px;
+    padding: 16px 18px;
+  }
+
+  .apresentacao .nomeCaixaTitulo {
+    font-size: 1.02rem;
+  }
+
+  .apresentacao .nomeCaixaTexto {
+    margin-top: 4px;
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
 }

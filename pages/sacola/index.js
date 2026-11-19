@@ -28,23 +28,23 @@ function Sacola() {
   const resumo = useResumoDaSacola();
 
   return (
-    <Moldura titulo="Sacola" classe={estilos.pagina}>
+    <Moldura titulo="Carrinho" classe={estilos.pagina}>
       <section className={estilos.compraSecao}>
         <div className={landing.container}>
           {pronto && !resumo.vazia && <Percurso atual={0} />}
 
-          <h1 className={estilos.tituloDaTela}>Sacola</h1>
+          <h1 className={estilos.tituloDaTela}>Carrinho</h1>
 
           {!pronto && (
             <p className={estilos.espera} role="status">
-              Abrindo a sacola.
+              Abrindo o carrinho.
             </p>
           )}
 
           {pronto && resumo.vazia && (
             <div className={estilos.vazia}>
               <p>
-                A sacola está vazia. Os tabuleiros e os kits estão na loja,
+                O carrinho está vazio. Os tabuleiros e os kits estão na loja,
                 esperando quem vai brincar.
               </p>
               <Link className={landing.botao} href={LINK_LOJA}>
@@ -105,7 +105,7 @@ function Sacola() {
                               type="button"
                               onClick={() => remover(item.chave)}
                             >
-                              Tirar da sacola
+                              Tirar do carrinho
                             </button>
                           </div>
                         </div>

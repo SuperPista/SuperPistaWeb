@@ -119,8 +119,8 @@ function Cadastro() {
     <PaginaDaConta titulo="Criar conta" etapaAtual={2}>
       <Titulo>Criar conta</Titulo>
       <p className={estilos.explica}>
-        Com a conta você entra no aplicativo Super Pista e ativa o código do
-        cartão que vem na sacola.
+        Com a conta você entra no aplicativo Super Pista e encontra o código de
+        ativação dos seus tabuleiros em Minha conta.
       </p>
 
       <form className={estilos.formulario} onSubmit={aoEnviar}>

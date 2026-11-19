@@ -10,7 +10,7 @@ import { LINK_LOGIN, LINK_CRIAR_CONTA } from "components/conta/links.js";
 export const ETAPAS = [
   "Baixe o app Super Pista na Play Store ou na App Store. Teste grátis por 3 dias em qualquer aparelho.",
   "Crie sua conta aqui no site e confirme pelo link que chega no seu e-mail.",
-  "No app, faça login e digite o código do cartão da sacola para ativar até 2 aparelhos permanentes.",
+  "No app, faça login e digite o código de ativação do seu pedido (disponível em Minha conta) para liberar até 2 aparelhos permanentes.",
   "Aponte a câmera para a imagem alvo da peça 1 e veja a cidade surgir em 3D, mesmo sem internet.",
 ];
 
@@ -44,10 +44,10 @@ function Aplicativo({ legenda }) {
           <p className={`${landing.corpo} ${estilos.corpoClaro}`}>
             O aplicativo Super Pista usa Realidade Aumentada: a câmera do
             celular ou do tablet reconhece o tabuleiro e levanta a cidade em 3D
-            em cima dele. O código da sacola libera até 2 dispositivos
-            permanentes e, depois de ativado, a cidade funciona 100% offline,
-            sem precisar de internet. Amigos e outros aparelhos também podem
-            testar grátis por 3 dias.
+            em cima dele. O código de ativação do pedido fica disponível na sua
+            conta, libera até 2 dispositivos permanentes e, depois de ativado, a
+            cidade funciona 100% offline, sem precisar de internet. Amigos e
+            outros aparelhos também podem testar grátis por 3 dias.
           </p>
 
           <ol className={estilos.etapasApp}>

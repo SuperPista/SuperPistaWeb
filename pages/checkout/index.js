@@ -175,7 +175,7 @@ function Checkout() {
 
           {!pronto || resumo.vazia ? (
             <p className={estilos.espera} role="status">
-              {enviando ? "Fechando o pedido." : "Abrindo a sacola."}
+              {enviando ? "Fechando o pedido." : "Abrindo o carrinho."}
             </p>
           ) : (
             <div className={estilos.duasColunas}>

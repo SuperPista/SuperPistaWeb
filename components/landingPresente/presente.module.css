@@ -1,0 +1,682 @@
+/* Landing page alternativa (/presente) para teste A/B.
+   Usa os mesmos tokens visuais do Super Pista (tinta chapada, borda preta de
+   3px, sombra dura e Archivo), mas com arquitetura de conversão direta e
+   personalização interativa já na primeira dobra. */
+
+.paginaPresente {
+  --preto: #000000;
+  --branco: #ffffff;
+  --amarelo: #ffd100;
+  --vermelho: #e4002b;
+  --cinza: #565656;
+
+  --largura: 1160px;
+  --gutter: clamp(20px, 4vw, 40px);
+  --respiro: clamp(52px, 6.5vw, 92px);
+
+  background-color: var(--branco);
+  color: var(--preto);
+}
+
+/* ---------- cabeçalho compacto com preço ---------- */
+
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  border-bottom: 3px solid var(--preto);
+  background-color: var(--branco);
+}
+
+.cabecalhoLinha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 10px;
+}
+
+.cabecalhoAcao {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cabecalhoPreco {
+  display: none;
+  margin: 0;
+  text-align: right;
+  line-height: 1.2;
+}
+
+.cabecalhoPreco strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.cabecalhoPreco span {
+  display: block;
+  color: var(--cinza);
+  font-size: 0.84rem;
+}
+
+@media (min-width: 720px) {
+  .cabecalhoPreco {
+    display: block;
+  }
+}
+
+/* ---------- 1ª dobra: hero escuro com personalização + oferta ---------- */
+
+.hero {
+  padding-block: clamp(32px, 4vw, 56px) clamp(44px, 5vw, 72px);
+  background-color: var(--preto);
+  color: var(--branco);
+}
+
+.heroTopo {
+  display: grid;
+  gap: 14px;
+  margin-bottom: clamp(24px, 3vw, 36px);
+}
+
+.selo {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 14px;
+  border: 3px solid var(--branco);
+  background-color: var(--vermelho);
+  color: var(--branco);
+  font-size: 0.84rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.heroLead {
+  margin: 0;
+  max-width: 58ch;
+  color: rgb(255 255 255 / 82%);
+  font-size: clamp(1.02rem, 1.5vw, 1.22rem);
+  line-height: 1.5;
+}
+
+.heroGrade {
+  display: grid;
+  gap: clamp(24px, 3.2vw, 40px);
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .heroGrade {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  }
+}
+
+/* ---------- palco de mídia com abas acessíveis ---------- */
+
+.palco {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.aba {
+  padding: 9px 14px;
+  border: 3px solid rgb(255 255 255 / 45%);
+  background-color: transparent;
+  color: rgb(255 255 255 / 86%);
+  font-family:
+    var(--fonte-pista, "Archivo"), "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.aba:hover {
+  border-color: var(--branco);
+  color: var(--branco);
+}
+
+.abaAtiva {
+  border-color: var(--amarelo);
+  background-color: var(--amarelo);
+  color: var(--preto);
+}
+
+.abaAtiva:hover {
+  border-color: var(--amarelo);
+  color: var(--preto);
+}
+
+.quadroMidia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 3px solid var(--branco);
+  background-color: var(--preto);
+  box-shadow: 7px 7px 0 var(--vermelho);
+}
+
+.midiaPreencher {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.quadroLegenda {
+  margin: 0;
+  color: rgb(255 255 255 / 72%);
+  font-size: 0.92rem;
+}
+
+/* ---------- cartão interativo de compra no hero ---------- */
+
+.cartaoCompra {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  padding: clamp(20px, 2.6vw, 28px);
+  border: 3px solid var(--amarelo);
+  background-color: var(--preto);
+  box-shadow: 7px 7px 0 var(--amarelo);
+}
+
+.personalizarTopo {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+@media (max-width: 460px) {
+  .personalizarTopo {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+.medalhaoMini {
+  width: 116px;
+  flex-shrink: 0;
+}
+
+.personalizarTexto {
+  display: grid;
+  gap: 6px;
+}
+
+.personalizarTexto h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.personalizarTexto p {
+  margin: 0;
+  color: rgb(255 255 255 / 76%);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.campoEnvoltorio {
+  margin-top: -18px;
+}
+
+.precoCaixa {
+  display: grid;
+  gap: 4px;
+  padding-top: 16px;
+  border-top: 2px dashed rgb(255 255 255 / 26%);
+}
+
+.precoAntes {
+  color: rgb(255 255 255 / 60%);
+  text-decoration: line-through;
+}
+
+.precoParcela {
+  font-size: clamp(1.75rem, 3vw, 2.3rem);
+  font-weight: 900;
+  font-stretch: 120%;
+  line-height: 1.05;
+  color: var(--amarelo);
+}
+
+.precoVista {
+  color: rgb(255 255 255 / 86%);
+}
+
+.botaoLargo {
+  width: 100%;
+  box-shadow: 7px 7px 0 var(--vermelho);
+}
+
+.botaoLargo:hover {
+  box-shadow: 4px 4px 0 var(--vermelho);
+}
+
+.botaoLargo:active {
+  box-shadow: 0 0 0 var(--vermelho);
+}
+
+.garantiasLinha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: rgb(255 255 255 / 76%);
+}
+
+.garantiasLinha li::before {
+  content: "✓ ";
+  color: var(--amarelo);
+  font-weight: 900;
+}
+
+/* ---------- pilares sobre fundo amarelo ---------- */
+
+.secaoAmarela {
+  padding-block: clamp(32px, 4vw, 48px);
+  border-block: 3px solid var(--preto);
+  background-color: var(--amarelo);
+}
+
+.pilares {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .pilares {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1020px) {
+  .pilares {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.pilar {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 18px 20px;
+  border: 3px solid var(--preto);
+  background-color: var(--branco);
+  box-shadow: 5px 5px 0 var(--preto);
+}
+
+.pilarDestaque {
+  font-size: 1.35rem;
+  font-weight: 900;
+  font-stretch: 118%;
+  line-height: 1.08;
+  text-transform: uppercase;
+}
+
+.pilar p {
+  margin: 0;
+  color: var(--cinza);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+/* ---------- dois jeitos de brincar (comparativo) ---------- */
+
+.secaoClara {
+  padding-block: var(--respiro);
+  background-color: var(--branco);
+}
+
+.cabecalhoSecao {
+  display: grid;
+  gap: 12px;
+  margin-bottom: clamp(28px, 3.5vw, 40px);
+}
+
+.comparativo {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 860px) {
+  .comparativo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.modo {
+  display: grid;
+  align-content: start;
+  border: 3px solid var(--preto);
+  background-color: var(--branco);
+  box-shadow: 7px 7px 0 var(--preto);
+}
+
+.modoTopo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 3px solid var(--preto);
+  background-color: var(--amarelo);
+}
+
+.modoTopoApp {
+  background-color: var(--vermelho);
+  color: var(--branco);
+}
+
+.modoTopo h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 900;
+  font-stretch: 112%;
+  text-transform: uppercase;
+}
+
+.modoIdade {
+  padding: 3px 10px;
+  border: 2px solid var(--preto);
+  background-color: var(--branco);
+  color: var(--preto);
+  white-space: nowrap;
+}
+
+.modoFoto {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-bottom: 3px solid var(--preto);
+  background-color: var(--preto);
+}
+
+.modoLista {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 20px 22px 22px 38px;
+  color: var(--cinza);
+}
+
+.modoLista strong {
+  color: var(--preto);
+}
+
+/* ---------- provas reais + o que vem na sacola ---------- */
+
+.secaoEscura {
+  padding-block: var(--respiro);
+  background-color: var(--preto);
+  color: var(--branco);
+}
+
+.secaoEscura .textoSuave {
+  color: rgb(255 255 255 / 78%);
+}
+
+.gradeVideos {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .gradeVideos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 980px) {
+  .gradeVideos {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.cartaoVideo {
+  display: grid;
+  gap: 8px;
+}
+
+.molduraVideo {
+  position: relative;
+  aspect-ratio: 9 / 14;
+  overflow: hidden;
+  border: 3px solid var(--branco);
+  background-color: var(--preto);
+  box-shadow: 5px 5px 0 var(--amarelo);
+}
+
+.cartaoVideo figcaption {
+  color: rgb(255 255 255 / 80%);
+  font-size: 0.9rem;
+}
+
+.sacolaGrade {
+  display: grid;
+  gap: clamp(24px, 4vw, 44px);
+  align-items: start;
+  margin-top: clamp(44px, 5vw, 68px);
+  padding-top: clamp(36px, 4vw, 52px);
+  border-top: 2px dashed rgb(255 255 255 / 26%);
+}
+
+@media (min-width: 880px) {
+  .sacolaGrade {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  }
+}
+
+.sacolaFoto {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 3px solid var(--branco);
+  box-shadow: 7px 7px 0 var(--vermelho);
+}
+
+.sacolaDetalhes {
+  display: grid;
+  gap: 20px;
+}
+
+.itensLista {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.itemLinha {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgb(255 255 255 / 20%);
+}
+
+.itemQtd {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 2px solid var(--amarelo);
+  color: var(--amarelo);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.cenariosCaixa {
+  display: grid;
+  gap: 10px;
+  padding: 18px 20px;
+  border: 3px solid var(--branco);
+  background-color: rgb(255 255 255 / 6%);
+}
+
+.cenariosCaixa h3 {
+  margin: 0;
+  color: var(--amarelo);
+  font-size: 1.05rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.cenariosTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cenariosTags li {
+  padding: 5px 11px;
+  border: 2px solid rgb(255 255 255 / 35%);
+  font-size: 0.9rem;
+}
+
+.notaSacola {
+  margin: 0;
+  color: rgb(255 255 255 / 65%);
+}
+
+/* ---------- história curta do criador ---------- */
+
+.historiaCartao {
+  display: grid;
+  gap: clamp(20px, 3vw, 36px);
+  align-items: center;
+  padding: clamp(22px, 3vw, 36px);
+  border: 3px solid var(--preto);
+  background-color: var(--branco);
+  box-shadow: 7px 7px 0 var(--preto);
+}
+
+@media (min-width: 780px) {
+  .historiaCartao {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+}
+
+.autorFoto {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: min(220px, 100%);
+  overflow: hidden;
+  border: 3px solid var(--preto);
+  box-shadow: 5px 5px 0 var(--amarelo);
+}
+
+.historiaTexto {
+  display: grid;
+  gap: 12px;
+}
+
+/* ---------- fechamento de pedido ---------- */
+
+.fechamento {
+  display: grid;
+  gap: clamp(24px, 4vw, 44px);
+  align-items: center;
+  padding: clamp(24px, 3.5vw, 40px);
+  border: 3px solid var(--amarelo);
+  background-color: var(--preto);
+  box-shadow: 8px 8px 0 var(--vermelho);
+}
+
+@media (min-width: 860px) {
+  .fechamento {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  }
+}
+
+.fechamentoPrevia {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+
+.fechamentoMedalhao {
+  width: min(250px, 100%);
+}
+
+.editarNomeLink {
+  color: var(--amarelo);
+  font-weight: 800;
+  text-underline-offset: 4px;
+}
+
+.fechamentoConteudo {
+  display: grid;
+  gap: 18px;
+}
+
+.resumoPedido {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 16px 18px;
+  border: 2px solid rgb(255 255 255 / 26%);
+  list-style: none;
+}
+
+.resumoPedido li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.96rem;
+}
+
+.resumoPedido span {
+  color: rgb(255 255 255 / 72%);
+}
+
+.resumoPedido strong {
+  color: var(--branco);
+  text-align: right;
+}
+
+.fechamentoAcoes {
+  display: grid;
+  gap: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aba {
+    transition: none;
+  }
+}

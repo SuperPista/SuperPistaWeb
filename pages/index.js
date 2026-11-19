@@ -1,4 +1,4 @@
-import { Archivo } from "next/font/google";
+import { archivo } from "components/midia/fontes.js";
 
 import landing from "components/landing/landing.module.css";
 import estilos from "components/home/home.module.css";
@@ -12,14 +12,6 @@ import Rodape from "components/home/Rodape.js";
 import Prateleira from "components/loja/Prateleira.js";
 import Seo, { esquemaOrganizacaoEWebsite } from "components/loja/Seo.js";
 import { todosOsProdutos } from "components/loja/catalogo.js";
-
-// A mesma Archivo da landing do tabuleiro, nas mesmas três larguras.
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
-  display: "swap",
-  variable: "--fonte-pista",
-});
 
 // A home é a loja: um produto com preço no topo, o que toda loja promete na
 // faixa de asfalto logo abaixo e a prateleira com todos os produtos em

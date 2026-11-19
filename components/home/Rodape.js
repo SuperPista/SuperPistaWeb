@@ -20,7 +20,7 @@ const COLUNAS = [
     titulo: "Loja",
     links: [
       { rotulo: "Produtos", destino: "/#produtos" },
-      { rotulo: "Sacola", destino: LINK_SACOLA },
+      { rotulo: "Carrinho", destino: LINK_SACOLA },
     ],
   },
   {
@@ -56,6 +56,7 @@ function Rodape() {
               alt="Super Pista"
               width={640}
               height={414}
+              sizes="(min-width: 1055px) 116px, (min-width: 764px) 11vw, 84px"
             />
             <div className={estilos.rodapeRedes}>
               <span className={estilos.rodapeRedesTitulo}>
@@ -66,6 +67,7 @@ function Rodape() {
                   <li key={rede.nome}>
                     <a
                       className={estilos.redeBotao}
+                      style={{ "--cor-rede": rede.cor }}
                       href={rede.url}
                       target="_blank"
                       rel="noopener noreferrer"
