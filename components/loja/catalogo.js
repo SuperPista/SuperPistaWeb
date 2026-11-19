@@ -17,15 +17,14 @@
 //
 // TODO: o parcelamento e os preços dos produtos que vêm em breve ainda são de
 // exemplo.
-// TODO: os tabuleiros amarelo, verde e azul e os dois kits ainda não têm foto
-// nem descrição oficial. O nome e o resumo deles são provisórios, e as imagens
-// em public/loja são ilustrativas, feitas do que o site já tinha: a arte do
+// TODO: os tabuleiros verde e azul e os dois kits ainda não têm foto nem
+// descrição oficial. O nome e o resumo deles são provisórios, e as imagens em
+// public/loja são ilustrativas, feitas do que o site já tinha: a arte do
 // tabuleiro vermelho recolorida (a cidade desenhada é a dele, não a de cada
 // cor) e recortes de uma foto do tabuleiro com brinquedos em volta. Elas levam
 // `ilustrativa: true`, e as telas avisam. Trocar pelas fotos de verdade.
-// TODO: confirmar se as quatro cidades vêm com os mesmos itens na sacola e se
-// todas aceitam o nome da criança. Por enquanto valem os do tabuleiro
-// vermelho, que é o único com descrição oficial.
+// TODO: confirmar se as cidades verde e azul vêm com os mesmos itens na sacola
+// e se aceitam o nome da criança. Vermelho e amarelo já têm descrição oficial.
 export const TABULEIROS = "tabuleiros";
 export const KITS = "kits";
 

@@ -11,7 +11,9 @@ import NomeDaCrianca from "components/home/NomeDaCrianca.js";
 import Moldura from "components/conta/Moldura.js";
 import Galeria from "components/loja/Galeria.js";
 import Compra from "components/loja/Compra.js";
-import DescricaoCompleta from "components/loja/DescricaoCompleta.js";
+import DescricaoCompleta, {
+  temDescricaoCompleta,
+} from "components/loja/DescricaoCompleta.js";
 import Prateleira from "components/loja/Prateleira.js";
 import { esquemaDoProduto } from "components/loja/Seo.js";
 import {
@@ -37,6 +39,7 @@ export function getStaticProps({ params }) {
 // A compra fica no início; os detalhes completos seguem abaixo do produto.
 function PaginaDoProduto({ produto }) {
   const temHistoria = produto.slug === SLUG_DO_TABULEIRO;
+  const temDetalhes = temDescricaoCompleta(produto.slug);
   const outros = todosOsProdutos().filter(
     (outro) => outro.slug !== produto.slug,
   );
@@ -69,7 +72,7 @@ function PaginaDoProduto({ produto }) {
           <div className={estilos.produto} key={produto.slug}>
             <div className={estilos.colunaGaleria}>
               <Galeria produto={produto} />
-              {temHistoria && (
+              {temDetalhes && (
                 <section
                   className={estilos.fichaGaleria}
                   aria-label="Medidas e indicação de uso"
@@ -116,9 +119,9 @@ function PaginaDoProduto({ produto }) {
 
       <Faixa />
 
-      {temHistoria && (
+      {temDetalhes && (
         <>
-          <DescricaoCompleta />
+          <DescricaoCompleta slug={produto.slug} />
           <Faixa />
         </>
       )}

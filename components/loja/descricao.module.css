@@ -1,4 +1,4 @@
-/* Detalhes completos do tabuleiro tema vermelho.
+/* Detalhes completos dos tabuleiros com descrição oficial.
    Usa os mesmos tokens visuais da landing: tinta chapada, borda preta de 3px
    e sombra dura sem desfoque. */
 
@@ -171,6 +171,11 @@
   border-bottom: 3px solid var(--preto);
   background-color: var(--vermelho);
   color: var(--branco);
+}
+
+.temaAmarelo h4 {
+  background-color: var(--amarelo);
+  color: var(--preto);
 }
 
 .tema ul {

@@ -14,25 +14,99 @@ const condicoesDoNome = [
   "ATENÇÃO: Por padrão o produto já vem com o nome da marca SUPERPISTA. Em caso de alta na demanda de pedidos, os nomes poderão vir impressos direto no tabuleiro ou colados com adesivo sobreposto ao produto, sem aviso prévio.",
 ];
 
-const temas = [
-  {
-    nome: "Tema vermelho",
-    itens: [
-      "Estádio",
-      "Escola",
-      "Academia",
-      "Praça, sol e nuvens",
-      "Banco",
-      "Mecânica de motos",
-      "Hospital, dentista",
-      "Lanchonete",
-      "Semáforos, radar",
-    ],
+export const DESCRICOES_POR_PRODUTO = {
+  "tabuleiro-vermelho": {
+    cidade: "A cidade vermelha",
+    temaLower: "vermelho",
+    tema: {
+      nome: "Tema vermelho",
+      classe: null,
+      itens: [
+        "Estádio",
+        "Escola",
+        "Academia",
+        "Praça, sol e nuvens",
+        "Banco",
+        "Mecânica de motos",
+        "Hospital, dentista",
+        "Lanchonete",
+        "Semáforos, radar",
+      ],
+    },
+    ilustracoes: {
+      pecas: {
+        src: "/loja/descricao/tabuleiro-vermelho-1.jpg",
+        largura: 2363,
+        altura: 2364,
+        descricao:
+          "As quatro peças separadas, suas medidas e o local do nome da criança.",
+      },
+      montado: {
+        src: "/loja/descricao/tabuleiro-vermelho-2.jpg",
+        largura: 2363,
+        altura: 2363,
+        descricao:
+          "As quatro peças montadas, formando o tabuleiro de 76 × 76 cm.",
+      },
+      nomes: {
+        src: "/loja/descricao/tabuleiro-vermelho-3.jpg",
+        largura: 2363,
+        altura: 2363,
+        descricao:
+          "Exemplos de como ficam os nomes: Sayuri e Murilo com poucas letras; Bernadette e Sandrinho com muitas letras.",
+      },
+    },
   },
-];
+  "tabuleiro-amarelo": {
+    cidade: "A cidade amarela",
+    temaLower: "amarelo",
+    tema: {
+      nome: "Tema amarelo",
+      classe: "temaAmarelo",
+      itens: [
+        "Polícia",
+        "Apartamentos",
+        "Pet shop",
+        "Mecânica e guincho",
+        "Posto de serviços",
+        "Lava rápido",
+        "Prédios comerciais",
+        "Praça, sol e nuvens",
+        "Semáforos, radar",
+        "Helicóptero",
+      ],
+    },
+    ilustracoes: {
+      pecas: {
+        src: "/loja/descricao/tabuleiro-amarelo-1.jpg",
+        largura: 2363,
+        altura: 2363,
+        descricao:
+          "As quatro peças separadas, suas medidas e o local do nome da criança.",
+      },
+      montado: {
+        src: "/loja/descricao/tabuleiro-amarelo-2.jpg",
+        largura: 2363,
+        altura: 2363,
+        descricao:
+          "As quatro peças montadas, formando o tabuleiro de 76 × 76 cm.",
+      },
+      nomes: {
+        src: "/loja/descricao/tabuleiro-amarelo-3.jpg",
+        largura: 2364,
+        altura: 2363,
+        descricao:
+          "Exemplos de como ficam os nomes: Amanda e Feliphe com poucas letras; Bernadette e Pedrinho com muitas letras.",
+      },
+    },
+  },
+};
 
-function Ilustracao({ numero, descricao }) {
-  const src = `/loja/descricao/tabuleiro-vermelho-${numero}.jpg`;
+export function temDescricaoCompleta(slug) {
+  return Boolean(DESCRICOES_POR_PRODUTO[slug]);
+}
+
+function Ilustracao({ src, largura, altura, descricao }) {
   return (
     <figure className={estilos.figura}>
       <a
@@ -44,8 +118,8 @@ function Ilustracao({ numero, descricao }) {
         <Image
           src={src}
           alt={descricao}
-          width={2363}
-          height={numero === 1 ? 2364 : 2363}
+          width={largura}
+          height={altura}
           sizes="(min-width: 900px) 560px, 92vw"
           className={estilos.imagem}
         />
@@ -60,9 +134,19 @@ function Ilustracao({ numero, descricao }) {
   );
 }
 
-// Transcrição integral das descrições 4–7, acompanhada das ilustrações 1–3.
-// O material identifica o tema vermelho; não o aplicar aos outros produtos.
-export default function DescricaoCompleta() {
+// Transcrição integral das descrições 4–7, acompanhada das ilustrações 1–3
+// de cada tabuleiro que já possui material oficial.
+export default function DescricaoCompleta({
+  slug = "tabuleiro-vermelho",
+} = {}) {
+  const detalhes = DESCRICOES_POR_PRODUTO[slug];
+  if (!detalhes) return null;
+
+  const { cidade, temaLower, tema, ilustracoes } = detalhes;
+  const classeTema = tema.classe
+    ? `${estilos.tema} ${estilos[tema.classe]}`
+    : estilos.tema;
+
   return (
     <section
       className={estilos.secao}
@@ -77,27 +161,21 @@ export default function DescricaoCompleta() {
           <nav className={estilos.indice} aria-label="Detalhes do produto">
             <a href="#montagem">Montagem e medidas</a>
             <a href="#personalizacao">Nome da criança</a>
-            <a href="#temas">A cidade vermelha</a>
+            <a href="#temas">{cidade}</a>
             <a href="#modo-de-usar">Aplicativo 3D</a>
             <a href="#devolucao">Devolução</a>
           </nav>
         </header>
         <section className={estilos.bloco} id="montagem">
-          <h3>Montagem e medidas do tabuleiro tema vermelho</h3>
+          <h3>Montagem e medidas do tabuleiro tema {temaLower}</h3>
           <p>
             Como montar: é só juntar as 4 partes numeradas indicadas no canto de
             cada peça. Cada peça mede 38 × 38 cm; o tabuleiro agrupado mede 76 ×
             76 cm. O nome da criança fica na parte 4.
           </p>
           <div className={estilos.grade}>
-            <Ilustracao
-              numero={1}
-              descricao="As quatro peças separadas, suas medidas e o local do nome da criança."
-            />
-            <Ilustracao
-              numero={2}
-              descricao="As quatro peças montadas, formando o tabuleiro de 76 × 76 cm."
-            />
+            <Ilustracao {...ilustracoes.pecas} />
+            <Ilustracao {...ilustracoes.montado} />
           </div>
         </section>
         <section
@@ -111,29 +189,24 @@ export default function DescricaoCompleta() {
             ))}
           </div>
           <div className={estilos.exemplo}>
-            <Ilustracao
-              numero={3}
-              descricao="Exemplos de como ficam os nomes: Sayuri e Murilo com poucas letras; Bernadette e Sandrinho com muitas letras."
-            />
+            <Ilustracao {...ilustracoes.nomes} />
           </div>
         </section>
         <section className={estilos.bloco} id="temas">
           <h3>Conteúdo das artes</h3>
           <p>
-            Conheça as artes impressas e os elementos 3D do tabuleiro tema
-            vermelho:
+            Conheça as artes impressas e os elementos 3D do tabuleiro tema{" "}
+            {temaLower}:
           </p>
           <div>
-            {temas.map((tema) => (
-              <div key={tema.nome} className={estilos.tema}>
-                <h4>{tema.nome}</h4>
-                <ul>
-                  {tema.itens.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            <div className={classeTema}>
+              <h4>{tema.nome}</h4>
+              <ul>
+                {tema.itens.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
           </div>
           <p>
             <strong>
