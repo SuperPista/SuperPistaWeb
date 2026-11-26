@@ -19,8 +19,8 @@ function LinkDaSacola() {
       href={LINK_SACOLA}
     >
       <span className={estilos.sacolaLinha}>
-        <Icone nome="sacola" />
-        <span className={estilos.sacolaTexto}>Sacola</span>
+        <Icone nome="carrinho" />
+        <span className={estilos.sacolaTexto}>Carrinho</span>
         {quantidade > 0 && (
           <>
             <span className={estilos.sacolaConta} aria-hidden="true">

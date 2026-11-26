@@ -1,4 +1,4 @@
-import { Archivo } from "next/font/google";
+import { archivo } from "components/midia/fontes.js";
 
 import landing from "components/landing/landing.module.css";
 import home from "components/home/home.module.css";
@@ -6,14 +6,6 @@ import estilos from "components/conta/conta.module.css";
 import Cabecalho from "components/home/Cabecalho.js";
 import Rodape from "components/home/Rodape.js";
 import Seo from "components/loja/Seo.js";
-
-// A mesma Archivo da home e da landing, nas mesmas três larguras.
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
-  display: "swap",
-  variable: "--fonte-pista",
-});
 
 // Casca das páginas fora da home que fazem parte do site: o mesmo cabeçalho,
 // com o menu, e o mesmo rodapé. O miolo vem de quem usa.

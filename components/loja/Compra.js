@@ -21,7 +21,7 @@ import useNomeDaCrianca from "components/nome/useNomeDaCrianca.js";
 // preenchido, e ele continua lá ao passar de um tabuleiro para outro. O que
 // ainda não está à venda fica sem preço e sem compra: no lugar, o aviso de que
 // vem em breve e o link para o tabuleiro vermelho, que já está.
-function Compra({ produto }) {
+function Compra({ produto, compacto = false }) {
   const { nome, artigo, mudarNome, escolherArtigo } = useNomeDaCrianca();
   const adicionar = useSacola((estado) => estado.adicionar);
   const [quantidade, setQuantidade] = useState(1);
@@ -47,11 +47,15 @@ function Compra({ produto }) {
 
   return (
     <div className={estilos.compra}>
-      <h1 className={estilos.produtoTitulo}>{produto.nome}</h1>
-      <p className={estilos.compraResumo}>{produto.resumo}</p>
+      {!compacto && (
+        <>
+          <h2 className={estilos.produtoTitulo}>{produto.nome}</h2>
+          <p className={estilos.compraResumo}>{produto.resumo}</p>
+        </>
+      )}
       {produto.emBreve ? <EmBreve /> : <Preco produto={produto} grande />}
 
-      {produto.comAplicativo && (
+      {produto.comAplicativo && !compacto && (
         <a className={estilos.appDestaque} href="#aplicativo">
           <span className={estilos.appDestaqueFoto}>
             <Image
@@ -65,9 +69,9 @@ function Compra({ produto }) {
           <span className={estilos.appDestaqueTexto}>
             <strong>Vem com o aplicativo de Realidade Aumentada</strong>
             <span>
-              Ative em até 2 aparelhos permanentes com o código da sacola.
-              Funciona offline após ativado, e outros aparelhos podem testar
-              grátis por 3 dias.
+              Ative em até 2 aparelhos permanentes com o código de ativação do
+              pedido. Funciona offline após ativado, e outros aparelhos podem
+              testar grátis por 3 dias.
             </span>
             <span className={estilos.appDestaqueLink}>Ver como funciona</span>
           </span>
@@ -100,7 +104,7 @@ function Compra({ produto }) {
       )}
 
       {!produto.emBreve && (
-        <>
+        <div className={estilos.compraAcao}>
           <div className={estilos.compraLinha}>
             <Quantidade valor={quantidade} aoMudar={setQuantidade} />
             <button
@@ -108,7 +112,7 @@ function Compra({ produto }) {
               type="button"
               onClick={colocarNaSacola}
             >
-              Colocar na sacola
+              Colocar no carrinho
             </button>
           </div>
 
@@ -117,15 +121,15 @@ function Compra({ produto }) {
           <div role="status">
             {colocado && (
               <div className={estilos.naSacola}>
-                <p>Está na sacola: {colocado}</p>
-                <Link href={LINK_SACOLA}>Ver a sacola</Link>
+                <p>Está no carrinho: {colocado}</p>
+                <Link href={LINK_SACOLA}>Ver o carrinho</Link>
               </div>
             )}
           </div>
-        </>
+        </div>
       )}
 
-      {produto.garantias && (
+      {produto.garantias && !compacto && (
         <ul className={`${estilos.garantias} ${landing.dado}`}>
           {produto.garantias.map((garantia) => (
             <li key={garantia}>{garantia}</li>

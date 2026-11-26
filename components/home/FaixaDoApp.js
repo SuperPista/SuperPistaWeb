@@ -21,8 +21,8 @@ function FaixaDoApp() {
             Já tem o seu Super Pista?
           </h2>
           <p className={estilos.faixaAppTexto}>
-            Ative o aplicativo com o código do cartão que vem na sacola e veja a
-            cidade de pé em 3D na tela do celular.
+            Ative o aplicativo com o código do seu pedido em Minha conta e veja
+            a cidade de pé em 3D na tela do celular.
           </p>
         </div>
         <div className={estilos.appAcoes}>

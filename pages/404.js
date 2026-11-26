@@ -19,17 +19,17 @@ function PaginaNaoEncontrada() {
   return (
     <Moldura
       titulo="Página não encontrada (404)"
-      descricao="Esta pista não leva a lugar nenhum. Conheça nossos tabuleiros com pista de carrinhos em MDF e kits de brinquedos."
+      descricao="Este endereço mudou de lugar. Conheça nossos tabuleiros com pista de carrinhos em MDF e kits de brinquedos."
       caminho="/404"
       indexar={false}
     >
       <section className={estilos.secaoErro}>
         <div className={`${landing.container} ${estilos.placaErro}`}>
           <span className={estilos.codigo404}>404</span>
-          <h1 className={estilos.titulo}>Esta pista não leva a lugar nenhum</h1>
+          <h1 className={estilos.titulo}>Este endereço mudou de lugar</h1>
           <p className={`${landing.corpo} ${estilos.mensagem}`}>
-            O endereço que você tentou acessar não existe, mudou de lugar ou a
-            corrida tomou outro rumo. Que tal voltar para a pista principal?
+            O link que você acessou foi atualizado ou não existe mais. Use as
+            opções abaixo para continuar na Super Pista.
           </p>
 
           <div className={estilos.acoes}>

@@ -40,8 +40,9 @@ function Oferta() {
 
         <h2 className={estilos.h2}>Imagine essa cara quando a sacola chegar</h2>
         <p className={estilos.lead}>
-          As quatro peças de MDF, a sacola reforçada, o cartão que ativa o
-          aplicativo e o nome da criança impresso na cidade, sem custo a mais.
+          As quatro peças de MDF, a sacola reforçada, o acesso ao aplicativo de
+          Realidade Aumentada e o nome da criança impresso na cidade, sem custo
+          a mais.
         </p>
 
         <p className={estilos.preco}>
@@ -63,7 +64,7 @@ function Oferta() {
 
         {peca && (
           <p className={`${estilos.ofertaNome} ${estilos.dado}`}>
-            Vai para a sacola com o nome {peca}.
+            Vai para o carrinho com o nome {peca}.
           </p>
         )}
 

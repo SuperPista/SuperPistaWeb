@@ -13,6 +13,7 @@ function Cabecalho() {
           alt="Super Pista"
           width={640}
           height={414}
+          sizes="(min-width: 1055px) 116px, (min-width: 764px) 11vw, 84px"
           priority
         />
         <BotaoComprar compacto>Quero para meu filho</BotaoComprar>

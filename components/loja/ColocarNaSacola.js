@@ -23,11 +23,11 @@ function ColocarNaSacola({ produto }) {
         type="button"
         onClick={() => adicionar({ slug: produto.slug })}
       >
-        Colocar na sacola
+        Colocar no carrinho
         <span className={estilos.somenteLeitor}>: {produto.nome}</span>
       </button>
       <p className={`${estilos.cartaoSelo} ${landing.dado}`} role="status">
-        {quantidade > 0 && `${quantidade} na sacola`}
+        {quantidade > 0 && `${quantidade} no carrinho`}
       </p>
     </>
   );

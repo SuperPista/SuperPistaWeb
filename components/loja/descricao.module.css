@@ -1,0 +1,228 @@
+/* Detalhes completos dos tabuleiros com descrição oficial.
+   Usa os mesmos tokens visuais da landing: tinta chapada, borda preta de 3px
+   e sombra dura sem desfoque. */
+
+.secao {
+  --preto: #000000;
+  --branco: #ffffff;
+  --amarelo: #ffd100;
+  --vermelho: #e4002b;
+  --cinza: #565656;
+
+  padding-block: clamp(24px, 3vw, 36px);
+  background-color: var(--amarelo);
+  scroll-margin-top: 110px;
+}
+
+.descricao {
+  display: grid;
+  gap: clamp(22px, 3vw, 32px);
+}
+
+.cabecalho {
+  display: grid;
+  gap: 16px;
+}
+
+.cabecalho h2 {
+  max-width: 24ch;
+}
+
+.indice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.indice a {
+  padding: 9px 16px;
+  border: 3px solid var(--preto);
+  border-radius: 999px;
+  color: var(--preto);
+  background-color: var(--branco);
+  box-shadow: 3px 3px 0 var(--preto);
+  font-size: 0.94rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.indice a:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--preto);
+}
+
+.indice a:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--preto);
+}
+
+.bloco {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+  padding: clamp(20px, 2.5vw, 32px);
+  border: 3px solid var(--preto);
+  background-color: var(--branco);
+  box-shadow: 7px 7px 0 var(--preto);
+  font-size: 1rem;
+  line-height: 1.6;
+  scroll-margin-top: 110px;
+}
+
+.bloco h3,
+.bloco h4,
+.bloco p {
+  margin: 0;
+}
+
+.bloco h3 {
+  max-width: 34ch;
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.bloco h4 {
+  font-size: 1.08rem;
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.25;
+}
+
+.bloco p {
+  max-width: 75ch;
+}
+
+.bloco a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.bloco a:hover {
+  text-decoration-color: var(--vermelho);
+}
+
+.grade {
+  display: grid;
+  gap: 20px;
+}
+
+.figura {
+  min-width: 0;
+  margin: 0;
+}
+
+.figura figcaption {
+  padding-top: 10px;
+  border-top: 2px solid var(--preto);
+  color: var(--cinza);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.figura figcaption a {
+  display: inline-block;
+  color: var(--preto);
+  font-weight: 800;
+}
+
+.imagem {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.condicoes {
+  display: grid;
+  gap: 12px;
+}
+
+.condicoes p + p {
+  padding-top: 12px;
+  border-top: 2px dashed rgb(0 0 0 / 20%);
+}
+
+.condicoes p:last-child {
+  padding: 16px 18px;
+  border: 3px solid var(--preto);
+  background-color: var(--amarelo);
+  font-weight: 600;
+}
+
+.exemplo {
+  align-self: start;
+}
+
+.tema {
+  border: 3px solid var(--preto);
+}
+
+.tema h4 {
+  padding: 14px 20px;
+  border-bottom: 3px solid var(--preto);
+  background-color: var(--vermelho);
+  color: var(--branco);
+}
+
+.temaAmarelo h4 {
+  background-color: var(--amarelo);
+  color: var(--preto);
+}
+
+.tema ul {
+  margin: 16px 20px;
+  padding-left: 20px;
+}
+
+.instrucoes {
+  display: grid;
+  gap: 20px 32px;
+}
+
+.instrucao {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 3px solid var(--amarelo);
+}
+
+.devolucao {
+  border-left: 10px solid var(--vermelho);
+}
+
+@media (min-width: 900px) {
+  .grade,
+  .instrucoes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .personalizacao {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    column-gap: 32px;
+  }
+
+  .personalizacao h3 {
+    grid-column: 1 / -1;
+  }
+
+  .exemplo {
+    position: sticky;
+    top: 112px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indice a {
+    transition: none;
+  }
+}

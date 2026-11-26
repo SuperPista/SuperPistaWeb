@@ -55,6 +55,7 @@ function Hero() {
                     alt=""
                     width={440}
                     height={380}
+                    sizes="(min-width: 900px) 108px, 96px"
                     priority
                   />
                 ) : (

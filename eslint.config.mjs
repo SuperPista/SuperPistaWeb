@@ -10,6 +10,9 @@ import prettier from "eslint-config-prettier/flat";
 
 export default defineConfig([
   {
+    ignores: [".agents/**"],
+  },
+  {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     plugins: { js },
     extends: ["js/recommended"],

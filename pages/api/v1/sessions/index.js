@@ -74,9 +74,14 @@ async function postHandler(request, response) {
 
 async function deleteHandler(request, response) {
   const userTryingToDelete = request.context.user;
-  const sessionToken = request.cookies.session_id;
+  const sessionObject = request.context.session;
 
-  const sessionObject = await session.findOneValidByToken(sessionToken);
+  if (!sessionObject) {
+    throw new UnauthorizedError({
+      message: "Usuário não possui sessão ativa.",
+      action: "Verifique se este usuário está logado e tente novamente.",
+    });
+  }
   const expiredSession = await session.expireById(sessionObject.id);
   controller.clearSessionCookie(response);
 

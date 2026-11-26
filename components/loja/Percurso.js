@@ -4,7 +4,7 @@ import estilos from "components/loja/loja.module.css";
 import { LINK_SACOLA } from "components/loja/links.js";
 
 const ETAPAS = [
-  { rotulo: "Sacola", destino: LINK_SACOLA },
+  { rotulo: "Carrinho", destino: LINK_SACOLA },
   { rotulo: "Dados e entrega" },
   { rotulo: "Pagamento" },
   { rotulo: "Pedido feito" },

@@ -91,6 +91,8 @@ async function injectAuthenticatedUser(request) {
   request.context = {
     ...request.context,
     user: userObject,
+    // Reutilizada só nesta requisição, depois de validar token e vencimento.
+    session: sessionObject,
   };
 }
 

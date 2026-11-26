@@ -17,9 +17,7 @@ async function postHandler(request, response) {
   const { current_password, new_password } = request.body || {};
   const ip = controller.getClientIp(request);
 
-  const sessionToken = request.cookies.session_id;
-  const sessionObject = await session.findOneValidByToken(sessionToken);
-  const storedUser = await user.findOneById(sessionObject.user_id);
+  const { session: sessionObject, user: storedUser } = request.context;
 
   if (typeof current_password !== "string" || current_password.length === 0) {
     throw new ValidationError({

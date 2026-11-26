@@ -17,15 +17,14 @@
 //
 // TODO: o parcelamento e os preços dos produtos que vêm em breve ainda são de
 // exemplo.
-// TODO: os tabuleiros amarelo, verde e azul e os dois kits ainda não têm foto
-// nem descrição oficial. O nome e o resumo deles são provisórios, e as imagens
-// em public/loja são ilustrativas, feitas do que o site já tinha: a arte do
+// TODO: os tabuleiros verde e azul e os dois kits ainda não têm foto nem
+// descrição oficial. O nome e o resumo deles são provisórios, e as imagens em
+// public/loja são ilustrativas, feitas do que o site já tinha: a arte do
 // tabuleiro vermelho recolorida (a cidade desenhada é a dele, não a de cada
 // cor) e recortes de uma foto do tabuleiro com brinquedos em volta. Elas levam
 // `ilustrativa: true`, e as telas avisam. Trocar pelas fotos de verdade.
-// TODO: confirmar se as quatro cidades vêm com os mesmos itens na sacola e se
-// todas aceitam o nome da criança. Por enquanto valem os do tabuleiro
-// vermelho, que é o único com descrição oficial.
+// TODO: confirmar se as cidades verde e azul vêm com os mesmos itens na sacola
+// e se aceitam o nome da criança. Vermelho e amarelo já têm descrição oficial.
 export const TABULEIROS = "tabuleiros";
 export const KITS = "kits";
 
@@ -47,9 +46,9 @@ const ITENS_DO_TABULEIRO = [
     descricao: "sacola reforçada para levar a cidade para onde a família for",
   },
   {
-    quantidade: "1",
+    quantidade: "App",
     descricao:
-      "cartão com código para ativar o aplicativo em até 2 dispositivos permanentes",
+      "código de ativação no pedido para usar o aplicativo em até 2 dispositivos permanentes",
   },
   {
     quantidade: "Grátis",
@@ -159,7 +158,7 @@ function tabuleiro({ cor, tinta, resumo, fotos, emBreve = false }) {
     parcelas: { vezes: 12, valor: 2430 },
     // o nome ou apelido da criança sai impresso numa das peças, sem custo
     aceitaNome: true,
-    // o cartão que vem na sacola ativa o aplicativo de Realidade Aumentada
+    // o pedido gera o código que ativa o aplicativo de Realidade Aumentada
     comAplicativo: true,
     fotos,
     emBreve,

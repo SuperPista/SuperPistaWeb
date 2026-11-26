@@ -1,4 +1,4 @@
-import { Archivo } from "next/font/google";
+import { archivo } from "components/midia/fontes.js";
 
 import estilos from "components/landing/landing.module.css";
 import Cabecalho from "components/landing/Cabecalho.js";
@@ -16,15 +16,6 @@ import Perguntas, { PERGUNTAS } from "components/landing/Perguntas.js";
 import Oferta from "components/landing/Oferta.js";
 import Seo, { esquemaDoProduto, esquemaFaq } from "components/loja/Seo.js";
 import { SLUG_DO_TABULEIRO, produtoPorSlug } from "components/loja/catalogo.js";
-
-// Uma família só, em três larguras: 125 para a sinalização, 100 para o texto
-// e 87 para os dados pequenos.
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
-  display: "swap",
-  variable: "--fonte-pista",
-});
 
 // Landing page do tabuleiro: sem menu, sem rodapé e sem link para o site.
 // A página conta uma história, da infância de quem compra até a sacola chegando

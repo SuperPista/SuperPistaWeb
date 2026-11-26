@@ -1,7 +1,5 @@
 import { createRouter } from "next-connect";
 import controller from "infra/controller.js";
-import user from "models/user.js";
-import session from "models/session.js";
 import auditLog from "models/auditLog.js";
 import database from "infra/database.js";
 
@@ -14,12 +12,16 @@ export default createRouter()
 // 18). Hash de senha e tokens ficam de fora: não são dados sobre ela, e o
 // arquivo pode acabar num lugar menos protegido que o banco.
 async function getHandler(request, response) {
-  const sessionToken = request.cookies.session_id;
-  const sessionObject = await session.findOneValidByToken(sessionToken);
-  const userFound = await user.findOneById(sessionObject.user_id);
+  const userFound = request.context.user;
 
-  const sessionsResult = await database.query({
-    text: `
+  const [
+    sessionsResult,
+    activationTokensResult,
+    passwordResetsResult,
+    auditLogsResult,
+  ] = await Promise.all([
+    database.query({
+      text: `
       SELECT
         created_at,
         expires_at
@@ -30,11 +32,11 @@ async function getHandler(request, response) {
       ORDER BY
         created_at DESC
     ;`,
-    values: [userFound.id],
-  });
+      values: [userFound.id],
+    }),
 
-  const activationTokensResult = await database.query({
-    text: `
+    database.query({
+      text: `
       SELECT
         used_at,
         expires_at,
@@ -46,11 +48,11 @@ async function getHandler(request, response) {
       ORDER BY
         created_at DESC
     ;`,
-    values: [userFound.id],
-  });
+      values: [userFound.id],
+    }),
 
-  const passwordResetsResult = await database.query({
-    text: `
+    database.query({
+      text: `
       SELECT
         used_at,
         expires_at,
@@ -62,12 +64,12 @@ async function getHandler(request, response) {
       ORDER BY
         created_at DESC
     ;`,
-    values: [userFound.id],
-  });
+      values: [userFound.id],
+    }),
 
-  // O registro de ações guarda o IP de cada acesso, e IP é dado pessoal.
-  const auditLogsResult = await database.query({
-    text: `
+    // O registro de ações guarda o IP de cada acesso, e IP é dado pessoal.
+    database.query({
+      text: `
       SELECT
         action,
         ip,
@@ -80,8 +82,9 @@ async function getHandler(request, response) {
       ORDER BY
         created_at DESC
     ;`,
-    values: [userFound.id],
-  });
+      values: [userFound.id],
+    }),
+  ]);
 
   const exportData = {
     _meta: {
